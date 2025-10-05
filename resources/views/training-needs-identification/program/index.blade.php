@@ -17,9 +17,9 @@
 
     <div class="d-flex flex-wrap justify-content-center align-items-stretch">
         @forelse ($tniPrograms as $tniProgram)
-            <div class="mx-3" style="width: 350px;">
+            <div class="mx-3 mb-6" style="width: 350px;">
                 <div class="card h-100 mb-3" style="border-radius: 6px; overflow: hidden;">
-                    <img src="{{ asset('storage/' . $tniProgram->image_path) }}" class="card-img-top" alt="Image">
+                    <img src="{{ $tniProgram->image_path ? asset('storage/' . $tniProgram->image_path) : asset('images/no-image.jpg') }}" class="card-img-top" style="height: 200px" alt="Image">
                     <div class="card-body">
                         <h5 class="card-title">{{ $tniProgram->program_name }}</h5>
                         <p class="card-text" style="text-align: justify;">
