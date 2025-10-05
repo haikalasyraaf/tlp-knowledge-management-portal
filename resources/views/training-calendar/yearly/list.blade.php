@@ -49,6 +49,7 @@
                                     </div>
                                     <div class="col-lg-12 mb-3">
                                         <div class="form-check">
+                                            <input type="checkbox" name="is_display" class="form-check-input" value="2">
                                             <input id="checkChecked" type="checkbox" name="is_display" class="form-check-input" value="1" checked>
                                             <label class="form-check-label" for="checkChecked">Set as Display</label>
                                         </div>

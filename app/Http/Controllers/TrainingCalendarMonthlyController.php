@@ -47,6 +47,12 @@ class TrainingCalendarMonthlyController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'is_display' => 'required',
+        ]);
+
         $data = $request->all();
         if ($request->hasFile('document_path')) {
             $path = $request->file('document_path')->store('training_calendar_monthly_documents', 'public');
@@ -67,6 +73,12 @@ class TrainingCalendarMonthlyController extends Controller
 
     public function update($id, Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'is_display' => 'required',
+        ]);
+
         $data = $request->all();
         $trainingCalendar = TrainingCalendarMonthly::findOrFail($id);
         
@@ -78,10 +90,6 @@ class TrainingCalendarMonthlyController extends Controller
             $data['document_path'] = $path;
         } else {
             $data['document_path'] = $trainingCalendar->document_path;
-        }
-
-        if(($data['is_display'] ?? 2) == 1) {
-            TrainingCalendarMonthly::query()->update(['is_display' => 2]);
         }
 
         $trainingCalendar->update([

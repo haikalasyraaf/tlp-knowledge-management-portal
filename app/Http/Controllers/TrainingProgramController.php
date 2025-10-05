@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TrainingProgram;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class TrainingProgramController extends Controller
@@ -17,6 +18,12 @@ class TrainingProgramController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image_path' => 'nullable|mimes:pdf',
+        ]);
+
         $data = $request->only(['name', 'description']);
 
         if ($request->hasFile('image_path')) {
@@ -31,6 +38,12 @@ class TrainingProgramController extends Controller
 
     public function update($id, Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image_path' => 'nullable|mimes:pdf',
+        ]);
+
         $data = $request->only(['name', 'description']);
 
         $program = TrainingProgram::findOrFail($id);

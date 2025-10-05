@@ -14,9 +14,9 @@
 
     <div class="d-flex flex-wrap justify-content-center align-items-stretch">
         @forelse ($trainingPrograms as $trainingProgram)
-            <div class="mx-3" style="width: 350px;">
+            <div class="mx-3 mb-6" style="width: 350px;">
                 <div class="card h-100 mb-3" style="border-radius: 6px; overflow: hidden;">
-                    <img src="{{ asset('storage/' . $trainingProgram->image_path) }}" class="card-img-top" alt="Image">
+                    <img src="{{ $trainingProgram->image_path ? asset('storage/' . $trainingProgram->image_path) : asset('images/no-image.jpg') }}" class="card-img-top" style="height: 200px" alt="Image">
                     <div class="card-body">
                         <h5 class="card-title">{{ $trainingProgram->name }}</h5>
                         <p class="card-text" style="text-align: justify;">
@@ -50,7 +50,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="createTrainingProgram" enctype="multipart/form-data">
+                            <form id="editTrainingProgram{{$trainingProgram->id}}" enctype="multipart/form-data">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-lg-12">
@@ -68,11 +68,11 @@
                             
                                         <div class="col-lg-12 my-3">
                                             <label for="program_name" class="form-label">Program Name</label>
-                                            <input id="program_name" type="text" name="program_name" class="form-control" value="{{$trainingProgram->name}}" placeholder="Name">
+                                            <input id="program_name" type="text" name="name" class="form-control" value="{{$trainingProgram->name}}" placeholder="Name">
                                         </div>
                                         <div class="col-lg-12 mb-3">
                                             <label for="program_description" class="form-label">Program Description</label>
-                                            <textarea id="program_description" name="program_description" class="form-control" rows="5"
+                                            <textarea id="program_description" name="description" class="form-control" rows="5"
                                                 placeholder="Enter description...">{!!$trainingProgram->description!!} </textarea>
                                         </div>
                                         <div class="col-12 text-end">
@@ -118,11 +118,11 @@
                     
                                 <div class="col-lg-12 my-3">
                                     <label for="program_name" class="form-label">Program Name</label>
-                                    <input id="program_name" type="text" name="program_name" class="form-control" placeholder="Name">
+                                    <input id="program_name" type="text" name="name" class="form-control" placeholder="Name">
                                 </div>
                                 <div class="col-lg-12 mb-3">
                                     <label for="program_description" class="form-label">Program Description</label>
-                                    <textarea id="program_description" name="program_description" class="form-control" rows="5"
+                                    <textarea id="program_description" name="description" class="form-control" rows="5"
                                         placeholder="Enter description..."></textarea>
                                 </div>
                                 <div class="col-12 text-end">
@@ -163,7 +163,7 @@
 
             $(document).on('click', '.edit-btn', function () {
                 let programId = $(this).data('id');
-                let form = $('#editUserForm' + programId);
+                let form = $('#editTrainingProgram' + programId);
 
                 $.ajax({
                     url: "/training-program/" + programId + "/edit",
@@ -173,11 +173,7 @@
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     },
                     success: function (response) {
-                        $('#editModal' + programId).modal('hide');
-
-                        console.log(response);
-                        toastr.success('User detail updated successfully!', '', { timeOut: 8000 });
-                        $('#dataTableBuilder').DataTable().ajax.reload();
+                        location.reload();
                     },
                     error: function (xhr) {
                         console.log(xhr.responseText);
@@ -196,11 +192,7 @@
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     },
                     success: function (response) {
-                        $('#deleteModal' + programId).modal('hide');
-
-                        console.log(response);
-                        toastr.success('User has been removed successfully!', '', { timeOut: 8000 });
-                        $('#dataTableBuilder').DataTable().ajax.reload();
+                        location.reload();
                     },
                     error: function (xhr) {
                         console.log(xhr.responseText);

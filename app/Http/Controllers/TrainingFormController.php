@@ -34,6 +34,11 @@ class TrainingFormController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
         $data = $request->all();
         if ($request->hasFile('document_path')) {
             $path = $request->file('document_path')->store('training_form', 'public');
@@ -53,6 +58,11 @@ class TrainingFormController extends Controller
 
     public function update($id, Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
         $data = $request->all();
         $trainingForm = TrainingForm::findOrFail($id);
         

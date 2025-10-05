@@ -45,6 +45,11 @@ class TransferOfKnowledgeController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
         $data = $request->all();
 
         TransferOfKnowledge::create([
@@ -59,6 +64,11 @@ class TransferOfKnowledgeController extends Controller
 
     public function update($id, Request $request)
     {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
         $data = $request->all();
         $knowledge = TransferOfKnowledge::findOrFail($id);
 

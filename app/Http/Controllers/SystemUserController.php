@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Rap2hpoutre\FastExcel\FastExcel;
 use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
@@ -44,6 +45,14 @@ class SystemUserController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'employee_id'   => 'required|string|max:255',
+            'name'          => 'required|string|max:255',
+            'role'          => 'required|string',
+            'department'    => 'required|string',
+            'designation'   => 'required|string',
+        ]);
+
         $data = $request->all();
 
         $data['password'] = bcrypt($request->employee_id);
@@ -55,6 +64,14 @@ class SystemUserController extends Controller
 
     public function update($id, Request $request)
     {
+        $request->validate([
+            'employee_id'   => 'required|string|max:255',
+            'name'          => 'required|string|max:255',
+            'role'          => 'required|string',
+            'department'    => 'required|string',
+            'designation'   => 'required|string',
+        ]);
+
         $data = $request->all();
         $data['password'] = bcrypt($request->employee_id);
 
