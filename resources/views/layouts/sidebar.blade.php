@@ -1,4 +1,9 @@
 <div class="bg-white border-end vh-100 py-3">
+    <div class="d-flex justify-content-center">
+        <a href="/">
+            <img src="{{ asset('images/tlp-logo.png') }}" class="w-20 h-20" alt="Image">
+        </a>
+    </div>
     <h5 class="text-center">{{ config('app.name', 'Laravel') }}</h5>
     <br>
     <ul class="nav flex-column">
