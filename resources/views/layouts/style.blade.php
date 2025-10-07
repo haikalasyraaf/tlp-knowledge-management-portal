@@ -61,7 +61,7 @@
         display: none;
     }
 
-    #drop-area {
+    .drop-area {
         display: flex;
         flex-direction: column;
         align-items: center;    /* center horizontally */
@@ -74,7 +74,7 @@
         min-height: 150px; /* optional so container has some height */
     }
 
-    #image-preview {
+    .image-preview {
         max-width: 100%;
         max-height: 250px;
         object-fit: contain;

@@ -59,16 +59,14 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-lg-12">
-                                            <div id="drop-area"
-                                                style="border: 2px dashed #ccc; padding: 20px; text-align: center; cursor: pointer; position: relative;">
-                                                <p id="drag-drop-text" class="mb-0">Drag & drop image here or click to select</p>
-                                                <input id="program_image_path" type="file" name="image_path" class="form-control" style="display:none;" accept="image/*">
-                                                <img id="image-preview" src="#" alt="Image preview" style="display: none;">
+                                            <div class="drop-area">
+                                                <p class="drag-drop-text mb-0">Drag & drop image here or click to select</p>
+                                                <input type="file" name="image_path" class="form-control program_image_path" style="display:none;" accept="image/*">
+                                                <img class="image-preview" src="#" alt="Image preview" style="display: none;">
                                             </div>
                                         </div>
                                         <div class="col-12 mt-3">
-                                            <button type="button" id="clear-image-btn" class="w-100 btn btn-sm btn-outline-danger" 
-                                                style="display: none;">Clear Image</button>
+                                            <button type="button" class="w-100 btn btn-sm btn-outline-danger clear-image-btn" style="display: none;">Clear Image</button>
                                         </div>
                             
                                         <div class="col-lg-12 my-3">
@@ -126,16 +124,14 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <div id="drop-area"
-                                        style="border: 2px dashed #ccc; padding: 20px; text-align: center; cursor: pointer; position: relative;">
-                                        <p id="drag-drop-text" class="mb-0">Drag & drop image here or click to select</p>
-                                        <input id="program_image_path" type="file" name="image_path" class="form-control" style="display:none;" accept="image/*">
-                                        <img id="image-preview" src="#" alt="Image preview" style="display: none;">
+                                    <div class="drop-area">
+                                        <p class="drag-drop-text mb-0">Drag & drop image here or click to select</p>
+                                        <input type="file" name="image_path" class="form-control program_image_path" style="display:none;" accept="image/*">
+                                        <img class="image-preview" src="#" alt="Image preview" style="display: none;">
                                     </div>
                                 </div>
                                 <div class="col-12 mt-3">
-                                    <button type="button" id="clear-image-btn" class="w-100 btn btn-sm btn-outline-danger" 
-                                        style="display: none;">Clear Image</button>
+                                    <button type="button" class="w-100 btn btn-sm btn-outline-danger clear-image-btn" style="display: none;">Clear Image</button>
                                 </div>
                     
                                 <div class="col-lg-12 my-3">
@@ -243,66 +239,6 @@
                     }
                 });
             });
-        </script>
-
-        <script>
-            const dropArea = document.getElementById('drop-area');
-            const fileInput = document.getElementById('program_image_path');
-            const preview = document.getElementById('image-preview');
-            const clearBtn = document.getElementById('clear-image-btn');
-            const dragDropText = document.getElementById('drag-drop-text');
-
-            dropArea.addEventListener('click', () => fileInput.click());
-
-            dropArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropArea.style.borderColor = '#007bff';
-                dropArea.style.backgroundColor = '#e9f5ff';
-            });
-
-            dropArea.addEventListener('dragleave', (e) => {
-                e.preventDefault();
-                dropArea.style.borderColor = '#ccc';
-                dropArea.style.backgroundColor = '';
-            });
-
-            dropArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropArea.style.borderColor = '#ccc';
-                dropArea.style.backgroundColor = '';
-
-                if (e.dataTransfer.files.length) {
-                fileInput.files = e.dataTransfer.files;
-                showPreview(fileInput.files[0]);
-                }
-            });
-
-            fileInput.addEventListener('change', () => {
-                if (fileInput.files && fileInput.files[0]) {
-                showPreview(fileInput.files[0]);
-                }
-            });
-
-            clearBtn.addEventListener('click', () => {
-                fileInput.value = '';
-                preview.src = '#';
-                preview.style.display = 'none';
-                clearBtn.style.display = 'none';
-                dragDropText.style.display = 'inline-block';
-                dropArea.style.borderColor = '#ccc';
-                dropArea.style.backgroundColor = '';
-            });
-
-            function showPreview(file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                    clearBtn.style.display = 'inline-block';
-                    dragDropText.style.display = 'none';
-                };
-                reader.readAsDataURL(file);
-            }
         </script>
     @endpush
 </x-app-layout>
