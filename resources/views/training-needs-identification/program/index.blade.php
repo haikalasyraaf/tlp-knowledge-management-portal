@@ -164,6 +164,7 @@
                 let form = $('#createTrainingProgram')[0];
                 let formData = new FormData(form);
 
+                $('.add-btn').attr('disabled', true);
                 $.ajax({
                     url: "/training-needs/program/create",
                     type: "POST",
@@ -174,9 +175,14 @@
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     },
                     success: function (response) {
-                        location.reload();
+                        toastr.success('Program added successfully!', null, 1500);
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
                     },
                     error: function (xhr) {
+                        $('.add-btn').removeAttr('disabled');
+
                         console.log(xhr.responseText);
                         toastr.error(xhr.responseJSON?.message || 'Something went wrong!');
                     }
@@ -188,6 +194,7 @@
                 let form = $('#editTrainingProgram' + programId)[0];
                 let formData = new FormData(form);
 
+                $('.edit-btn').attr('disabled', true);
                 $.ajax({
                     url: "/training-needs/program/" + programId + "/edit",
                     type: "POST",
@@ -198,9 +205,14 @@
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     },
                     success: function (response) {
-                        location.reload();
+                        toastr.success('Program updated successfully!', null, 1500);
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
                     },
                     error: function (xhr) {
+                        $('.edit-btn').removeAttr('disabled');
+
                         console.log(xhr.responseText);
                         toastr.error(xhr.responseJSON?.message || 'Something went wrong!');
                     }
@@ -210,6 +222,7 @@
             $(document).on('click', '.delete-btn', function () {
                 let programId = $(this).data('id');
 
+                $('.delete-btn').attr('disabled', true);
                 $.ajax({
                     url: "/training-needs/program/" + programId + "/delete",
                     type: "DELETE",
@@ -217,9 +230,14 @@
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     },
                     success: function (response) {
-                        location.reload();
+                        toastr.success('Program removed successfully!', null, 1500);
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
                     },
                     error: function (xhr) {
+                        $('.delete-btn').removeAttr('disabled');
+
                         console.log(xhr.responseText);
                         toastr.error(xhr.responseJSON?.message || 'Something went wrong!');
                     }
