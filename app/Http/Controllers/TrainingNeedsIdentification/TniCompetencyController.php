@@ -4,9 +4,11 @@ namespace App\Http\Controllers\TrainingNeedsIdentification;
 
 use App\Http\Controllers\Controller;
 use App\Models\TrainingNeedsIdentification\TniCompetency;
+use App\Models\TrainingNeedsIdentification\TniCourse;
 use App\Models\TrainingNeedsIdentification\TniProgram;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class TniCompetencyController extends Controller
@@ -61,7 +63,17 @@ class TniCompetencyController extends Controller
 
     public function delete($id)
     {
-        TniCompetency::findOrFail($id)->delete();
+        DB::transaction(function () use ($id) {
+            TniCourse::where('tni_competency_id', $id)->delete();
+
+            $competency = TniCompetency::findOrFail($id);
+            if ($competency->image_path && Storage::disk('public')->exists($competency->image_path)) {
+                Storage::disk('public')->delete($competency->image_path);
+            }
+
+            $competency->delete();
+        });
+
         return response()->json(['success' => true]);
     }
 }

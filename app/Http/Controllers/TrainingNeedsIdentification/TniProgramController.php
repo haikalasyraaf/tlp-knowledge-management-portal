@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\TrainingNeedsIdentification;
 
 use App\Http\Controllers\Controller;
+use App\Models\TrainingNeedsIdentification\TniCompetency;
 use App\Models\TrainingNeedsIdentification\TniCourse;
 use App\Models\TrainingNeedsIdentification\TniProgram;
 use Rap2hpoutre\FastExcel\FastExcel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class TniProgramController extends Controller
@@ -60,7 +62,27 @@ class TniProgramController extends Controller
 
     public function delete($id)
     {
-        TniProgram::findOrFail($id)->delete();
+        DB::transaction(function () use ($id) {
+            $competencies = TniCompetency::where('tni_program_id', $id)->get();
+
+            foreach ($competencies as $competency) {
+                TniCourse::where('tni_competency_id', $competency->id)->delete();
+
+                if ($competency->image_path && Storage::disk('public')->exists($competency->image_path)) {
+                    Storage::disk('public')->delete($competency->image_path);
+                }
+            }
+
+            TniCompetency::where('tni_program_id', $id)->delete();
+
+            $program = TniProgram::findOrFail($id);
+            if ($program->image_path && Storage::disk('public')->exists($program->image_path)) {
+                Storage::disk('public')->delete($program->image_path);
+            }
+
+            $program->delete();
+        });
+
         return response()->json(['success' => true]);
     }
 

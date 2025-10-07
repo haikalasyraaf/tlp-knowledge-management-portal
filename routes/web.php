@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::get('training-program', [TrainingProgramController::class, 'index'])->name('training-program.index');
     Route::post('training-program/create', [TrainingProgramController::class, 'store'])->name('training-program.store');
     Route::post('training-program/{id}/edit', [TrainingProgramController::class, 'update'])->name('training-program.update');
-    Route::delete('training-program/{id}/delete', [TrainingProgramController::class, 'update'])->name('training-program.update');
+    Route::delete('training-program/{id}/delete', [TrainingProgramController::class, 'delete'])->name('training-program.delete');
 
     Route::get('training-program/{programId}/program', [SubTrainingProgramController::class, 'index'])->name('sub-training-program.index');
     Route::post('training-program/{programId}/program/create', [SubTrainingProgramController::class, 'store'])->name('sub-training-program.store');

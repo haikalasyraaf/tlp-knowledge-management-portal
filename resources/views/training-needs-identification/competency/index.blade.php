@@ -16,6 +16,11 @@
         @forelse ($tniCompetencies as $tniCompetency)
             <div class="mx-3 mb-6" style="width: 350px;">
                 <div class="card h-100 mb-3" style="border-radius: 6px; overflow: hidden;">
+                    @if (auth()->user()->role == 'Admin')
+                        <button type="button" class="btn btn-danger position-absolute top-0 end-0 m-2" style="z-index: 10;" data-bs-toggle="modal" data-bs-target="#deleteModal{{$tniCompetency->id}}">
+                            <i class="bi bi-trash icon-13"></i>
+                        </button>
+                    @endif
                     <img src="{{ $tniCompetency->image_path ? asset('storage/' . $tniCompetency->image_path) : asset('images/no-image.jpg') }}" class="card-img-top" style="height: 200px" alt="Image">
                     <div class="card-body">
                         <h5 class="card-title">{{ $tniCompetency->competency_name }}</h5>
@@ -79,6 +84,22 @@
                                     </div>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="deleteModal{{$tniCompetency->id}}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content text-start">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete this competency? All its related content will be deleted as well.
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-danger delete-btn" data-id="{{ $tniCompetency->id }}">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -174,11 +195,7 @@
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     },
                     success: function (response) {
-                        $('#editModal' + competencyId).modal('hide');
-
-                        console.log(response);
-                        toastr.success('User detail updated successfully!', '', { timeOut: 8000 });
-                        $('#dataTableBuilder').DataTable().ajax.reload();
+                        location.reload();
                     },
                     error: function (xhr) {
                         console.log(xhr.responseText);
@@ -191,17 +208,13 @@
                 let competencyId = $(this).data('id');
 
                 $.ajax({
-                    url: "/training-needs/competency/" + competencyId + "/delete",
+                    url: "/training-needs/program/{{ $program_id }}/competency/" + competencyId + "/delete",
                     type: "DELETE",
                     headers: {
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     },
                     success: function (response) {
-                        $('#deleteModal' + competencyId).modal('hide');
-
-                        console.log(response);
-                        toastr.success('User has been removed successfully!', '', { timeOut: 8000 });
-                        $('#dataTableBuilder').DataTable().ajax.reload();
+                        location.reload();
                     },
                     error: function (xhr) {
                         console.log(xhr.responseText);
