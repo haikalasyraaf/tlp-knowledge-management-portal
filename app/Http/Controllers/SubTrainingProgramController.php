@@ -44,7 +44,7 @@ class SubTrainingProgramController extends Controller
         $validated = $request->validate([
             'program_name' => 'required|string|max:255',
             'program_description' => 'nullable|string',
-            'document_path' => 'nullable|mimes:pdf',
+            'document_path' => 'nullable',
         ]);
 
         if ($request->hasFile('document_path')) {
@@ -76,7 +76,7 @@ class SubTrainingProgramController extends Controller
         $validated = $request->validate([
             'program_name' => 'required|string|max:255',
             'program_description' => 'nullable|string',
-            'document_path' => 'nullable|mimes:pdf',
+            'document_path' => 'nullable',
         ]);
 
         if ($request->hasFile('document_path')) {

@@ -90,7 +90,7 @@ class TransferOfKnowledgeController extends Controller
     public function uploadDocument($knowledgeId, Request $request)
     {
         $request->validate([
-            'document_path' => 'required|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:51200',
+            'document_path' => 'required|max:51200',
         ]);
 
         $file = $request->file('document_path');

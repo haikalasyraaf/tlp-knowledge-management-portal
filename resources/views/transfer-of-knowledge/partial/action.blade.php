@@ -66,7 +66,7 @@
                                     @if (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $knowledge->created_by))
                                         <div class="col-lg-12 mb-3">
                                             <label for="document_path{{$knowledge->id}}" class="form-label">Document</label>
-                                            <input id="document_path{{$knowledge->id}}" type="file" name="document_path" class="form-control" accept="application/pdf">
+                                            <input id="document_path{{$knowledge->id}}" type="file" name="document_path" class="form-control">
                                         </div>
                                         <div class="col-12 mb-3 text-end">
                                             <button type="button" class="btn btn-primary upload-document-btn" data-id="{{ $knowledge->id }}">Upload</button>

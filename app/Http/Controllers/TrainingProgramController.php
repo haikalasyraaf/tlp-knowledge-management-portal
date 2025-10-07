@@ -23,7 +23,7 @@ class TrainingProgramController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image_path' => 'nullable|mimes:pdf',
+            'image_path' => 'nullable',
         ]);
 
         $data = $request->only(['name', 'description']);

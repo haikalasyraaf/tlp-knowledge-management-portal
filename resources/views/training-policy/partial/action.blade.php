@@ -25,7 +25,7 @@
                                 </div>
                                 <div class="col-lg-6 mb-3">
                                     <label for="document_path" class="form-label">Document</label>
-                                    <input id="document_path" type="file" name="document_path" class="form-control" accept="application/pdf">
+                                    <input id="document_path" type="file" name="document_path" class="form-control">
                                 </div>
                                 <div class="col-lg-12 mb-3">
                                     <label for="description" class="form-label">Description</label>
