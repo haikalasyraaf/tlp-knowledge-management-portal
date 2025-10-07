@@ -64,7 +64,12 @@ php artisan key:generate
 php artisan migrate --seed
 ```
 
-### 6. Start the Laravel server
+### 6. Create Storage Symlink
+```bash
+php artisan storage:link
+```
+
+### 7. Start the Laravel server
 ```bash
 php artisan serve
 ```
