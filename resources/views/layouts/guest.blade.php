@@ -19,17 +19,22 @@
 
         @include('layouts.style')
     </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0" style="background: linear-gradient(to right, #2c3b71, #0aaead);">
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-                <div class="d-flex justify-content-center">
-                    <a href="/">
-                        <img src="{{ asset('images/tlp-logo.png') }}" class="tw-w-20 tw-h-20" alt="Image">
-                    </a>
+    <body class="bg-light">
+        <div class="min-vh-100 d-flex flex-column justify-content-center align-items-center" style="background: linear-gradient(to right, #2c3b71, #0aaead);">
+            <div class="w-100" style="max-width: 420px;">
+                <div class="card shadow-lg border-0 rounded-3">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-center mb-3">
+                            <a href="/">
+                                <img src="{{ asset('images/tlp-logo.png') }}" class="img-fluid" style="width: 80px; height: 80px;" alt="Image">
+                            </a>
+                        </div>
+                        {{ $slot }}
+                    </div>
                 </div>
-                {{ $slot }}
             </div>
         </div>
+
         @include('layouts.script')
         @stack('scripts')
     </body>

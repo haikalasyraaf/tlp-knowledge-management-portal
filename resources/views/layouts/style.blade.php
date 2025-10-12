@@ -131,6 +131,9 @@
     .bg-primary {
         background-color: #2c3b71 !important;
     }
+    .border-bottom-primary {
+        border-bottom: 4px solid #2c3b71 !important; /* light teal/blue tone */
+    }
 
     .text-primary {
         color: #2c3b71 !important;
