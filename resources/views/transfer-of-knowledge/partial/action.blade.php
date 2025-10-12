@@ -7,7 +7,7 @@
     @endif
 </div>
 
-<div class="modal fade" id="editModal{{$knowledge->id}}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal{{$knowledge->id}}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-lg">
         <div class="modal-content text-start">
             <div class="modal-header pb-0">
@@ -120,7 +120,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="deleteModal{{$knowledge->id}}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteModal{{$knowledge->id}}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-lg">
         <div class="modal-content text-start">
             <div class="modal-header">
