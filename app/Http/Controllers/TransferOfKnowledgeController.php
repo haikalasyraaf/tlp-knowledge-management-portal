@@ -52,14 +52,14 @@ class TransferOfKnowledgeController extends Controller
 
         $data = $request->all();
 
-        TransferOfKnowledge::create([
+        $knowledge = TransferOfKnowledge::create([
             'title'         => $data['title'] ?? null,
             'content'       => $data['content'] ?? null,
             'created_by'    => $request->user()->id,
             'updated_by'    => $request->user()->id,
         ]);
 
-        return response()->json(['message' => 'Transfer of Knowledge created successfully']);
+        return response()->json(['message'   => 'Transfer of Knowledge created successfully.', 'knowledge' => $knowledge]);
     }
 
     public function update($id, Request $request)
