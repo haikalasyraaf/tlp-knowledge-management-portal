@@ -3,15 +3,15 @@
     <div x-data="{ role: '{{ old('role', 'Staff') }}' }">
         <ul class="nav nav-tabs justify-content-center mb-4 border-0">
             <li class="nav-item flex-fill text-center">
-                <a href="#" class="nav-link p-2 border-0"
-                    :class="role == 'Staff' ? 'fw-semibold text-secondary border-bottom-primary' : 'text-secondary'"
+                <a href="#" class="nav-link p-2 border-0" style="border-radius: 6px !important;"
+                    :class="role == 'Staff' ? 'fw-semibold text-white bg-light-second-primary' : 'text-secondary'"
                     @click.prevent="role = 'Staff'">
                     STAFF
                 </a>
             </li>
             <li class="nav-item flex-fill text-center">
-                <a href="#" class="nav-link p-2 border-0"
-                    :class="role == 'Admin' ? 'fw-semibold text-secondary border-bottom-primary' : 'text-secondary'"
+                <a href="#" class="nav-link p-2 border-0" style="border-radius: 6px !important;"
+                    :class="role == 'Admin' ? 'fw-semibold text-white bg-light-second-primary' : 'text-secondary'"
                     @click.prevent="role = 'Admin'">
                     ADMIN
                 </a>
