@@ -24,7 +24,7 @@
             <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
                 <div class="d-flex justify-content-center">
                     <a href="/">
-                        <img src="{{ asset('images/tlp-logo.png') }}" class="w-20 h-20" alt="Image">
+                        <img src="{{ asset('images/tlp-logo.png') }}" class="tw-w-20 tw-h-20" alt="Image">
                     </a>
                 </div>
                 {{ $slot }}
