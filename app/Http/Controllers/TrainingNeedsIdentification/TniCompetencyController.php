@@ -15,9 +15,10 @@ class TniCompetencyController extends Controller
 {
     public function index($program_id)
     {
-        $tniCompetencies = TniCompetency::where('tni_program_id', $program_id)->latest()->get();
+        $program = TniProgram::findOrFail($program_id);
+        $tniCompetencies = TniCompetency::where('tni_program_id', $program->id)->latest()->get();
 
-        return view('training-needs-identification.competency.index', compact('program_id' ,'tniCompetencies'));
+        return view('training-needs-identification.competency.index', compact('program' ,'tniCompetencies'));
     }
 
     public function store($program_id, Request $request)

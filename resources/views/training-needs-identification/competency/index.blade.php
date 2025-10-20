@@ -1,15 +1,18 @@
 <x-app-layout>
 
     <div class="d-flex align-items-center mb-3">
-        <p class="mb-0 me-3 p-0" style="font-weight: 500">Training Needs Identification (Competency)</p>
+        <h5 class="mb-0 me-3 p-0">Program - {{ $program->program_name }}</h5>
 
-        <div class="flex-grow-1 border-top"></div>
+        <div class="flex-grow-1 border-top me-3"></div>
 
         @if (auth()->user()->role == 'Admin')
-        <button class="btn btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#createModal">
-            <i class="bi bi-plus-lg icon-13 me-2"></i> New Competency
-        </button>    
+            <button class="btn btn-sm btn-primary me-1" data-bs-toggle="modal" data-bs-target="#createModal">
+                <i class="bi bi-plus-lg icon-13 me-1"></i> New
+            </button>
         @endif
+        <a href="{{route('training-needs.program.index')}}" class="btn btn-sm btn-secondary">
+            <i class="bi bi-arrow-left icon-13 me-1"></i>Back
+        </a>
     </div>
 
     <div class="d-flex flex-wrap justify-content-center align-items-stretch">
@@ -31,7 +34,7 @@
                     <div class="px-3 pb-3 text-center">
                         <div class="d-flex">
                             <div class="flex-fill">
-                                <a href="{{ route('training-needs.course.index', [$program_id, $tniCompetency->id]) }}" class="w-100 btn btn-primary">
+                                <a href="{{ route('training-needs.course.index', [$program->id, $tniCompetency->id]) }}" class="w-100 btn btn-primary">
                                     <i class="bi bi-card-list icon-13 me-1"></i> View
                                 </a>
                             </div>
@@ -159,7 +162,7 @@
 
                 $('.add-btn').attr('disabled', true);
                 $.ajax({
-                    url: "/training-needs/program/{{ $program_id }}/competency/create",
+                    url: "/training-needs/program/{{ $program->id }}/competency/create",
                     type: "POST",
                     data: formData,
                     processData: false,
@@ -189,7 +192,7 @@
 
                 $('.edit-btn').attr('disabled', true);
                 $.ajax({
-                    url: "/training-needs/program/{{ $program_id }}/competency/" + competencyId + "/edit",
+                    url: "/training-needs/program/{{ $program->id }}/competency/" + competencyId + "/edit",
                     type: "POST",
                     data: formData,
                     processData: false,
@@ -217,7 +220,7 @@
 
                 $('.delete-btn').attr('disabled', true);
                 $.ajax({
-                    url: "/training-needs/program/{{ $program_id }}/competency/" + competencyId + "/delete",
+                    url: "/training-needs/program/{{ $program->id }}/competency/" + competencyId + "/delete",
                     type: "DELETE",
                     headers: {
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"

@@ -1,4 +1,12 @@
 <x-app-layout>
+    <div class="d-flex align-items-center mb-3">
+        <div class="flex-fill"></div>
+        <div>
+            <a href="{{route('training-calendar.monthly.index')}}" class="btn btn-sm btn-secondary">
+                <i class="bi bi-arrow-left icon-13 me-2"></i>Back
+            </a>
+        </div>
+    </div>
     <div class="card">
         <div class="card-body p-0">
             <div class="p-3" style="border-bottom: 1px solid #dee2e6">

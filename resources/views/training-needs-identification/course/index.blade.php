@@ -1,10 +1,18 @@
 <x-app-layout>
+    <div class="d-flex align-items-center mb-3">
+        <div class="flex-fill"></div>
+        <div>
+            <a href="{{route('training-needs.competency.index', $program->id)}}" class="btn btn-sm btn-secondary">
+                <i class="bi bi-arrow-left icon-13 me-2"></i>Back
+            </a>
+        </div>
+    </div>
     <div class="card">
         <div class="card-body p-0">
             <div class="p-3" style="border-bottom: 1px solid #dee2e6">
                 <div class="row align-items-center">
                     <div class="col-6">
-                        <h5 class="mb-0">Training Needs Identification (Course)</h5>
+                        <h5 class="mb-0">Competency - {{ $competency->competency_name }}</h5>
                     </div>
                     <div class="col-6 text-end">
                         @if (auth()->user()->role == 'Admin')
@@ -81,7 +89,7 @@
                 let formData = new FormData(form);
 
                 $.ajax({
-                    url: "/training-needs/program/{{ $program_id }}/competency/{{ $competency_id }}/course/create",
+                    url: "/training-needs/program/{{ $program->id }}/competency/{{ $competency->id }}/course/create",
                     type: "POST",
                     data: formData,
                     processData: false,
@@ -110,7 +118,7 @@
                 let formData = new FormData(form);
 
                 $.ajax({
-                    url: "/training-needs/program/{{ $program_id }}/competency/{{ $competency_id }}/course/" + courseId + "/edit",
+                    url: "/training-needs/program/{{ $program->id }}/competency/{{ $competency->id }}/course/" + courseId + "/edit",
                     type: "POST",
                     data: formData,
                     processData: false,
@@ -136,7 +144,7 @@
                 let courseId = $(this).data('id');
 
                 $.ajax({
-                    url: "/training-needs/program/{{ $program_id }}/competency/{{ $competency_id }}/course/" + courseId + "/delete",
+                    url: "/training-needs/program/{{ $program->id }}/competency/{{ $competency->id }}/course/" + courseId + "/delete",
                     type: "DELETE",
                     headers: {
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
@@ -159,7 +167,7 @@
                 e.preventDefault();
                 const courseId = $(this).data('course-id');
                 const courseName = $(this).data('course-name');
-                const url = `/training-needs/program/{{ $program_id }}/competency/{{ $competency_id }}/course/${courseId}/apply`;
+                const url = `/training-needs/program/{{ $program->id }}/competency/{{ $competency->id }}/course/${courseId}/apply`;
 
                 $.ajax({
                     url: url,
@@ -184,7 +192,7 @@
                 e.preventDefault();
                 const courseId = $(this).data('course-id');
                 const courseName = $(this).data('course-name');
-                const url = `/training-needs/program/{{ $program_id }}/competency/{{ $competency_id }}/course/${courseId}/withdraw`;
+                const url = `/training-needs/program/{{ $program->id }}/competency/{{ $competency->id }}/course/${courseId}/withdraw`;
 
                 $.ajax({
                     url: url,

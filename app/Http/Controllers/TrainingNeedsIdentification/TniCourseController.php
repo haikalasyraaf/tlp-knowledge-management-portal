@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\TrainingNeedsIdentification;
 
 use App\Http\Controllers\Controller;
+use App\Models\TrainingNeedsIdentification\TniCompetency;
 use App\Models\TrainingNeedsIdentification\TniCourse;
+use App\Models\TrainingNeedsIdentification\TniProgram;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +16,9 @@ class TniCourseController extends Controller
 {
     public function index($program_id, $competency_id, Request $request, Builder $builder)
     {
-        $query = TniCourse::where('tni_competency_id', $competency_id)->get();
+        $program    = TniProgram::findOrFail($program_id);
+        $competency = TniCompetency::findOrFail($competency_id);
+        $query      = TniCourse::where('tni_competency_id', $competency_id)->get();
 
         if (request()->ajax()) {
             return DataTables::of($query)
@@ -48,7 +52,7 @@ class TniCourseController extends Controller
             ['data' => 'action', 'title' => 'Action', 'className' => 'text-center', 'orderable' => false, 'searchable' => false, 'width' => '10%'],
         ]);
 
-        return view('training-needs-identification.course.index', compact('program_id', 'competency_id', 'html'));
+        return view('training-needs-identification.course.index', compact('program', 'competency', 'html'));
     }
 
     public function store($program_id, $competency_id, Request $request)
