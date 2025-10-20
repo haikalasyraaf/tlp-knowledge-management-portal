@@ -213,4 +213,54 @@
         background-color: #f89406 !important; /* Bootstrap warning orange */
     }
 
+    .login-container {
+        display: flex;
+        height: 100vh;
+    }
+
+    /* Image section */
+    .image-side {
+        flex: 3;
+        overflow: hidden;
+    }
+
+    .carousel-item img {
+        width: 100%;
+        height: 100vh;
+        object-fit: cover;
+        object-position: center center !important;
+    }
+
+    /* Form section */
+    .form-side {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #fff;
+        padding: 2rem;
+    }
+
+    /* Responsive (stack for mobile) */
+    @media (max-width: 992px) {
+        .login-container {
+            flex-direction: column;
+        }
+
+        .image-side {
+            flex: none;
+            height: 65vh;
+        }
+
+        .carousel-item img {
+            height: 65vh;
+            object-fit: cover;
+            object-position: center center !important;
+        }
+
+        .form-side {
+            flex: none;
+            height: 35vh;
+        }
+    }
 </style>

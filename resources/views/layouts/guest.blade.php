@@ -6,6 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
+        <link rel="icon" type="image/png" href="{{ asset('images/tlp-logo.png') }}">
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -19,18 +20,60 @@
 
         @include('layouts.style')
     </head>
+
     <body class="bg-light">
-        <div class="min-vh-100 d-flex flex-column justify-content-center align-items-center" style="background: linear-gradient(to right, #2c3b71, #0aaead);">
-            <div class="w-100" style="max-width: 420px;">
-                <div class="card shadow-lg border-0 rounded-3">
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-center mb-3">
-                            <a href="/">
-                                <img src="{{ asset('images/tlp-logo.png') }}" class="img-fluid" style="width: 80px; height: 80px;" alt="Image">
-                            </a>
+        @php
+            $images = App\Models\LoginImage::all();
+        @endphp
+
+        <div class="login-container">
+            <div class="image-side">
+                @if($images->count() > 0)
+                    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-pause="false">
+                        @if($images->count() > 1)
+                            <div class="carousel-indicators">
+                                @foreach ($images as $index => $image)
+                                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ $index }}" class="{{ $index == 0 ? 'active' : '' }}" aria-current="{{ $index == 0 ? 'true' : 'false' }}" aria-label="Slide {{ $index + 1 }}"></button>
+                                @endforeach
+                            </div>
+                        @endif
+
+                        <div class="carousel-inner">
+                            @foreach ($images as $index => $image)
+                                <div class="carousel-item {{ $index == 0 ? 'active' : '' }}" data-bs-interval="10000">
+                                    <img src="{{ Storage::url($image->image_path) }}" class="d-block w-100" style="height: 100vh; object-fit: cover; object-position: center;" alt="Image Not Found">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5>{{$image->image_label ?? ''}}</h5>
+                                        <p>{{$image->image_placeholder ?? ''}}</p>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
-                        {{ $slot }}
+
+                        @if($images->count() > 1)
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev" style="justify-content: start !important;">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next" style="justify-content: end !important;">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        @endif
                     </div>
+                @else
+                    <img src="{{ asset('images/default-login-image.jpg') }}" class="d-block w-100" style="height: 100vh; object-fit: cover; object-position: center;" alt="Default Login Image">
+                @endif
+            </div>
+
+            <div class="form-side p-4">
+                <div class="w-100 pb-4">
+                    <div class="d-flex justify-content-center">
+                        <a href="/">
+                            <img src="{{ asset('images/tlp-logo.png') }}" class="img-fluid" style="width: 125px; height: 125px;" alt="Logo">
+                        </a>
+                    </div>
+                    {{ $slot }}
                 </div>
             </div>
         </div>

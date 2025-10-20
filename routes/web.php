@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\LoginImageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubTrainingProgramController;
 use App\Http\Controllers\SystemUserController;
@@ -24,6 +26,10 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('settings/login-image', [LoginImageController::class, 'index'])->name('settings.login-image.index');
+    Route::post('settings/login-image/create', [LoginImageController::class, 'store'])->name('settings.login-image.store');
+    Route::delete('settings/login-image/{id}/delete', [LoginImageController::class, 'delete'])->name('settings.login-image.delete');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('settings.profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('settings.profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('settings.profile.destroy');

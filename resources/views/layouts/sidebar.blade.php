@@ -74,6 +74,13 @@
                             My Profile
                         </a>
                     </li>
+                    @if (auth()->user()->role == 'Admin')
+                        <li>
+                            <a href="{{ route('settings.login-image.index') }}" class="nav-link {{ request()->routeIs('settings.login-image.index') ? 'active' : '' }}" style="padding: 12px 14px 12px 40px !important;">
+                                Login Image
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </li>
