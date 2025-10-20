@@ -88,7 +88,9 @@ class TniProgramController extends Controller
 
     public function report()
     {
-        $courses = TniCourse::with(['users'])->get();
+        $courses = TniCourse::with(['users' => function ($query) {
+            $query->wherePivot('status', '!=', 'withdrawn');
+        }, 'competency.program'])->get();
 
         $data = $courses->flatMap(function ($course) {
             return $course->users->map(function ($user) use ($course) {
@@ -96,14 +98,18 @@ class TniProgramController extends Controller
                     'Staff ID'          => $user->employee_id ?? '-',
                     'Staff Name'        => $user->name,
                     'Department'        => $user->department ?? '-',
-                    'Program Name'      => $course->competency->program->program_name,
-                    'Course Name'       => $course->course_name,
+                    'Program Name'      => optional(optional($course->competency)->program)->program_name ?? '-',
+                    'Course Name'       => $course->course_name ?? '-',
                     'Duration (Hours)'  => $course->course_duration ?? '-',
-                    'Cost'              => number_format((float) $course->course_cost, 2, '.', ',')  ?? '-',
+                    'Cost'              => $course->course_cost ? number_format((float) $course->course_cost, 2, '.', ',') : '-',
                     'Remark'            => $course->course_category ?? '-',
                 ];
             });
         });
+
+        if ($data->isEmpty()) {
+            return redirect()->back()->with('error', 'No data available to export.');
+        }
 
         return (new FastExcel($data))->download('program_report.xlsx');
     }

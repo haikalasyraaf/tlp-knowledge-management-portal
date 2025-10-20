@@ -1,15 +1,21 @@
 <x-app-layout>
 
+    @if(session('error'))
+        <script>
+            toastr.error("{{ session('error') }}");
+        </script>
+    @endif
+
     <div class="d-flex align-items-center mb-3">
-        <p class="mb-0 me-3 p-0" style="font-weight: 500">Training Needs Identification (Program)</p>
+        <h5 class="mb-0 me-3 p-0">Training Needs Identification</h5>
 
         <div class="flex-grow-1 border-top"></div>
 
         @if (auth()->user()->role == 'Admin')
-            <a href="{{ route('training-needs.program.report') }}" class="btn btn-success ms-2">
+            <a href="{{ route('training-needs.program.report') }}" class="btn btn-sm btn-success ms-2">
                 <i class="bi bi-file-earmark-arrow-down-fill icon-13 me-1"></i> Export
             </a>
-            <button class="btn btn-primary ms-1" data-bs-toggle="modal" data-bs-target="#createModal">
+            <button class="btn btn-sm btn-primary ms-1" data-bs-toggle="modal" data-bs-target="#createModal">
                 <i class="bi bi-plus-lg icon-13 me-1"></i> New Program
             </button>
         @endif
