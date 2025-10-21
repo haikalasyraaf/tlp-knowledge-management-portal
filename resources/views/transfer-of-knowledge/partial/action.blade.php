@@ -85,14 +85,35 @@
                                                         <div class="d-flex justify-content-between align-items-center">
                                                             <div>{{ $document->document_name }}</div>
                                                             <div>
-                                                                <a href="{{ asset('storage/'.$document->document_path) }}" target="_blank" class="text-primary">
-                                                                    <i class="bi bi-download icon-13 ps-1"></i>
-                                                                </a>
+                                                                <a href="#" class="btn btn-sm btn-info text-white view-doc-btn" data-bs-toggle="modal" data-bs-target="#viewModal{{ $document->id }}" data-file="{{ asset('storage/' . $document->document_path) }}">View</a>
+                                                                <a href="{{ asset('storage/'.$document->document_path) }}" class="btn btn-sm btn-primary" target="_blank" class="text-primary">Download</a>
                                                                 @if (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $knowledge->created_by))
-                                                                    <a href="#" class="text-danger delete-document-btn" data-knowledge-id="{{ $knowledge->id }}" data-id="{{ $document->id }}">
-                                                                        <i class="bi bi-trash-fill icon-13 ps-1"></i>
-                                                                    </a>
+                                                                    <a href="#" class="btn btn-sm btn-danger delete-document-btn" data-knowledge-id="{{ $knowledge->id }}" data-id="{{ $document->id }}">Delete</a>
                                                                 @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal fade" id="viewModal{{ $document->id }}" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                                                <div class="modal-dialog modal-xl">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="btn-close" onclick="$('#viewModal{{ $document->id }}').modal('hide');"></button>
+                                                        </div>
+                                                        <div class="modal-body text-center">
+                                                            {{-- Default iframe preview --}}
+                                                            <iframe id="previewFrame{{ $document->id }}" src="" width="100%" height="600" style="border:none;display:none;"></iframe>
+
+                                                            {{-- Fallback message --}}
+                                                            <div id="downloadContainer{{ $document->id }}" style="display:none;">
+                                                                <div class="d-flex justify-content-center align-items-center" style="height: 600px">
+                                                                    <div>
+                                                                        <p>File type not support for preview. You can download the file below:</p>
+                                                                        <a id="downloadBtn{{ $document->id }}" href="#" class="btn btn-primary" download>Download File</a>                                                                        
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>

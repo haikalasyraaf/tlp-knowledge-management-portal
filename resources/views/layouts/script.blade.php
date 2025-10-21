@@ -82,3 +82,69 @@
         });
     });
 </script>
+
+<script>
+    function refreshIframe(iframe, src) {
+        // Reload iframe if content not rendered properly
+        setTimeout(() => {
+            if (!iframe.contentDocument || iframe.contentDocument.body.innerHTML.trim() === '') {
+                iframe.src = src; // force reload
+            }
+        }, 500); // small delay to allow initial load
+    }
+
+    $(document).on('click', '.view-doc-btn', function () {
+        const fileUrl = this.dataset.file;
+        const modalId = this.getAttribute('data-bs-target');
+        const id = modalId.replace('#viewModal', ''); // extract the training ID
+
+        const iframe = document.getElementById('previewFrame' + id);
+        const fallback = document.getElementById('downloadContainer' + id);
+        const downloadBtn = document.getElementById('downloadBtn' + id);
+
+        // Reset view
+        iframe.style.display = 'none';
+        fallback.style.display = 'none';
+        iframe.src = '';
+
+        const ext = fileUrl.split('.').pop().toLowerCase();
+        const viewable = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'txt', 'html', 'htm'];
+
+        if (viewable.includes(ext)) {
+            let src = fileUrl;
+
+            if (ext === 'pdf') {
+                src += '#toolbar=0&navpanes=0&scrollbar=0';
+                iframe.src = src;
+                refreshIframe(iframe, src);
+            } 
+            else if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) {
+                const imgHTML = `
+                    <html><body style="margin:0;overflow:hidden;">
+                        <img src='${fileUrl}' style="width:100%;height:100%;object-fit:contain;">
+                    </body></html>
+                `;
+                src = 'data:text/html;charset=utf-8,' + encodeURIComponent(imgHTML);
+                iframe.src = src;
+                refreshIframe(iframe, src);
+            } 
+            else {
+                iframe.src = src;
+                refreshIframe(iframe, src);
+            }
+
+            iframe.style.display = 'block';
+        } else {
+            downloadBtn.href = fileUrl;
+            fallback.style.display = 'block';
+        }
+    });
+
+    // Clear iframe when modal closes
+    document.querySelectorAll('[id^="viewModal"]').forEach(modal => {
+        modal.addEventListener('hidden.bs.modal', () => {
+            const iframe = modal.querySelector('iframe');
+            if (iframe) iframe.src = '';
+        });
+    });
+</script>

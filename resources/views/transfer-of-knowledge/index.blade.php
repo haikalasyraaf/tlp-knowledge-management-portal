@@ -221,12 +221,29 @@
                                         '<div class="d-flex justify-content-between align-items-center">' +
                                             '<div>' + response.document.name + '</div>' +
                                             '<div>' +
-                                                '<a href="' + response.document.path + '" target="_blank" class="text-primary">' +
-                                                    '<i class="bi bi-download icon-13 ps-1"></i>' +
-                                                '</a>' +
-                                                '<a href="#" class="text-danger delete-document-btn" data-knowledge-id="' + knowledgeId + '" data-id="' + response.document.id + '">' +
-                                                    '<i class="bi bi-trash-fill icon-13 ps-1"></i>' +
-                                                '</a>' +
+                                                '<a href="#" class="btn btn-sm btn-info text-white view-doc-btn" data-bs-toggle="modal" data-bs-target="#viewModal' + response.document.id + '" data-file="' + response.document.path + '">View</a> ' +
+                                                '<a href="' + response.document.path + '" class="btn btn-sm btn-primary text-white" download>Download</a> ' +
+                                                '<a href="#" class="btn btn-sm btn-danger delete-document-btn" data-knowledge-id="' + knowledgeId + '" data-id="' + response.document.id + '">Delete</a>' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="modal fade" id="viewModal' + response.document.id + '" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">' +
+                                '<div class="modal-dialog modal-xl">' +
+                                    '<div class="modal-content">' +
+                                        '<div class="modal-header">' +
+                                            '<button type="button" class="btn-close" onclick="$(\'#viewModal' + response.document.id + '\').modal(\'hide\');"></button>' +
+                                        '</div>' +
+                                        '<div class="modal-body text-center">' +
+                                            '<iframe id="previewFrame' + response.document.id + '" src="" width="100%" height="600" style="border:none;display:none;"></iframe>' +
+                                            '<div id="downloadContainer' + response.document.id + '" style="display:none;">' +
+                                                '<div class="d-flex justify-content-center align-items-center" style="height: 600px">' +
+                                                    '<div>' +
+                                                        '<p>File type not supported for preview. You can download the file below:</p>' +
+                                                        '<a id="downloadBtn' + response.document.id + '" href="' + response.document.path + '" class="btn btn-primary" download>Download File</a>' +
+                                                    '</div>' +
+                                                '</div>' +
                                             '</div>' +
                                         '</div>' +
                                     '</div>' +
@@ -272,12 +289,29 @@
                                         '<div class="d-flex justify-content-between align-items-center">' +
                                             '<div>' + response.document.name + '</div>' +
                                             '<div>' +
-                                                '<a href="' + response.document.path + '" target="_blank" class="text-primary">' +
-                                                    '<i class="bi bi-download icon-13 ps-1"></i>' +
-                                                '</a>' +
-                                                '<a href="#" class="text-danger delete-document-btn" data-knowledge-id="' + knowledgeId + '" data-id="' + response.document.id + '">' +
-                                                    '<i class="bi bi-trash-fill icon-13 ps-1"></i>' +
-                                                '</a>' +
+                                                '<a href="#" class="btn btn-sm btn-info text-white view-doc-btn" data-bs-toggle="modal" data-bs-target="#viewModal' + response.document.id + '" data-file="' + response.document.path + '">View</a> ' +
+                                                '<a href="' + response.document.path + '" class="btn btn-sm btn-primary text-white" download>Download</a> ' +
+                                                '<a href="#" class="btn btn-sm btn-danger delete-document-btn" data-knowledge-id="' + knowledgeId + '" data-id="' + response.document.id + '">Delete</a>' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="modal fade" id="viewModal' + response.document.id + '" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">' +
+                                '<div class="modal-dialog modal-xl">' +
+                                    '<div class="modal-content">' +
+                                        '<div class="modal-header">' +
+                                            '<button type="button" class="btn-close" onclick="$(\'#viewModal' + response.document.id + '\').modal(\'hide\');"></button>' +
+                                        '</div>' +
+                                        '<div class="modal-body text-center">' +
+                                            '<iframe id="previewFrame' + response.document.id + '" src="" width="100%" height="600" style="border:none;display:none;"></iframe>' +
+                                            '<div id="downloadContainer' + response.document.id + '" style="display:none;">' +
+                                                '<div class="d-flex justify-content-center align-items-center" style="height: 600px">' +
+                                                    '<div>' +
+                                                        '<p>File type not supported for preview. You can download the file below:</p>' +
+                                                        '<a id="downloadBtn' + response.document.id + '" href="' + response.document.path + '" class="btn btn-primary" download>Download File</a>' +
+                                                    '</div>' +
+                                                '</div>' +
                                             '</div>' +
                                         '</div>' +
                                     '</div>' +

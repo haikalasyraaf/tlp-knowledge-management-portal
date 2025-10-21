@@ -1,9 +1,39 @@
 <div class="d-flex justify-content-center gap-1">
+        <a href="#" class="btn btn-sm btn-info text-white view-doc-btn" data-bs-toggle="modal" data-bs-target="#viewModal{{ $trainingCalendar->id }}" data-file="{{ asset('storage/' . $trainingCalendar->document_path) }}">View</a>
     <a href="{{ asset('storage/' . $trainingCalendar->document_path) }}" class="btn btn-sm btn-primary" download>Download</a>
     @if (auth()->user()->role == 'Admin')
         <a href="#" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#editModal{{$trainingCalendar->id}}">Edit</a>
         <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{$trainingCalendar->id}}">Delete</a>
     @endif
+</div>
+
+<div class="modal fade" id="viewModal{{ $trainingCalendar->id }}" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="mb-3">
+                    <h5 class="mb-1">{{ $trainingCalendar->name }}</h5>
+                    <p>{!! $trainingCalendar->description !!}</p>
+                </div>
+
+                {{-- Default iframe preview --}}
+                <iframe id="previewFrame{{ $trainingCalendar->id }}" src="" width="100%" height="600" style="border:none;display:none;"></iframe>
+
+                {{-- Fallback message --}}
+                <div id="downloadContainer{{ $trainingCalendar->id }}" style="display:none;">
+                    <div class="d-flex justify-content-center align-items-center" style="height: 600px">
+                        <div>
+                            <p>File type not support for preview. You can download the file below:</p>
+                            <a id="downloadBtn{{ $trainingCalendar->id }}" href="#" class="btn btn-primary" download>Download File</a>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade" id="editModal{{$trainingCalendar->id}}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
