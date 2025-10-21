@@ -86,7 +86,7 @@
                                                             <div>{{ $document->document_name }}</div>
                                                             <div>
                                                                 <a href="#" class="btn btn-sm btn-info text-white view-doc-btn" data-bs-toggle="modal" data-bs-target="#viewModal{{ $document->id }}" data-file="{{ asset('storage/' . $document->document_path) }}">View</a>
-                                                                <a href="{{ asset('storage/'.$document->document_path) }}" class="btn btn-sm btn-primary" target="_blank" class="text-primary">Download</a>
+                                                                <a href="{{ asset('storage/'.$document->document_path) }}" class="btn btn-sm btn-primary" class="text-primary" download="{{ Str::slug(pathinfo($document->document_name, PATHINFO_FILENAME)) }}">Download</a>
                                                                 @if (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $knowledge->created_by))
                                                                     <a href="#" class="btn btn-sm btn-danger delete-document-btn" data-knowledge-id="{{ $knowledge->id }}" data-id="{{ $document->id }}">Delete</a>
                                                                 @endif

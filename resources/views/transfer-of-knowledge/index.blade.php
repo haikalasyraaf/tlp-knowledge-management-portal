@@ -214,6 +214,8 @@
                     success: function (response) {
                         toastr.success('Document uploaded successfully!', '', { timeOut: 8000 });
 
+                        let nameWithoutExt = response.document.name.replace(/\.[^/.]+$/, '');
+                        let downloadName = nameWithoutExt.replace(/\s+/g, '-');
                         let newAttachmentRow =
                             '<div class="col-12 mb-2" id="document-' + response.document.id + '">' +
                                 '<div class="card">' +
@@ -222,7 +224,7 @@
                                             '<div>' + response.document.name + '</div>' +
                                             '<div>' +
                                                 '<a href="#" class="btn btn-sm btn-info text-white view-doc-btn" data-bs-toggle="modal" data-bs-target="#viewModal' + response.document.id + '" data-file="' + response.document.path + '">View</a> ' +
-                                                '<a href="' + response.document.path + '" class="btn btn-sm btn-primary text-white" download>Download</a> ' +
+                                                '<a href="' + response.document.path + '" class="btn btn-sm btn-primary text-white" download="' + downloadName + '">Download</a> ' +
                                                 '<a href="#" class="btn btn-sm btn-danger delete-document-btn" data-knowledge-id="' + knowledgeId + '" data-id="' + response.document.id + '">Delete</a>' +
                                             '</div>' +
                                         '</div>' +
@@ -241,7 +243,7 @@
                                                 '<div class="d-flex justify-content-center align-items-center" style="height: 600px">' +
                                                     '<div>' +
                                                         '<p>File type not supported for preview. You can download the file below:</p>' +
-                                                        '<a id="downloadBtn' + response.document.id + '" href="' + response.document.path + '" class="btn btn-primary" download>Download File</a>' +
+                                                        '<a id="downloadBtn' + response.document.id + '" href="' + response.document.path + '" class="btn btn-primary" download="' + downloadName + '">Download File</a>' +
                                                     '</div>' +
                                                 '</div>' +
                                             '</div>' +
@@ -282,6 +284,8 @@
                         console.log(response);
                         toastr.success('Transfer of Knowledge Document uploaded successfully!', '', { timeOut: 8000 });
 
+                        let nameWithoutExt = response.document.name.replace(/\.[^/.]+$/, '');
+                        let downloadName = nameWithoutExt.replace(/\s+/g, '-');
                         let newAttachmentRow =
                             '<div class="col-12 mb-2" id="document-' + response.document.id + '">' +
                                 '<div class="card">' +
@@ -290,7 +294,7 @@
                                             '<div>' + response.document.name + '</div>' +
                                             '<div>' +
                                                 '<a href="#" class="btn btn-sm btn-info text-white view-doc-btn" data-bs-toggle="modal" data-bs-target="#viewModal' + response.document.id + '" data-file="' + response.document.path + '">View</a> ' +
-                                                '<a href="' + response.document.path + '" class="btn btn-sm btn-primary text-white" download>Download</a> ' +
+                                                '<a href="' + response.document.path + '" class="btn btn-sm btn-primary text-white" download="' + downloadName + '">Download</a> ' +
                                                 '<a href="#" class="btn btn-sm btn-danger delete-document-btn" data-knowledge-id="' + knowledgeId + '" data-id="' + response.document.id + '">Delete</a>' +
                                             '</div>' +
                                         '</div>' +
@@ -309,7 +313,7 @@
                                                 '<div class="d-flex justify-content-center align-items-center" style="height: 600px">' +
                                                     '<div>' +
                                                         '<p>File type not supported for preview. You can download the file below:</p>' +
-                                                        '<a id="downloadBtn' + response.document.id + '" href="' + response.document.path + '" class="btn btn-primary" download>Download File</a>' +
+                                                        '<a id="downloadBtn' + response.document.id + '" href="' + response.document.path + '" class="btn btn-primary" download="' + downloadName + '">Download File</a>' +
                                                     '</div>' +
                                                 '</div>' +
                                             '</div>' +

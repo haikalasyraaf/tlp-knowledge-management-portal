@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-center gap-1">
         <a href="#" class="btn btn-sm btn-info text-white view-doc-btn" data-bs-toggle="modal" data-bs-target="#viewModal{{ $trainingCalendar->id }}" data-file="{{ asset('storage/' . $trainingCalendar->document_path) }}">View</a>
-    <a href="{{ asset('storage/' . $trainingCalendar->document_path) }}" class="btn btn-sm btn-primary" download>Download</a>
+    <a href="{{ asset('storage/' . $trainingCalendar->document_path) }}" class="btn btn-sm btn-primary" download="{{ Str::slug($trainingCalendar->name) . '.' . pathinfo($trainingCalendar->document_path, PATHINFO_EXTENSION) }}">Download</a>
     @if (auth()->user()->role == 'Admin')
         <a href="#" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#editModal{{$trainingCalendar->id}}">Edit</a>
         <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{$trainingCalendar->id}}">Delete</a>
