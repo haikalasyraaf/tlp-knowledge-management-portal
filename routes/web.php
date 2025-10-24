@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LoginImageController;
 use App\Http\Controllers\ProfileController;
@@ -21,11 +22,9 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
     Route::get('settings/login-image', [LoginImageController::class, 'index'])->name('settings.login-image.index');
     Route::post('settings/login-image/create', [LoginImageController::class, 'store'])->name('settings.login-image.store');
     Route::delete('settings/login-image/{id}/delete', [LoginImageController::class, 'delete'])->name('settings.login-image.delete');
@@ -70,6 +69,8 @@ Route::middleware('auth')->group(function () {
     Route::post('transfer-of-knowledge/create', [TransferOfKnowledgeController::class, 'store'])->name('transfer-of-knowledge.store');
     Route::post('transfer-of-knowledge/{id}/edit', [TransferOfKnowledgeController::class, 'update'])->name('transfer-of-knowledge.update');
     Route::delete('transfer-of-knowledge/{id}/delete', [TransferOfKnowledgeController::class, 'delete'])->name('transfer-of-knowledge.delete');
+    Route::post('transfer-of-knowledge/{id}/set-as-top-learner', [TransferOfKnowledgeController::class, 'setAsTopLearner'])->name('transfer-of-knowledge.set-as-top-leaner');
+    Route::post('transfer-of-knowledge/{id}/remove-as-top-learner', [TransferOfKnowledgeController::class, 'removeAsTopLearner'])->name('transfer-of-knowledge.remove-as-top-leaner');
     Route::post('transfer-of-knowledge/{knowledge_id}/document/upload', [TransferOfKnowledgeController::class, 'uploadDocument'])->name('transfer-of-knowledge.upload.document');
     Route::delete('transfer-of-knowledge/{knowledge_id}/document/{id}/delete', [TransferOfKnowledgeController::class, 'deleteDocument'])->name('transfer-of-knowledge.delete.document');
 

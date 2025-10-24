@@ -191,6 +191,55 @@
                 });
             });
 
+            $(document).on('click', '.set-top-learner-btn', function () {
+                let knowledgeId = $(this).data('id');
+                let form = $('#learnerForm' + knowledgeId)[0];
+                let formData = new FormData(form);
+
+                $.ajax({
+                    url: "/transfer-of-knowledge/" + knowledgeId + "/set-as-top-learner",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    success: function (response) {
+                        $('#topLearnerModal' + knowledgeId).modal('hide');
+
+                        console.log(response);
+                        toastr.success('Transfer of Knowledge set as Top Learner', '', { timeOut: 8000 });
+                        $('#dataTableBuilder').DataTable().ajax.reload();
+                    },
+                    error: function (xhr) {
+                        console.log(xhr.responseText);
+                        toastr.error(xhr.responseJSON?.message || 'Something went wrong!');
+                    }
+                });
+            });
+
+            $(document).on('click', '.remove-as-top-learner', function () {
+                let knowledgeId = $(this).data('id');
+
+                $.ajax({
+                    url: "/transfer-of-knowledge/" + knowledgeId + "/remove-as-top-learner",
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        toastr.success('Transfer of Knowledge remove as Top Learner', '', { timeOut: 8000 });
+                        $('#dataTableBuilder').DataTable().ajax.reload();
+                    },
+                    error: function (xhr) {
+                        console.log(xhr.responseText);
+                        toastr.error(xhr.responseJSON?.message || 'Something went wrong!');
+                    }
+                });
+            });
+
             // UPLOAD document (after record is created)
             $(document).on('click', '.upload-create-document-btn', function (e) {
                 e.preventDefault();

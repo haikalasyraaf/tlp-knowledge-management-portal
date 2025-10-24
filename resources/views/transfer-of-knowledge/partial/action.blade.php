@@ -1,4 +1,11 @@
 <div class="d-flex justify-content-center gap-1">
+    @if (auth()->user()->role == 'Admin')
+        @if ($knowledge->is_top_learner == 1)
+            <a href="#" class="btn btn-sm btn-warning remove-as-top-learner" data-id="{{ $knowledge->id }}">Unset Top</a>
+        @else
+            <a href="#" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#topLearnerModal{{$knowledge->id}}">Set Top</a>
+        @endif
+    @endif
     @if (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $knowledge->created_by))
         <a href="#" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#editModal{{$knowledge->id}}">Edit</a>
         <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{$knowledge->id}}">Delete</a>
@@ -136,6 +143,33 @@
                         </div>
                     </form>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="topLearnerModal{{$knowledge->id}}" tabindex="-1" aria-labelledby="topLearnerModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content text-start">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="learnerForm{{$knowledge->id}}">
+                    <div class="card" style="box-shadow: none !important">
+                        <div class="card-body py-0">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="top_learner_month{{$knowledge->id}}" class="form-label">Top Learner Month</label>
+                                    <input id="top_learner_month{{$knowledge->id}}" type="month" name="top_learner_month" class="form-control">
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary set-top-learner-btn" data-id="{{ $knowledge->id }}">Set as Top Learner</button>
             </div>
         </div>
     </div>

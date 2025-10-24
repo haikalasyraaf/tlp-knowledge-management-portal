@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TransferOfKnowledge;
 use App\Models\TransferOfKnowledgeDocument;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
@@ -17,6 +18,14 @@ class TransferOfKnowledgeController extends Controller
         if (request()->ajax()) {
             return DataTables::of(TransferOfKnowledge::query())
                 ->addIndexColumn()
+                ->editColumn('title', function ($knowledge) {
+                    if($knowledge->is_top_learner) {
+                        $monthYear = date('M Y', strtotime($knowledge->top_learner_month));
+                        return '<strong>' . $knowledge->title . '<br><span class="badge rounded-pill text-bg-success">' . $monthYear . ' Top Learner</span></strong>';
+                    } else {
+                        return $knowledge->title;
+                    }
+                })
                 ->editColumn('created_by', function ($knowledge) {
                     $user = User::where('id', $knowledge->created_by)->first();
                     return $user->name;
@@ -27,17 +36,17 @@ class TransferOfKnowledgeController extends Controller
                 ->addColumn('action', function ($knowledge) {
                     return view('transfer-of-knowledge.partial.action', compact('knowledge'))->render();
                 })
-                ->rawColumns(['is_display', 'action'])
+                ->rawColumns(['title', 'is_display', 'action'])
                 ->toJson();
         }
 
         $html = $builder->columns([
             ['data' => 'id', 'visible' => false],
             ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => '', 'className' => 'text-center', 'orderable' => false, 'searchable' => false, 'width' => '5%'],
-            ['data' => 'title', 'title' => 'Title', 'width' => '45%'],
+            ['data' => 'title', 'title' => 'Title', 'width' => '40%'],
             ['data' => 'created_by', 'title' => 'Author By'],
             ['data' => 'created_at', 'title' => 'Posted On'],
-            ['data' => 'action', 'title' => 'Action', 'className' => 'text-center', 'orderable' => false, 'searchable' => false, 'width' => '10%'],
+            ['data' => 'action', 'title' => 'Action', 'className' => 'text-center', 'orderable' => false, 'searchable' => false, 'width' => '20%'],
         ]);
 
         return view('transfer-of-knowledge.index', compact('html'));
@@ -120,5 +129,29 @@ class TransferOfKnowledgeController extends Controller
         $document->delete();
 
         return response()->json(['message' => 'Transfer of Knowledge Document deleted successfully']);
+    }
+
+    public function setAsTopLearner($id, Request $request)
+    {
+        $request->validate([
+            'top_learner_month' => 'required',
+        ]);
+
+        $knowledge = TransferOfKnowledge::findOrFail($id);
+        $knowledge->is_top_learner = true;
+        $knowledge->top_learner_month = Carbon::createFromFormat('Y-m', $request->input('top_learner_month'))->startOfMonth();
+        $knowledge->save();
+
+        return response()->json(['message' => 'Transfer of Knowledge set as Top Learner successfully']);
+    }
+
+    public function removeAsTopLearner($id, Request $request)
+    {
+        $knowledge = TransferOfKnowledge::findOrFail($id);
+        $knowledge->is_top_learner = NULL;
+        $knowledge->top_learner_month = NULL;
+        $knowledge->save();
+
+        return response()->json(['message' => 'Transfer of Knowledge remove as Top Learner successfully']);
     }
 }
