@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Rap2hpoutre\FastExcel\FastExcel;
 use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
@@ -55,6 +56,13 @@ class SystemUserController extends Controller
 
         $data = $request->all();
 
+        if ($request->hasFile('profile_photo')) {
+            $file = $request->file('profile_photo');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('profile_photos', $filename, 'public');
+            $data['profile_photo_path'] = $filePath;
+        }
+
         $data['password'] = bcrypt($request->employee_id);
 
         $user = User::create($data);
@@ -72,10 +80,24 @@ class SystemUserController extends Controller
             'designation'   => 'required|string',
         ]);
 
+        $user = User::findOrFail($id);
         $data = $request->all();
+
+        if ($request->hasFile('profile_photo')) {
+            if ($user->profile_photo_path && Storage::disk('public')->exists($user->profile_photo_path)) {
+                Storage::disk('public')->delete($user->profile_photo_path);
+            }
+
+            $file = $request->file('profile_photo');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('profile_photos', $filename, 'public');
+            $data['profile_photo_path'] = $filePath;
+        } else {
+            $data['profile_photo_path'] = $user->profile_photo_path;
+        }
+
         $data['password'] = bcrypt($request->employee_id);
 
-        $user = User::findOrFail($id);
         $user->update($data);
 
         return response()->json(['message' => 'User updated successfully']);
@@ -83,7 +105,15 @@ class SystemUserController extends Controller
 
     public function delete($id)
     {
-        User::findOrFail($id)->delete();
+        $user = User::findOrFail($id);
+
+        // Delete profile photo if it exists
+        if ($user->profile_photo_path && Storage::disk('public')->exists($user->profile_photo_path)) {
+            Storage::disk('public')->delete($user->profile_photo_path);
+        }
+
+        // Then delete the user
+        $user->delete();
         return response()->json(['success' => true]);
     }
 

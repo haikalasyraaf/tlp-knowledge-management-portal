@@ -31,10 +31,18 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="createUserForm">
+                    <form id="createUserForm" enctype="multipart/form-data">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
+                                    <div class="col-lg-12 mb-3">
+                                        <div class="mb-2 d-flex justify-content-center">
+                                            <img src="{{ asset('images/default-profile-photo.png') }}" alt="Profile Photo" class="img-thumbnail"
+                                                style="width: 120px; height: 120px; object-fit: cover;">
+                                        </div>
+                                        <label for="user_profile_photo" class="form-label">Profile Photo</label>
+                                        <input id="user_profile_photo" type="file" name="profile_photo" class="form-control" accept="image/*">
+                                    </div>
                                     <div class="col-lg-6 mb-3">
                                         <label for="user_employee_id" class="form-label">Employee ID</label>
                                         <input id="user_employee_id" type="text" name="employee_id" class="form-control" placeholder="Employee ID">                        
@@ -162,12 +170,15 @@
         {!! $html->scripts() !!}
         <script>
             $(document).on('click', '.add-user-btn', function () {
-                let form = $('#createUserForm');
+                let form = $('#createUserForm')[0];
+                let formData = new FormData(form);
 
                 $.ajax({
                     url: "/system-user/create",
                     type: "POST",
                     data: form.serialize(),
+                    contentType: false,
+                    processData: false,
                     headers: {
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     },
@@ -188,12 +199,15 @@
 
             $(document).on('click', '.edit-user-btn', function () {
                 let userId = $(this).data('id');
-                let form = $('#editUserForm' + userId);
+                let form = $('#editUserForm' + userId)[0];
+                let formData = new FormData(form);
 
                 $.ajax({
                     url: "/system-user/" + userId + "/edit",
                     type: "POST",
-                    data: form.serialize(),
+                    data: formData,
+                    contentType: false,
+                    processData: false,
                     headers: {
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     },

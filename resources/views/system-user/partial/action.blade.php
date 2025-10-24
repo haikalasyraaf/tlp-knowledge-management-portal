@@ -13,10 +13,18 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="editUserForm{{$user->id}}">
+                <form id="editUserForm{{$user->id}}" enctype="multipart/form-data">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
+                                <div class="col-lg-12 mb-3">
+                                    <div class="mb-2 d-flex justify-content-center">
+                                        <img src="{{ $user->profile_photo_path ? asset('storage/' . $user->profile_photo_path) : asset('images/default-profile-photo.png') }}" 
+                                            alt="Profile Photo" class="img-thumbnail" style="width: 120px; height: 120px; object-fit: cover;">
+                                    </div>
+                                    <label for="user_profile_photo_{{ $user->id }}" class="form-label">Profile Photo</label>
+                                    <input id="user_profile_photo_{{ $user->id }}" type="file" name="profile_photo" class="form-control" accept="image/*">
+                                </div>
                                 <div class="col-lg-6 mb-3">
                                     <label for="user_employee_id" class="form-label">Employee ID</label>
                                     <input id="user_employee_id" type="text" name="employee_id" class="form-control"

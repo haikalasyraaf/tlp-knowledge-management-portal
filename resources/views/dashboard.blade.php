@@ -19,7 +19,7 @@
                         </div>
                         <div class="card-body p-0">
                             <div class="d-flex justify-content-center">
-                                <img src="{{ asset('images/default-profile-photo.png') }}" class="rounded-circle" style="width: 100px; height: 100px; border: 1px solid black">
+                                <img src="{{ $knowledge->owner->profile_photo_path ? asset('storage/' . $knowledge->owner->profile_photo_path) : asset('images/default-profile-photo.png') }}" class="rounded-circle" style="width: 100px; height: 100px; border: 1px solid black; object-fit: cover;">
                             </div>
                             <div>
                                 <h6 class="text-center"></h6>
