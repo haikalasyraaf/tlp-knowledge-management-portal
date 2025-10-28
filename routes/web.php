@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InternalBulletinController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LoginImageController;
 use App\Http\Controllers\ProfileController;
@@ -91,6 +92,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('training-needs/program/{program_id}/competency/{competency_id}/course/{id}/delete', [TniCourseController::class, 'delete'])->name('training-needs.course.delete');
     Route::post('training-needs/program/{program_id}/competency/{competency_id}/course/{id}/apply', [TniCourseController::class, 'apply'])->name('training-needs.course.apply');
     Route::post('training-needs/program/{program_id}/competency/{competency_id}/course/{id}/withdraw', [TniCourseController::class, 'withdraw'])->name('training-needs.course.withdraw');
+
+    Route::get('internal-bulletin', [InternalBulletinController::class, 'index'])->name('internal-bulletin.index');
+    Route::post('internal-bulletin/create', [InternalBulletinController::class, 'store'])->name('internal-bulletin.store');
+    Route::post('internal-bulletin/{id}/edit', [InternalBulletinController::class, 'update'])->name('internal-bulletin.update');
+    Route::delete('internal-bulletin/{id}/delete', [InternalBulletinController::class, 'delete'])->name('internal-bulletin.delete');
+    Route::post('internal-bulletin/{bulletin_id}/document/upload', [InternalBulletinController::class, 'uploadDocument'])->name('internal-bulletin.upload.document');
+    Route::delete('internal-bulletin/{bulletin_id}/document/{id}/delete', [InternalBulletinController::class, 'deleteDocument'])->name('internal-bulletin.delete.document');
 
     Route::get('system-user', [SystemUserController::class, 'index'])->name('system-user.index');
     Route::post('system-user/create', [SystemUserController::class, 'store'])->name('system-user.store');

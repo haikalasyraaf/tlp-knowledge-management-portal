@@ -52,6 +52,14 @@
 
         @if (auth()->user()->role == 'Admin')
             <li class="nav-item">
+                <a class="nav-link w-100 {{ request()->routeIs('internal-bulletin.index') ? 'active' : '' }}" href="{{ route('internal-bulletin.index') }}">
+                    <i class="bi bi-newspaper sidebar-icon-md"></i> Internal Bulletin
+                </a>
+            </li>
+        @endif
+
+        @if (auth()->user()->role == 'Admin')
+            <li class="nav-item">
                 <a class="nav-link w-100 {{ request()->routeIs('system-user.index') ? 'active' : '' }}" href="{{ route('system-user.index') }}">
                     <i class="bi bi-people sidebar-icon-md"></i> System Users
                 </a>
