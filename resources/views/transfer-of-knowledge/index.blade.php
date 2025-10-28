@@ -68,6 +68,16 @@
                                 <div class="card-body">
                                     <input type="hidden" name="knowledge_id" id="created_knowledge_id">
 
+                                    <div class="small mt-1" id="upload-note" style="color: red !important">
+                                        <i class="bi bi-info-circle me-1"></i>
+                                        Please submit the Transfer of Knowledge before uploading documents.
+                                    </div>
+
+                                    <div class="small" id="incomplete-note" style="color: orange !important">
+                                        <i class="bi bi-exclamation-diamond me-1"></i>
+                                        Please ensure that at least one document is uploaded. Otherwise, your sharing will not be processed and will be considered incomplete.
+                                    </div>
+
                                     <div class="row">
                                         <div class="col-lg-12 mb-3">
                                             <label for="create_document_path" class="form-label">Document</label>
@@ -93,10 +103,6 @@
                                         </div>
                                     </div>
 
-                                    <div class="text-muted small mt-2" id="upload-note">
-                                        <i class="bi bi-info-circle me-1"></i>
-                                        Please submit the Transfer of Knowledge before uploading documents.
-                                    </div>
                                 </div>
                             </div>
                         </form>

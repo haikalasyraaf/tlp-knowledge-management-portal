@@ -15,16 +15,34 @@ class TransferOfKnowledgeController extends Controller
 {
     public function index(Request $request, Builder $builder)
     {
+
+        if($request->user()->role == 'Admin') {
+            $query = TransferOfKnowledge::orderBy('created_at', 'desc');
+        } else if ($request->user()->role == 'Staff') {
+            $query = TransferOfKnowledge::where(function ($q) use ($request) {
+                $q->where('created_by', $request->user()->id)
+                ->orWhereHas('documents'); // relationship must exist
+            })->orderBy('created_at', 'desc');
+        }
+
         if (request()->ajax()) {
-            return DataTables::of(TransferOfKnowledge::query())
+            return DataTables::of($query)
                 ->addIndexColumn()
                 ->editColumn('title', function ($knowledge) {
-                    if($knowledge->is_top_learner) {
+                    $title = e($knowledge->title); // escape for safety
+
+                    $hasDocument = $knowledge->documents()->exists();
+
+                    if ($knowledge->is_top_learner) {
                         $monthYear = date('M Y', strtotime($knowledge->top_learner_month));
-                        return '<strong>' . $knowledge->title . '<br><span class="badge rounded-pill text-bg-success">' . $monthYear . ' Top Learner</span></strong>';
-                    } else {
-                        return $knowledge->title;
+                        $title .= ' <span class="badge rounded-pill text-bg-success">' . $monthYear . ' Top Learner</span>';
                     }
+
+                    if (!$hasDocument) {
+                        $title .= '<br><small class="text-muted fst-italic">No document attached — this sharing is hidden to others.</small>';
+                    }
+
+                    return $title;
                 })
                 ->editColumn('created_by', function ($knowledge) {
                     $user = User::where('id', $knowledge->created_by)->first();

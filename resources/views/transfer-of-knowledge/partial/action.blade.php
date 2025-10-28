@@ -67,8 +67,13 @@
                     </form>
 
                     <form id="documentForm{{$knowledge->id}}" enctype="multipart/form-data">
-                        <div class="card card-attachment d-none" style="box-shadow: none !important">
+                        <div class="card card-attachment mt-3 d-none" style="box-shadow: none !important">
                             <div class="card-body">
+                                <div class="small" id="incomplete-note-{{ $knowledge->id }}" style="color: orange !important">
+                                    <i class="bi bi-exclamation-diamond me-1"></i>
+                                    Please ensure that at least one document is uploaded. Otherwise, your sharing will not be processed and will be considered incomplete.
+                                </div>
+
                                 <div class="row">
                                     @if (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $knowledge->created_by))
                                         <div class="col-lg-12 mb-3">
