@@ -10,6 +10,7 @@ use Rap2hpoutre\FastExcel\FastExcel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class TniProgramController extends Controller
@@ -86,11 +87,27 @@ class TniProgramController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function report()
+    public function report(Request $request)
     {
-        $courses = TniCourse::with(['users' => function ($query) {
-            $query->wherePivot('status', '!=', 'withdrawn');
-        }, 'competency.program'])->get();
+        $reportType = $request->input('report_type');
+        $year = $request->input('year');   // Example: 2025
+        $month = $request->input('month'); // Example: 2025-10
+
+        $query = TniCourse::with(['users' => function ($q) use ($reportType, $year, $month) {
+            $q->wherePivot('status', '!=', 'withdrawn');
+
+            if ($reportType == 2 && $year) {
+                // Yearly report
+                $q->whereYear('tni_course_user.updated_at', $year);
+            } elseif ($reportType == 3 && $month) {
+                // Monthly report — extract year & month properly
+                $parsedMonth = \Carbon\Carbon::parse($month);
+                $q->whereYear('tni_course_user.updated_at', $parsedMonth->year)
+                ->whereMonth('tni_course_user.updated_at', $parsedMonth->month);
+            }
+        }, 'competency.program']);
+
+        $courses = $query->get();
 
         $data = $courses->flatMap(function ($course) {
             return $course->users->map(function ($user) use ($course) {
@@ -109,7 +126,7 @@ class TniProgramController extends Controller
         });
 
         if ($data->isEmpty()) {
-            return redirect()->back()->with('error', 'No data available to export.');
+            throw new \Exception('No data available to export.');
         }
 
         return (new FastExcel($data))->download('program_report.xlsx');

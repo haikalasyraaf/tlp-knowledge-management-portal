@@ -79,7 +79,7 @@ Route::middleware('auth')->group(function () {
     Route::post('training-needs/program/create', [TniProgramController::class, 'store'])->name('training-needs.program.store');
     Route::post('training-needs/program/{id}/edit', [TniProgramController::class, 'update'])->name('training-needs.program.update');
     Route::delete('training-needs/program/{id}/delete', [TniProgramController::class, 'delete'])->name('training-needs.program.delete');
-    Route::get('training-needs/program/report', [TniProgramController::class, 'report'])->name('training-needs.program.report');
+    Route::post('training-needs/program/report', [TniProgramController::class, 'report'])->name('training-needs.program.report');
 
     Route::get('training-needs/program/{program_id}/competency', [TniCompetencyController::class, 'index'])->name('training-needs.competency.index');
     Route::post('training-needs/program/{program_id}/competency/create', [TniCompetencyController::class, 'store'])->name('training-needs.competency.store');
