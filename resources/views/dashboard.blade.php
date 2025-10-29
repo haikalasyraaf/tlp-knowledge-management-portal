@@ -7,12 +7,154 @@
         </div>
     </div>
 
-    @if ($top_transfer_of_knowledges)
-        <div class="d-flex overflow-auto flex-nowrap mt-4">
+    @if ($bulletins->count() > 0)
+        <div class="my-3">
+            <div class="rounded-2 bg-gradient-blue px-3 py-2">
+                <h6 class="mb-0">Internal Bulletins</h6>
+            </div>
+        </div>
+        <div class="d-flex flex-nowrap overflow-x-auto gap-3 mb-4" style="max-width: 1232px;">
+            @foreach ($bulletins as $bulletin)
+                <div class="flex-shrink-0" style="width: 350px;">
+                    <div class="card">
+                        <img src="{{ $bulletin->image_path ? asset('storage/' . $bulletin->image_path) : asset('images/default-news.png') }}" class="card-img-top" style="height: 200px" alt="Image">
+                        <div class="card-body p-4">
+                            <div>
+                                <h6>{{ $bulletin->title }}</h6>
+                                <div class="form-control" style="border: none; background-color: transparent; padding: 0px; text-align: justify; height: 80px; overflow-y: auto;">
+                                    {!! nl2br(e($bulletin->description)) !!}
+                                </div>
+                            </div>
+
+                            <div class="mt-2">
+                                <a href="#" class="w-100 btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewBulletinModal{{$bulletin->id}}">View Bulletin</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="viewBulletinModal{{$bulletin->id}}" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content text-start">
+                            <div class="modal-header pb-0">
+                                <h1 class="modal-title fs-5">View Bulletin</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="edit-wrapper">
+                                    <div class="card" style="box-shadow: none !important">
+                                        <div class="card-body pb-0">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <a class="w-100 btn btn-primary detail-btn active" style="cursor: pointer">Detail</a>
+                                                </div>
+                                                <div class="col-6">
+                                                    <a class="w-100 btn btn-secondary attachment-btn" style="cursor: pointer">Attachment</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <form id="editForm{{$bulletin->id}}">
+                                        <div class="card card-detail" style="box-shadow: none !important">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-lg-12 mb-3">
+                                                        <label for="title{{$bulletin->id}}" class="form-label">Title</label>
+                                                        <input id="title{{$bulletin->id}}" type="text" name="title" class="form-control"
+                                                            value="{{$bulletin->title}}" placeholder="Title" disabled>
+                                                    </div>
+                                                    <div class="col-lg-12 mb-3">
+                                                        <label for="description{{$bulletin->id}}" class="form-label">Description</label>
+                                                        <textarea id="description{{$bulletin->id}}" name="content" class="form-control" rows="15" style="resize: none;" disabled>{!! $bulletin->content !!}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <form id="documentForm{{$bulletin->id}}" enctype="multipart/form-data">
+                                        <div class="card card-attachment d-none" style="box-shadow: none !important">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-12 mb-2">
+                                                        List of Attachment(s)
+                                                    </div>
+
+                                                    <div class="attachments-container" id="document-container-{{ $bulletin->id }}">
+                                                        @forelse ($bulletin->documents as $document)
+                                                            <div class="col-12 mb-2" id="document-{{ $document->id }}">
+                                                                <div class="card">
+                                                                    <div class="card-body p-2">
+                                                                        <div class="d-flex justify-content-between align-items-center">
+                                                                            <div>{{ $document->document_name }}</div>
+                                                                            <div>
+                                                                                <a href="#" class="btn btn-sm btn-info text-white view-doc-btn" data-bs-toggle="modal" data-bs-target="#viewBulletinDocumentModal{{ $document->id }}" data-file="{{ asset('storage/' . $document->document_path) }}">View</a>
+                                                                                <a href="{{ asset('storage/'.$document->document_path) }}" class="btn btn-sm btn-primary" class="text-primary" download="{{ Str::slug(pathinfo($document->document_name, PATHINFO_FILENAME)) }}">Download</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="modal fade" id="viewBulletinDocumentModal{{ $document->id }}" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                                                                <div class="modal-dialog modal-xl">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <button type="button" class="btn-close" onclick="$('#viewBulletinDocumentModal{{ $document->id }}').modal('hide');"></button>
+                                                                        </div>
+                                                                        <div class="modal-body text-center">
+                                                                            {{-- Default iframe preview --}}
+                                                                            <iframe id="previewFrame{{ $document->id }}" src="" width="100%" height="600" style="border:none;display:none;"></iframe>
+
+                                                                            {{-- Fallback message --}}
+                                                                            <div id="downloadContainer{{ $document->id }}" style="display:none;">
+                                                                                <div class="d-flex justify-content-center align-items-center" style="height: 600px">
+                                                                                    <div>
+                                                                                        <p>File type not support for preview. You can download the file below:</p>
+                                                                                        <a id="downloadBtn{{ $document->id }}" href="#" class="btn btn-primary" download>Download File</a>                                                                        
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @empty
+                                                            <div class="col-12 mb-2" id="empty-document-message">
+                                                                <div class="card">
+                                                                    <div class="card-body p-2">
+                                                                        <div class="d-flex justify-content-center align-items-center">
+                                                                            <div class="text-center">No document uploaded</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endforelse
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @endif
+
+    @if ($top_transfer_of_knowledges->count() > 0)
+        <div class="my-3">
+            <div class="rounded-2 bg-gradient-blue px-3 py-2">
+                <h6 class="mb-0">Top Learner</h6>
+            </div>
+        </div>
+        <div class="d-flex overflow-auto flex-nowrap gap-3 mb-4" style="max-width: 1232px;">
             @foreach ($top_transfer_of_knowledges as $knowledge)
-                <div class="flex-shrink-0 col-12 col-lg-4" style="padding: 0 12px 12px 12px">
+                <div class="flex-shrink-0" style="width: 350px">
                     <div class="card p-4">
-                        <div class="card-header rounded-5 bg-gradient-blue mb-4">
+                        <div class="card-header rounded-5 mb-4" style="background-color: #FFC107; color: black">
                             <div class="text-center">
                                 <h5 class="mb-0">{{ $knowledge->top_learner_month->format('M Y') }} Top Learner</h5>
                             </div>
@@ -31,21 +173,21 @@
 
                             <div>
                                 <h6>{{ $knowledge->title }}</h6>
-                                <div class="form-control" style="border: none; background-color: transparent; padding: 0px; text-align: justify; height: 160px; overflow-y: auto;">
+                                <div class="form-control" style="border: none; background-color: transparent; padding: 0px; text-align: justify; height: 80px; overflow-y: auto;">
                                     {!! nl2br(e($knowledge->content)) !!}
                                 </div>
                             </div>
 
                             <div class="mt-2">
-                                <a href="#" class="w-100 btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewModal{{$knowledge->id}}">View Transfer of Knowledge</a>
+                                <a href="#" class="w-100 btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewKnowledgeModal{{$knowledge->id}}">View Transfer of Knowledge</a>
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade" id="viewModal{{$knowledge->id}}" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                    <div class="modal fade" id="viewKnowledgeModal{{$knowledge->id}}" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content text-start">
                                 <div class="modal-header pb-0">
-                                    <h1 class="modal-title fs-5" id="viewModalLabel">View Transfer of Knowledge</h1>
+                                    <h1 class="modal-title fs-5">View Transfer of Knowledge</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
@@ -97,7 +239,7 @@
                                                                             <div class="d-flex justify-content-between align-items-center">
                                                                                 <div>{{ $document->document_name }}</div>
                                                                                 <div>
-                                                                                    <a href="#" class="btn btn-sm btn-info text-white view-doc-btn" data-bs-toggle="modal" data-bs-target="#viewModal{{ $document->id }}" data-file="{{ asset('storage/' . $document->document_path) }}">View</a>
+                                                                                    <a href="#" class="btn btn-sm btn-info text-white view-doc-btn" data-bs-toggle="modal" data-bs-target="#viewKnowledgeDocumentModal{{ $document->id }}" data-file="{{ asset('storage/' . $document->document_path) }}">View</a>
                                                                                     <a href="{{ asset('storage/'.$document->document_path) }}" class="btn btn-sm btn-primary" class="text-primary" download="{{ Str::slug(pathinfo($document->document_name, PATHINFO_FILENAME)) }}">Download</a>
                                                                                 </div>
                                                                             </div>
@@ -105,11 +247,11 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div class="modal fade" id="viewModal{{ $document->id }}" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                                                                <div class="modal fade" id="viewKnowledgeDocumentModal{{ $document->id }}" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                                                                     <div class="modal-dialog modal-xl">
                                                                         <div class="modal-content">
                                                                             <div class="modal-header">
-                                                                                <button type="button" class="btn-close" onclick="$('#viewModal{{ $document->id }}').modal('hide');"></button>
+                                                                                <button type="button" class="btn-close" onclick="$('#viewKnowledgeDocumentModal{{ $document->id }}').modal('hide');"></button>
                                                                             </div>
                                                                             <div class="modal-body text-center">
                                                                                 {{-- Default iframe preview --}}

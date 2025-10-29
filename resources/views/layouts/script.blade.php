@@ -96,7 +96,7 @@
     $(document).on('click', '.view-doc-btn', function () {
         const fileUrl = this.dataset.file;
         const modalId = this.getAttribute('data-bs-target');
-        const id = modalId.replace('#viewModal', ''); // extract the training ID
+        const id = modalId.replace(/^#view.*Modal/, ''); // extract the training ID
 
         const iframe = document.getElementById('previewFrame' + id);
         const fallback = document.getElementById('downloadContainer' + id);
