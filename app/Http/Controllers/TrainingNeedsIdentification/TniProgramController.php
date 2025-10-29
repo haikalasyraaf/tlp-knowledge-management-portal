@@ -103,6 +103,7 @@ class TniProgramController extends Controller
                     'Duration (Hours)'  => $course->course_duration ?? '-',
                     'Cost'              => $course->course_cost ? number_format((float) $course->course_cost, 2, '.', ',') : '-',
                     'Remark'            => $course->course_category ?? '-',
+                    'Date Applied'      => $user->pivot->updated_at ? $user->pivot->updated_at->format('d M Y h:i A') : '-',
                 ];
             });
         });
