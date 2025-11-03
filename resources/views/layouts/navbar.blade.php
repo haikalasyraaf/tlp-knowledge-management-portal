@@ -17,19 +17,63 @@
             <!-- Right side: User Dropdown -->
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link d-flex align-items-center text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span><i class="bi bi-bell-fill icon-13"></i></span>
+                    {{-- Bell icon --}}
+                    <a class="nav-link position-relative text-white" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-bell-fill icon-13"></i>
+
+                        {{-- Unread count badge --}}
+                        @if(auth()->user()->unreadNotifications->count() > 0)
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ auth()->user()->unreadNotifications->count() }}
+                            </span>
+                        @endif
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end py-0" aria-labelledby="userDropdown">
-                        <li class="p-2">
-                            <p class="mb-0" style="font-size: 13px !important">Notifications</p>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li class="p-2">
-                            <p class="mb-0" style="font-size: 13px !important">No new notification at the moment</p>
-                        </li>
+
+                    {{-- Dropdown list --}}
+                    <ul class="dropdown-menu dropdown-menu-end p-0 shadow border-0"
+                        aria-labelledby="notificationDropdown"
+                        style="width: 360px; max-height: 400px;">
+
+                        {{-- Header --}}
+                        <li class="dropdown-header bg-light fw-bold p-3 border-bottom">Notifications</li>
+
+                        {{-- Notification items --}}
+                        @forelse(auth()->user()->notifications->take(10) as $notification)
+                            @php
+                                $sender = App\Models\User::find($notification->data['sender'] ?? null);
+                                if ($sender) {
+                                    $profileImage = $sender->profile_photo_path
+                                        ? asset('storage/' . $sender->profile_photo_path)
+                                        : asset('images/default-profile-photo.png');
+                                    $name = $sender->name;
+                                } else {
+                                    $profileImage = asset('images/default-profile-photo.png');
+                                    $name = 'System';
+                                }
+                            @endphp
+
+                            <li>
+                                <a href="{{ route('notifications.read', $notification->id) }}"
+                                    class="dropdown-item py-2 px-3 d-flex align-items-start {{ is_null($notification->read_at) ? 'bg-info-subtle' : '' }}"
+                                    style="transition: background-color 0.2s;">
+                                    {{-- Profile photo --}}
+                                    <img src="{{ $profileImage }}" class="rounded-circle flex-shrink-0 me-2" style="width: 42px; height: 42px; object-fit: cover;">
+
+                                    {{-- Notification text --}}
+                                    <div class="flex-grow-1 text-wrap" style="min-width: 0;">
+                                        <div class="fw-semibold">{{ $notification->data['title'] ?? 'Notification' }}</div>
+                                        <small class="text-muted d-block">{{ $notification->data['message'] ?? '' }}</small>
+                                        <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                                    </div>
+                                </a>
+                            </li>
+                        @empty
+                            <li>
+                                <div class="dropdown-item text-center text-muted py-4">
+                                    No notifications yet
+                                </div>
+                            </li>
+                        @endforelse
                     </ul>
                 </li>
                 <li class="nav-item dropdown">

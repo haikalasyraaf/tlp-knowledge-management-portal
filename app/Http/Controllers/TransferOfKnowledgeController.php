@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TransferOfKnowledge;
 use App\Models\TransferOfKnowledgeDocument;
 use App\Models\User;
+use App\Notifications\UserAlertNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -85,6 +86,18 @@ class TransferOfKnowledgeController extends Controller
             'created_by'    => $request->user()->id,
             'updated_by'    => $request->user()->id,
         ]);
+
+        $users = User::whereNot('id', $knowledge->created_by)->get();
+        $sender = User::find($knowledge->created_by);
+
+        foreach($users as $user) {
+            $user->notify(new UserAlertNotification(
+                'Transfer of Knowledge',
+                'New Knowledge Shared',
+                $sender->name . ' has shared a new topic: "' . $knowledge->title . '".',
+                $sender->id
+            ));            
+        }
 
         return response()->json(['message'   => 'Transfer of Knowledge created successfully.', 'knowledge' => $knowledge]);
     }

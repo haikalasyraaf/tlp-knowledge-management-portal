@@ -105,6 +105,8 @@ Route::middleware('auth')->group(function () {
     Route::post('system-user/{id}/edit', [SystemUserController::class, 'update'])->name('system-user.update');
     Route::delete('system-user/{id}/delete', [SystemUserController::class, 'delete'])->name('system-user.delete');
     Route::post('system-user/import', [SystemUserController::class, 'import'])->name('system-user.import');
+
+    Route::get('/notifications/read/{id}', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.read');
 });
 
 require __DIR__.'/auth.php';
