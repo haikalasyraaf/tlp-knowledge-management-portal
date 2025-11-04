@@ -1,10 +1,10 @@
 <div class="bg-white border-end vh-100 py-3">
     <div class="d-flex justify-content-center">
         <a href="/">
-            <img src="{{ asset('images/tlp-logo.png') }}" class="tw-w-20 tw-h-20" alt="Image">
+            <img src="{{ asset(\App\Models\Setting::get('app_logo', 'images/default-logo.png')) }}" style="height: 80px; width: 80px;">
         </a>
     </div>
-    <h5 class="text-center">{{ config('app.name', 'Laravel') }}</h5>
+    <h5 class="text-center">{{ \App\Models\Setting::get('app_name', 'Learning Portal') }}</h5>
     <br>
     <ul class="nav flex-column">
 
@@ -77,12 +77,12 @@
             </a>
             <div class="collapse {{ $settingsActive ? 'show' : '' }}" id="settingsSubmenu">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
-                    <li>
-                        <a href="{{ route('settings.profile.edit') }}" class="nav-link {{ request()->routeIs('settings.profile.edit') ? 'active' : '' }}" style="padding: 12px 14px 12px 40px !important;">
-                            My Profile
-                        </a>
-                    </li>
                     @if (auth()->user()->role == 'Admin')
+                        <li>
+                            <a href="{{ route('settings.index') }}" class="nav-link {{ request()->routeIs('settings.index') ? 'active' : '' }}" style="padding: 12px 14px 12px 40px !important;">
+                                System
+                            </a>
+                        </li>
                         <li>
                             <a href="{{ route('settings.login-image.index') }}" class="nav-link {{ request()->routeIs('settings.login-image.index') ? 'active' : '' }}" style="padding: 12px 14px 12px 40px !important;">
                                 Login Image
