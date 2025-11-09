@@ -65,7 +65,7 @@
                                                     </div>
                                                     <div class="col-lg-12 mb-3">
                                                         <label for="description{{$bulletin->id}}" class="form-label">Description</label>
-                                                        <textarea id="description{{$bulletin->id}}" name="content" class="form-control" rows="15" style="resize: none;" disabled>{!! $bulletin->content !!}</textarea>
+                                                        <textarea id="description{{$bulletin->id}}" name="description" class="form-control" rows="15" style="resize: none;" disabled>{!! $bulletin->description !!}</textarea>
                                                     </div>
                                                 </div>
                                             </div>

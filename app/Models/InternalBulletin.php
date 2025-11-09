@@ -8,7 +8,7 @@ class InternalBulletin extends Model
 {
     protected $fillable = [
         'title',
-        'content',
+        'description',
         'created_by',
         'updated_by',
     ];

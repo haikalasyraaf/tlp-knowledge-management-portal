@@ -36,7 +36,7 @@
                                     <div class="col-lg-12 mb-3">
                                         <label for="description{{$bulletin->id}}" class="form-label">Description</label>
                                         <textarea id="description{{$bulletin->id}}" name="description" class="form-control" rows="10"
-                                            placeholder="Enter description...">{!! $bulletin->content !!}</textarea>
+                                            placeholder="Enter description...">{!! $bulletin->description !!}</textarea>
                                     </div>
 
                                     <div class="col-12 text-end">
