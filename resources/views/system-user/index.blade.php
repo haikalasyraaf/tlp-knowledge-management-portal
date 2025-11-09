@@ -176,14 +176,14 @@
                 $.ajax({
                     url: "/system-user/create",
                     type: "POST",
-                    data: form.serialize(),
+                    data: formData,
                     contentType: false,
                     processData: false,
                     headers: {
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     },
                     success: function (response) {
-                        form[0].reset();
+                        form.reset();
                         $('#createModal').modal('hide');
 
                         console.log(response);
