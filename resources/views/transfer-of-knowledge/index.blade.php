@@ -4,7 +4,14 @@
             <div class="p-3" style="border-bottom: 1px solid #dee2e6">
                 <div class="row align-items-center">
                     <div class="col-6">
-                        <h5 class="mb-0">Transfer of Knowledge List</h5>
+                        <h5 class="mb-0">
+                            Transfer of Knowledge List
+                            @if (auth()->user()->role == 'Admin')
+                                <button data-bs-toggle="modal" data-bs-target="#guidelineModal">
+                                    <i class="bi bi-gear-fill ms-1"></i>
+                                </button>                                
+                            @endif
+                        </h5>
                     </div>
                     <div class="col-6 text-end">
                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
@@ -15,6 +22,11 @@
             </div>
 
             <div class="p-3">
+                @if (\App\Models\Setting::get('tok_guideline', '') != '')
+                    <div style="font-size: 10.5px; border: 1px solid #ced4da; padding: 10px; border-radius: 5px; background-color: #e9ecef;">
+                        {!! nl2br(\App\Models\Setting::get('tok_guideline', '')) !!}
+                    </div>
+                @endif
                 {!! $html->table() !!}
             </div>
         </div>
@@ -107,6 +119,36 @@
                             </div>
                         </form>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ToK Guideline Modal -->
+    <div class="modal fade" id="guidelineModal" tabindex="-1" aria-labelledby="guidelineModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content text-start">
+                <div class="modal-header pb-0">
+                    <h1 class="modal-title fs-5" id="guidelineModalLabel">Transfer of Knowledge Guideline</h1>
+                    <button type="button" class="btn-close close-create-modal-btn" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body py-0">
+                    <form id="guidelineForm">
+                        <div class="card card-detail" style="box-shadow: none !important">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-12 mb-2 px-0">
+                                        <textarea id="tok_guideline" name="tok_guideline" class="form-control" rows="10" placeholder="Enter guideline..."
+                                            >{{ \App\Models\Setting::get('tok_guideline', '') }}</textarea>
+                                    </div>
+
+                                    <div class="col-12 text-end px-0">
+                                        <button type="button" class="btn btn-primary add-guideline-btn">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -506,6 +548,31 @@
                 if (knowledgeId) {
                     $('#dataTableBuilder').DataTable().ajax.reload();
                 }
+            });
+
+            $(document).on('click', '.add-guideline-btn', function (e) {
+                let form = $('#guidelineForm')[0];
+                let formData = new FormData(form);
+                $(e.currentTarget).prop('disabled', true);
+
+                $.ajax({
+                    url: "/settings/update/transfer-of-knowledge",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    success: function (response) {
+                        location.reload();
+                    },
+                    error: function (xhr) {
+                        console.log(xhr.responseText);
+                        toastr.error(xhr.responseJSON?.message || 'Something went wrong!');
+                        $(e.currentTarget).prop('disabled', false);
+                    }
+                });
             });
         </script>
     @endpush

@@ -47,4 +47,13 @@ class SettingController extends Controller
 
         return back()->with('success', 'Settings updated successfully.');
     }
+
+    public function updateTokGuideline(Request $request)
+    {
+        $request->validate([
+            'tok_guideline' => 'nullable|string|max:255',
+        ]);
+
+        \App\Models\Setting::set('tok_guideline', $request->tok_guideline);
+    }
 }
