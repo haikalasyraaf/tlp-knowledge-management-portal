@@ -87,17 +87,17 @@ class TransferOfKnowledgeController extends Controller
             'updated_by'    => $request->user()->id,
         ]);
 
-        $users = User::whereNot('id', $knowledge->created_by)->get();
-        $sender = User::find($knowledge->created_by);
+        // $users = User::whereNot('id', $knowledge->created_by)->get();
+        // $sender = User::find($knowledge->created_by);
 
-        foreach($users as $user) {
-            $user->notify(new UserAlertNotification(
-                'Transfer of Knowledge',
-                'New Knowledge Shared',
-                $sender->name . ' has shared a new topic: "' . $knowledge->title . '".',
-                $sender->id
-            ));            
-        }
+        // foreach($users as $user) {
+        //     $user->notify(new UserAlertNotification(
+        //         'Transfer of Knowledge',
+        //         'New Knowledge Shared',
+        //         $sender->name . ' has shared a new topic: "' . $knowledge->title . '".',
+        //         $sender->id
+        //     ));
+        // }
 
         return response()->json(['message'   => 'Transfer of Knowledge created successfully.', 'knowledge' => $knowledge]);
     }
