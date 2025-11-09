@@ -67,13 +67,18 @@
             </div>
 
             <div class="form-side p-4">
-                <div class="w-100 pb-4">
+                <div></div>
+                <div class="w-100">
                     <div class="d-flex justify-content-center">
                         <a href="/">
                             <img src="{{ asset('images/tlp-logo.png') }}" class="img-fluid" style="width: 125px; height: 125px;" alt="Logo">
                         </a>
                     </div>
                     {{ $slot }}
+                </div>
+                <div class="text-center">
+                    <p class="text-muted mb-2" style="font-size: 10.5px; font-weight: bold">“This System is Secured and Safe.”</p>
+                    <p class="text-muted mb-0" style="font-size: 10.5px; font-weight: bold">Use a strong password that includes a combination of alphabets (including capital letters) and numbers.</p>
                 </div>
             </div>
         </div>

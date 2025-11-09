@@ -235,10 +235,12 @@
     .form-side {
         flex: 1;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        justify-content: space-between;
         align-items: center;
         background: #fff;
         padding: 2rem;
+        height: 100vh;
     }
 
     /* Responsive (stack for mobile) */
