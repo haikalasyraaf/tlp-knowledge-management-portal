@@ -39,6 +39,10 @@
         margin: 0;
     }
 
+    .icon-10 {
+        font-size: 10px !important;
+    }
+
     .icon-13 {
         font-size: 13px !important;
     }

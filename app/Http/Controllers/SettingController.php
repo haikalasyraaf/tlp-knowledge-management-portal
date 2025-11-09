@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SettingController extends Controller
 {
@@ -21,13 +22,27 @@ class SettingController extends Controller
         $request->validate([
             'app_name' => 'required|string|max:255',
             'app_logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'guideline_document_path' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
         ]);
 
         \App\Models\Setting::set('app_name', $request->app_name);
 
         if ($request->hasFile('app_logo')) {
+            $oldLogo = \App\Models\Setting::get('app_logo');
+            if ($oldLogo && Storage::disk('public')->exists(str_replace('storage/', '', $oldLogo))) {
+                Storage::disk('public')->delete(str_replace('storage/', '', $oldLogo));
+            }
             $path = $request->file('app_logo')->store('logo', 'public');
             \App\Models\Setting::set('app_logo', 'storage/' . $path);
+        }
+
+        if ($request->hasFile('guideline_document_path')) {
+            $oldDoc = \App\Models\Setting::get('guideline_document_path');
+            if ($oldDoc && Storage::disk('public')->exists(str_replace('storage/', '', $oldDoc))) {
+                Storage::disk('public')->delete(str_replace('storage/', '', $oldDoc));
+            }
+            $path = $request->file('guideline_document_path')->store('login_guideline', 'public');
+            \App\Models\Setting::set('guideline_document_path', 'storage/' . $path);
         }
 
         return back()->with('success', 'Settings updated successfully.');

@@ -52,6 +52,18 @@
                         LOG IN
                     </button>
                 </div>
+
+                @php
+                    $guideline = \App\Models\Setting::get('guideline_document_path');
+                @endphp
+
+                <div class="mt-2 text-end">
+                    @if($guideline && file_exists(public_path($guideline)))
+                        <a href="{{ asset($guideline) }}" style="font-size: 11px !important;" target="_blank" download="{{ \App\Models\Setting::get('app_name', 'Learning Portal') }} User Guideline">
+                            <i class="bi bi-journal-bookmark-fill icon-10 me-1"></i> User Guideline
+                        </a>
+                    @endif
+                </div>
             </form>
         </div>
     </div>

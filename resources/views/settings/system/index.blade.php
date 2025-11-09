@@ -30,6 +30,21 @@
                             <input id="app_name" type="text" name="app_name" class="form-control" value="{{ $settings['app_name'] ?? '' }}" placeholder="Enter application name">
                         </div>
 
+                        {{-- User Guideline --}}
+                        <div class="col-lg-12 mb-3">
+                            <label for="guideline_document_path" class="form-label">User Guideline</label>
+                            @php
+                                $guideline = \App\Models\Setting::get('guideline_document_path');
+                            @endphp
+
+                            @if($guideline && file_exists(public_path($guideline)))
+                                <a href="{{ asset($guideline) }}" target="_blank" download="{{ \App\Models\Setting::get('app_name', 'Learning Portal') }} User Guideline">
+                                    <i class="bi bi-download icon-13 ms-1"></i>
+                                </a>
+                            @endif
+                            <input id="guideline_document_path" type="file" name="guideline_document_path" class="form-control" accept="application/pdf">
+                        </div>
+
                         {{-- Save Button --}}
                         <div class="col-12 text-end">
                             <button type="button" class="btn btn-primary save-settings-btn">
