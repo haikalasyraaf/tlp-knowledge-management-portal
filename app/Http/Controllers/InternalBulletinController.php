@@ -17,6 +17,10 @@ class InternalBulletinController extends Controller
         if (request()->ajax()) {
             return DataTables::of(InternalBulletin::query())
                 ->addIndexColumn()
+                ->editColumn('image_display', function ($bulletin) {
+                    $image = $bulletin->image_path ? Storage::url($bulletin->image_path) : asset('images/default-news.png');
+                    return '<img src="' . $image . '" style="width: 120px; height: 100%; object-fit: cover; object-position: center; border-radius: 8px;">';
+                })
                 ->editColumn('title', function ($bulletin) {
                     if($bulletin->is_top_learner) {
                         $monthYear = date('M Y', strtotime($bulletin->top_learner_month));
@@ -35,13 +39,14 @@ class InternalBulletinController extends Controller
                 ->addColumn('action', function ($bulletin) {
                     return view('internal-bulletin.partial.action', compact('bulletin'))->render();
                 })
-                ->rawColumns(['title', 'is_display', 'action'])
+                ->rawColumns(['image_display', 'title', 'is_display', 'action'])
                 ->toJson();
         }
 
         $html = $builder->columns([
             ['data' => 'id', 'visible' => false],
             ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => '', 'className' => 'text-center', 'orderable' => false, 'searchable' => false, 'width' => '5%'],
+            ['data' => 'image_display', 'title' => 'Image', 'orderable' => false, 'searchable' => false],
             ['data' => 'title', 'title' => 'Title', 'width' => '40%'],
             ['data' => 'created_by', 'title' => 'Created By'],
             ['data' => 'created_at', 'title' => 'Posted On'],

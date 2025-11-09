@@ -46,6 +46,17 @@
                             <div class="card card-detail" style="box-shadow: none !important">
                                 <div class="card-body">
                                     <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="drop-area">
+                                                <p class="drag-drop-text mb-0">Drag & drop image here or click to select</p>
+                                                <input type="file" name="image_path" class="form-control program_image_path" style="display:none;" accept="image/*">
+                                                <img class="image-preview" src="#" alt="Image preview" style="display: none;">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mt-3">
+                                            <button type="button" class="w-100 btn btn-sm btn-outline-danger clear-image-btn" style="display: none;">Clear Image</button>
+                                        </div>
+
                                         <div class="col-lg-12 mb-3">
                                             <label for="create_title" class="form-label">Title</label>
                                             <input id="create_title" type="text" name="title" class="form-control" placeholder="Title" required>

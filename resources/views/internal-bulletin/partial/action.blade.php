@@ -28,6 +28,16 @@
                         <div class="card card-detail" style="box-shadow: none !important">
                             <div class="card-body">
                                 <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="drop-area">
+                                            <p class="drag-drop-text mb-0">Drag & drop image here or click to select</p>
+                                            <input type="file" name="image_path" class="form-control program_image_path" style="display:none;" accept="image/*">
+                                            <img class="image-preview" src="#" alt="Image preview" style="display: none;">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-3">
+                                        <button type="button" class="w-100 btn btn-sm btn-outline-danger clear-image-btn" style="display: none;">Clear Image</button>
+                                    </div>
                                     <div class="col-lg-12 mb-3">
                                         <label for="title{{$bulletin->id}}" class="form-label">Title</label>
                                         <input id="title{{$bulletin->id}}" type="text" name="title" class="form-control"
@@ -171,3 +181,74 @@
         </div>
     </div>
 </div>
+
+<script>
+    (() => {
+        // Replace {{$bulletin->id}} with the actual bulletin ID
+        const modal = document.getElementById('editModal{{$bulletin->id}}');
+        if (!modal) return;
+
+        const dropArea = modal.querySelector('.drop-area');
+        const fileInput = dropArea.querySelector('.program_image_path');
+        const preview = dropArea.querySelector('.image-preview');
+        const clearBtn = modal.querySelector('.clear-image-btn');
+        const dragDropText = dropArea.querySelector('.drag-drop-text');
+
+        if (!dropArea || !fileInput || !preview || !clearBtn) return;
+
+        // Click to open file dialog
+        dropArea.addEventListener('click', () => fileInput.click());
+
+        // Drag over
+        dropArea.addEventListener('dragover', e => {
+            e.preventDefault();
+            dropArea.style.borderColor = '#007bff';
+            dropArea.style.backgroundColor = '#e9f5ff';
+        });
+
+        dropArea.addEventListener('dragleave', e => {
+            e.preventDefault();
+            dropArea.style.borderColor = '#ccc';
+            dropArea.style.backgroundColor = '';
+        });
+
+        // Drop
+        dropArea.addEventListener('drop', e => {
+            e.preventDefault();
+            dropArea.style.borderColor = '#ccc';
+            dropArea.style.backgroundColor = '';
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                showPreview(fileInput.files[0]);
+            }
+        });
+
+        // File input change
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files && fileInput.files[0]) showPreview(fileInput.files[0]);
+        });
+
+        // Clear button
+        clearBtn.addEventListener('click', () => {
+            fileInput.value = '';
+            preview.src = '#';
+            preview.style.display = 'none';
+            clearBtn.style.display = 'none';
+            dragDropText.style.display = 'inline-block';
+            dropArea.style.borderColor = '#ccc';
+            dropArea.style.backgroundColor = '';
+        });
+
+        // Preview function
+        function showPreview(file) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                clearBtn.style.display = 'inline-block';
+                dragDropText.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+    })();
+</script>

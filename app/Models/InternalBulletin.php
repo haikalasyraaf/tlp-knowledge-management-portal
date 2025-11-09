@@ -9,6 +9,7 @@ class InternalBulletin extends Model
     protected $fillable = [
         'title',
         'description',
+        'image_path',
         'created_by',
         'updated_by',
     ];
