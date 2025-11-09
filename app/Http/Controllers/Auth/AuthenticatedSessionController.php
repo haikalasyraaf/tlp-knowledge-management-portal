@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -28,14 +29,23 @@ class AuthenticatedSessionController extends Controller
             ->where('role', ucfirst($request->role))
             ->first();
 
-        if($user) {
-            Auth::login($user);
-            return redirect()->intended('/dashboard');            
-        } else {
+        if (!$user) {
             return redirect()->back()->withErrors([
                 'employee_id' => 'These credentials do not match our records.',
             ])->withInput();
         }
+
+        if (ucfirst($request->role) === 'Admin') {
+            if (!Hash::check($request->password, $user->password)) {
+                return redirect()->back()->withErrors([
+                    'password' => 'Incorrect password.',
+                ])->withInput();
+            }
+        }
+
+        Auth::login($user);
+
+        return redirect()->intended('/dashboard');
     }
 
     /**
