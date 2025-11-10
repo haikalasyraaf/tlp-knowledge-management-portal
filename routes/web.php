@@ -17,6 +17,7 @@ use App\Http\Controllers\TrainingNeedsIdentification\TniProgramController;
 use App\Http\Controllers\TrainingNeedsIdentificationController;
 use App\Http\Controllers\TrainingPolicyGuidelineController;
 use App\Http\Controllers\TrainingProgramController;
+use App\Http\Controllers\TrainingProgramFolderController;
 use App\Http\Controllers\TransferOfKnowledgeController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,13 @@ Route::middleware('auth')->group(function () {
     Route::post('training-program/create', [TrainingProgramController::class, 'store'])->name('training-program.store');
     Route::post('training-program/{id}/edit', [TrainingProgramController::class, 'update'])->name('training-program.update');
     Route::delete('training-program/{id}/delete', [TrainingProgramController::class, 'delete'])->name('training-program.delete');
+
+    Route::get('training-program/{programId}/folder', [TrainingProgramFolderController::class, 'index'])->name('training-program.folder.index');
+    Route::post('training-program/{programId}/folder/create', [TrainingProgramFolderController::class, 'store'])->name('training-program.folder.store');
+    Route::post('training-program/{programId}/folder/{id}/edit', [TrainingProgramFolderController::class, 'update'])->name('training-program.folder.update');
+    Route::delete('training-program/{programId}/folder/{id}/delete', [TrainingProgramFolderController::class, 'delete'])->name('training-program.folder.delete');
+    Route::post('training-program/{programId}/folder/{folderId}/document/upload', [TrainingProgramFolderController::class, 'uploadDocument'])->name('training-program.folder.upload.document');
+    Route::delete('training-program/{programId}/folder/{folderId}/document/{id}/delete', [TrainingProgramFolderController::class, 'deleteDocument'])->name('training-program.folder.delete.document');
 
     Route::get('training-program/{programId}/program', [SubTrainingProgramController::class, 'index'])->name('sub-training-program.index');
     Route::post('training-program/{programId}/program/create', [SubTrainingProgramController::class, 'store'])->name('sub-training-program.store');

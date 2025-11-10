@@ -31,7 +31,7 @@
                     <div class="px-3 pb-3 text-center">
                         <div class="d-flex">
                             <div class="flex-fill">
-                                <a href="{{ route('sub-training-program.index', $trainingProgram->id) }}" class="w-100 btn btn-primary">
+                                <a href="{{ route('training-program.folder.index', $trainingProgram->id) }}" class="w-100 btn btn-primary">
                                     <i class="bi bi-card-list icon-13 me-1"></i> View
                                 </a>
                             </div>
