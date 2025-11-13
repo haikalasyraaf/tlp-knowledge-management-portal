@@ -247,6 +247,56 @@
         height: 100vh;
     }
 
+    .lockscreen-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #000;
+        cursor: pointer;
+        overflow: hidden;
+        opacity: 1;
+        transition: transform 1s ease, opacity 1s ease;
+    }
+
+    /* Slide up when unlocked */
+    .lockscreen-overlay.hide {
+        transform: translateY(-100%);
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    #lockscreenVideo,
+    .lockscreen-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    #lockscreenVideo { z-index: 1; }
+    .lockscreen-bg { z-index: 0; }
+
+    .lockscreen-content {
+        position: absolute;
+        bottom: 10px; /* adjust as needed */
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+        color: #fff;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+        transition: transform 1s ease, opacity 1s ease;
+    }
+
+    .lockscreen-content.fade-up {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+
     /* Responsive (stack for mobile) */
     @media (max-width: 992px) {
         .login-container {

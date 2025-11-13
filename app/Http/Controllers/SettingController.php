@@ -45,6 +45,15 @@ class SettingController extends Controller
             \App\Models\Setting::set('guideline_document_path', 'storage/' . $path);
         }
 
+        if ($request->hasFile('lockscreen_video_path')) {
+            $oldDoc = \App\Models\Setting::get('lockscreen_video_path');
+            if ($oldDoc && Storage::disk('public')->exists(str_replace('storage/', '', $oldDoc))) {
+                Storage::disk('public')->delete(str_replace('storage/', '', $oldDoc));
+            }
+            $path = $request->file('lockscreen_video_path')->store('lockscreen_video', 'public');
+            \App\Models\Setting::set('lockscreen_video_path', 'storage/' . $path);
+        }
+
         return back()->with('success', 'Settings updated successfully.');
     }
 
@@ -55,5 +64,18 @@ class SettingController extends Controller
         ]);
 
         \App\Models\Setting::set('tok_guideline', $request->tok_guideline);
+    }
+
+    public function deleteLockscreenVideo()
+    {
+        $video = \App\Models\Setting::where('key', 'lockscreen_video_path')->value('value');
+
+        if ($video && Storage::disk('public')->exists($video)) {
+            Storage::disk('public')->delete($video);
+        }
+
+        \App\Models\Setting::where('key', 'lockscreen_video_path')->delete();
+
+        return back()->with('success', 'Lockscreen video deleted.');
     }
 }

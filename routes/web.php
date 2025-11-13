@@ -117,6 +117,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('/settings/update', [SettingController::class, 'update'])->name('settings.update');
+    Route::get('/settings/delete/lockscreen-video', [SettingController::class, 'deleteLockscreenVideo'])->name('settings.delete.lockscreen.video');
     Route::post('/settings/update/transfer-of-knowledge', [SettingController::class, 'updateTokGuideline'])->name('settings.update.tok.guideline');
 
     Route::get('/notifications/read/{id}', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.read');

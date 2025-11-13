@@ -4,6 +4,48 @@
 <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.3.2/af-2.7.0/b-3.2.4/b-colvis-3.2.4/b-html5-3.2.4/cr-2.1.1/cc-1.0.7/date-1.5.6/fc-5.0.4/fh-4.0.3/kt-2.12.1/r-3.0.5/rg-1.5.2/rr-1.5.0/sc-2.4.3/sb-1.8.3/sp-2.3.4/sl-3.0.1/sr-1.4.1/datatables.min.js" integrity="sha384-yfkD8va9Znrrqcsxc6hNLsvosW5XNoVn3qADDMUKQV5nHvGcgfvrD3P/Gv4WSNmt" crossorigin="anonymous"></script>
 
 <script>
+    const lockscreen = document.getElementById('lockscreen');
+
+    if(lockscreen) {
+        const lockscreenText = document.querySelector('.lockscreen-content');
+        const relockBtn = document.getElementById('relockBtn');
+        const video = document.getElementById('lockscreenVideo');
+        const source = video.querySelector('source');
+
+        video.addEventListener('loadedmetadata', () => {
+            slideDuration = video.duration;
+
+            setTimeout(() => {
+                if (!lockscreen.classList.contains('hide')) {
+                    lockscreen.classList.add('hide');
+                    lockscreenText.classList.add('fade-up');
+                    console.log(video.duration);
+                }
+            }, video.duration * 1000);
+        });
+
+        source.addEventListener('error', () => {
+            console.warn("Video not found or cannot load. Skipping lockscreen.");
+            lockscreen.style.display = 'none';
+            relockBtn.style.display = 'none';
+        });
+
+        lockscreen.addEventListener('click', () => {
+            if (!lockscreen.classList.contains('hide')) {
+                lockscreen.classList.add('hide');
+                lockscreenText.classList.add('fade-up');
+            }
+        });
+
+        relockBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            lockscreen.classList.remove('hide');
+            lockscreenText.classList.remove('fade-up');
+        });        
+    }
+</script>
+
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.modal').forEach(modal => {
             // Blur focus before it's hidden

@@ -24,7 +24,25 @@
     <body class="bg-light">
         @php
             $images = App\Models\LoginImage::all();
+            $video_path = \App\Models\Setting::get('lockscreen_video_path');
+            $showLockscreen = !session()->has('errors');
         @endphp
+
+        @if ($video_path && $showLockscreen)
+            <div class="lockscreen-overlay" id="lockscreen">
+                <video autoplay muted loop playsinline id="lockscreenVideo">
+                    <source src="{{ asset($video_path) }}" type="video/mp4">
+                </video>
+
+                <div class="lockscreen-content text-bottom">
+                    <h4 class="fw-bold text-white">Click anywhere to continue</h4>
+                </div>
+            </div>
+
+            <button id="relockBtn" class="btn btn-dark rounded-circle position-fixed" style="top: 20px; right: 20px; width: 45px; height: 45px; z-index: 5000; opacity: 0.7;">
+                <i class="bi bi-lock-fill"></i>
+            </button>
+        @endif
 
         <div class="login-container">
             <div class="image-side">

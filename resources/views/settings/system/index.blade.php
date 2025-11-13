@@ -31,7 +31,7 @@
                         </div>
 
                         {{-- User Guideline --}}
-                        <div class="col-lg-12 mb-3">
+                        <div class="col-lg-6 col-12 mb-3">
                             <label for="guideline_document_path" class="form-label">User Guideline</label>
                             @php
                                 $guideline = \App\Models\Setting::get('guideline_document_path');
@@ -43,6 +43,24 @@
                                 </a>
                             @endif
                             <input id="guideline_document_path" type="file" name="guideline_document_path" class="form-control" accept="application/pdf">
+                        </div>
+
+                        {{-- Lockscreen Video --}}
+                        <div class="col-lg-6 col-12 mb-3">
+                            <label for="lockscreen_video_path" class="form-label">Lockscreen Video</label>
+                            @php
+                                $video_path = \App\Models\Setting::get('lockscreen_video_path');
+                            @endphp
+
+                            @if($video_path && file_exists(public_path($video_path)))
+                                <a href="{{ asset($video_path) }}" target="_blank" download="{{ \App\Models\Setting::get('lockscreen_video_path') }} Lockscreen Video">
+                                    <i class="bi bi-download icon-13 ms-1"></i>
+                                </a>
+                                <a class="text-danger remove-lockscreen-video" style="cursor: pointer">
+                                    <i class="bi bi-trash icon-13 ms-1"></i>
+                                </a>
+                            @endif
+                            <input id="lockscreen_video_path" type="file" name="lockscreen_video_path" class="form-control" accept="video/mp4">
                         </div>
 
                         {{-- Save Button --}}
@@ -91,6 +109,24 @@
                         },
                         success: function(response) {
                             toastr.success('Settings updated successfully!', '', { timeOut: 3000 });
+                            setTimeout(() => location.reload(), 1500);
+                        },
+                        error: function(xhr) {
+                            console.error(xhr.responseText);
+                            toastr.error(xhr.responseJSON?.message || 'Something went wrong!');
+                        }
+                    });
+                });
+
+                $(document).on('click', '.remove-lockscreen-video', function() {
+                    const $btn = $(this); // store reference
+                    $btn.prop('disabled', true).addClass('disabled'); // disable button
+
+                    $.ajax({
+                        url: "{{ route('settings.delete.lockscreen.video') }}",
+                        type: "GET",
+                        success: function(response) {
+                            toastr.success('Video deleted successfully!', '', { timeOut: 3000 });
                             setTimeout(() => location.reload(), 1500);
                         },
                         error: function(xhr) {
