@@ -7,36 +7,17 @@ use App\Models\TrainingProgramFolder;
 use App\Models\TrainingProgramFolderDocument;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Yajra\DataTables\Facades\DataTables;
-use Yajra\DataTables\Html\Builder;
 
 class TrainingProgramFolderController extends Controller
 {
 
-    public function index($programId, Request $request, Builder $builder)
+    public function index($programId)
     {
         $trainingProgram = TrainingProgram::where('id', $programId)->first();
 
-        $query = TrainingProgramFolder::where('training_program_id', $trainingProgram->id)->latest();
+        $folders = TrainingProgramFolder::where('training_program_id', $trainingProgram->id)->orderBy('id', 'desc')->get();
 
-        if (request()->ajax()) {
-            return DataTables::of($query)
-                ->addIndexColumn()
-                ->addColumn('action', function ($folder) {
-                    return view('training-program-folder.partial.action', compact('folder'))->render();
-                })
-                ->rawColumns(['status', 'action'])
-                ->toJson();
-        }
-
-        $html = $builder->columns([
-            ['data' => 'id', 'visible' => false],
-            ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'No', 'className' => 'text-center', 'orderable' => false, 'searchable' => false, 'width' => '5%'],
-            ['data' => 'name', 'title' => 'Folder Name', 'width' => '45%'],
-            ['data' => 'action', 'title' => 'Action', 'className' => 'text-center', 'orderable' => false, 'searchable' => false, 'width' => '10%'],
-        ]);
-
-        return view('training-program-folder.index', compact('trainingProgram', 'html'));
+        return view('training-program-folder.index', compact('trainingProgram', 'folders'));
     }
 
     public function store($programId, Request $request)

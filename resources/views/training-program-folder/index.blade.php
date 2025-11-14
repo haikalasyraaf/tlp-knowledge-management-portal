@@ -1,29 +1,205 @@
 <x-app-layout>
-    <div class="card">
-        <div class="card-body p-0">
-            <div class="p-3" style="border-bottom: 1px solid #dee2e6">
-                <div class="row align-items-center">
-                    <div class="col-6">
-                        <h5 class="mb-0">{{ $trainingProgram->name }} - Folder List</h5>
+    <div class="d-flex align-items-center mb-3">
+        <h4 class="mb-0 me-3 p-0" style="font-weight: 500">{{ $trainingProgram->name }} - Folder List</h4>
+
+        <div class="flex-grow-1 border-top"></div>
+
+        @if (auth()->user()->role == 'Admin')
+            <button class="btn btn-sm btn-primary ms-3 me-1" data-bs-toggle="modal" data-bs-target="#createModal">
+                <i class="bi bi-plus-lg icon-13 me-1"></i> New
+            </button>            
+        @endif
+        <a href="{{route('training-program.index')}}" class="btn btn-sm btn-secondary">
+            <i class="bi bi-arrow-left icon-13 me-1"></i>Back
+        </a>
+    </div>
+
+    <div class="row mt-4">
+        @forelse ($folders as $folder)
+            <div class="col-3 py-3">
+                <div class="card h-100 mb-3" style="border-radius: 6px; overflow: hidden;">
+                    <div class="card-body pb-0">
+                        <h5 class="card-title">{{ $folder->name }}</h5>
+                        <p class="card-text" style="text-align: justify;">
+                            {!! nl2br($folder->description) !!}
+                        </p>
                     </div>
-                    <div class="col-6 text-end">
-                        @if (auth()->user()->role == 'Admin')
-                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
-                                <i class="bi bi-plus-lg icon-13 me-1"></i> New
-                            </button>                            
-                        @endif
-                        <a href="{{route('training-program.index')}}" class="btn btn-sm btn-secondary">
-                            <i class="bi bi-arrow-left icon-13 me-1"></i>Back
-                        </a>
+                    <div class="px-3 pb-3 text-center">
+                        <div class="d-flex">
+                            <div class="flex-fill">
+                                <a class="w-100 btn btn-primary" data-bs-toggle="modal" data-bs-target="#editAttachmentModal{{$folder->id}}">
+                                    <i class="bi bi-file-text icon-13 me-1"></i> Attachment
+                                </a>
+                            </div>
+
+                            @if (auth()->user()->role == 'Admin')
+                                <div class="ms-2">
+                                    <a class="w-100 btn btn-secondary" data-bs-toggle="modal" data-bs-target="#editModal{{$folder->id}}">
+                                        <i class="bi bi-pencil-square icon-13 me-1"></i> Edit
+                                    </a>
+                                </div>
+                                <div class="ms-2">
+                                   <button type="button" class="btn btn-danger" style="z-index: 10;" data-bs-toggle="modal" data-bs-target="#deleteModal{{$folder->id}}">
+                                        <i class="bi bi-trash icon-13"></i>
+                                    </button>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="p-3">
-                {!! $html->table() !!}
+            <div class="modal fade" id="editModal{{$folder->id}}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content text-start">
+                        <div class="modal-header pb-0">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="edit-wrapper">
+                                <form id="editForm{{$folder->id}}">
+                                    <div class="row">
+                                        <div class="col-12 mb-3">
+                                            <a class="w-100 btn btn-primary" href="#">Detail</a>
+                                        </div>
+                                        <div class="col-lg-12 mb-3">
+                                            <label for="name{{$folder->id}}" class="form-label">Folder Name</label>
+                                            <input id="name{{$folder->id}}" type="text" name="name" class="form-control"
+                                                value="{{$folder->name}}" placeholder="Folder name"
+                                                {{ auth()->user()->role == 'Admin' ? '' : 'disabled' }}>
+                                        </div>
+                                        <div class="col-lg-12 mb-3">
+                                            <label for="description{{$folder->id}}" class="form-label">Description</label>
+                                            <input id="description{{$folder->id}}" name="description" class="form-control" rows="3" 
+                                                value="{{ $folder->description }}" placeholder="Enter folder description..."
+                                                {{ auth()->user()->role == 'Admin' ? '' : 'disabled' }}>
+                                        </div>
+
+                                        @if (auth()->user()->role == 'Admin')
+                                            <div class="col-12 text-end">
+                                                <button type="button" class="btn btn-primary edit-btn" data-id="{{ $folder->id }}">Save</button>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+
+            <div class="modal fade" id="editAttachmentModal{{$folder->id}}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content text-start">
+                        <div class="modal-header pb-0">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="edit-wrapper">
+                                <form id="documentForm{{$folder->id}}" enctype="multipart/form-data">
+                                    <div class="row">
+                                        <div class="col-12 mb-3">
+                                            <a class="w-100 btn btn-primary" href="#">Attachment</a>
+                                        </div>
+                                        @if (auth()->user()->role == 'Admin')
+                                            <div class="col-lg-12 mb-3">
+                                                <label for="document_path{{$folder->id}}" class="form-label">Document</label>
+                                                <input id="document_path{{$folder->id}}" type="file" name="document_path" class="form-control">
+                                            </div>
+                                            <div class="col-12 mb-3 text-end">
+                                                <button type="button" class="btn btn-primary upload-document-btn" data-id="{{ $folder->id }}">Upload</button>
+                                            </div>
+                                        @endif
+
+                                        <div class="col-12 mb-2">
+                                            List of Attachment(s)
+                                        </div>
+
+                                        <div class="attachments-container" id="document-container-{{ $folder->id }}">
+                                            @forelse ($folder->documents as $document)
+                                                <div class="col-12 mb-2" id="document-{{ $document->id }}">
+                                                    <div class="card">
+                                                        <div class="card-body p-2">
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <div>{{ $document->document_name }}</div>
+                                                                <div>
+                                                                    <a href="#" class="btn btn-sm btn-info text-white view-doc-btn" data-bs-toggle="modal" data-bs-target="#viewModal{{ $document->id }}" data-file="{{ asset('storage/' . $document->document_path) }}">View</a>
+                                                                    <a href="{{ asset('storage/'.$document->document_path) }}" class="btn btn-sm btn-primary" class="text-primary" download="{{ Str::slug(pathinfo($document->document_name, PATHINFO_FILENAME)) }}">Download</a>
+                                                                    @if (auth()->user()->role == 'Admin')
+                                                                        <a href="#" class="btn btn-sm btn-danger delete-document-btn" data-folder-id="{{ $folder->id }}" data-id="{{ $document->id }}">Delete</a>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="modal fade" id="viewModal{{ $document->id }}" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                                                    <div class="modal-dialog modal-xl">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="btn-close" onclick="$('#viewModal{{ $document->id }}').modal('hide');"></button>
+                                                            </div>
+                                                            <div class="modal-body text-center">
+                                                                {{-- Default iframe preview --}}
+                                                                <iframe id="previewFrame{{ $document->id }}" src="" width="100%" height="600" style="border:none;display:none;"></iframe>
+
+                                                                {{-- Fallback message --}}
+                                                                <div id="downloadContainer{{ $document->id }}" style="display:none;">
+                                                                    <div class="d-flex justify-content-center align-items-center" style="height: 600px">
+                                                                        <div>
+                                                                            <p>File type not support for preview. You can download the file below:</p>
+                                                                            <a id="downloadBtn{{ $document->id }}" href="#" class="btn btn-primary" download>Download File</a>                                                                        
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @empty
+                                                <div class="col-12 mb-2" id="empty-document-message">
+                                                    <div class="card">
+                                                        <div class="card-body p-2">
+                                                            <div class="d-flex justify-content-center align-items-center">
+                                                                <div class="text-center">No document uploaded</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforelse
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="deleteModal{{$folder->id}}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content text-start">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete this folder? All its related content will be deleted as well.
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-danger delete-btn" data-id="{{ $folder->id }}">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        @empty
+            <div>
+                No training programs available at the moment.
+            </div>
+        @endforelse
     </div>
+
 
     <!-- Create Modal -->
     <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -58,7 +234,7 @@
 
                                         <div class="col-lg-12 mb-3">
                                             <label for="description" class="form-label">Folder Description</label>
-                                            <textarea id="description" name="description" class="form-control" rows="10" placeholder="Enter folder description..." required></textarea>
+                                            <input id="description" name="description" class="form-control" placeholder="Enter folder description...">
                                         </div>
 
                                         <div class="col-12 text-end">
@@ -112,7 +288,6 @@
     </div>
 
     @push('scripts')
-        {!! $html->scripts() !!}
         <script>
             $(document).on('click', '.add-btn', function (e) {
                 let form = $('#createForm')[0];
@@ -164,7 +339,7 @@
 
                         console.log(response);
                         toastr.success('Training Program Folder updated successfully!', '', { timeOut: 8000 });
-                        $('#dataTableBuilder').DataTable().ajax.reload();
+                        location.reload();
                     },
                     error: function (xhr) {
                         console.log(xhr.responseText);
@@ -187,7 +362,7 @@
 
                         console.log(response);
                         toastr.success('Training Program Folder removed successfully!', '', { timeOut: 8000 });
-                        $('#dataTableBuilder').DataTable().ajax.reload();
+                        location.reload();
                     },
                     error: function (xhr) {
                         console.log(xhr.responseText);
@@ -454,7 +629,7 @@
 
                 // ----- RELOAD DATATABLE IF NEW RECORD CREATED -----
                 if (folderId) {
-                    $('#dataTableBuilder').DataTable().ajax.reload();
+                    location.reload();
                 }
             });
         </script>
