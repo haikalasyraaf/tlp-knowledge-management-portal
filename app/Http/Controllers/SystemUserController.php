@@ -81,7 +81,7 @@ class SystemUserController extends Controller
         ]);
 
         $user = User::findOrFail($id);
-        $data = $request->all();
+        $data = $request->except(['password', 'profile_photo']);
 
         if ($request->hasFile('profile_photo')) {
             if ($user->profile_photo_path && Storage::disk('public')->exists($user->profile_photo_path)) {
@@ -96,7 +96,9 @@ class SystemUserController extends Controller
             $data['profile_photo_path'] = $user->profile_photo_path;
         }
 
-        $data['password'] = bcrypt($request->employee_id);
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password);
+        }
 
         $user->update($data);
 

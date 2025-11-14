@@ -41,6 +41,10 @@
                                         placeholder="Email" value="{{$user->email}}">
                                 </div>
                                 <div class="col-lg-6 mb-3">
+                                    <label for="user_password" class="form-label">Password</label>
+                                    <input id="user_password" type="text" name="password" class="form-control" placeholder="Password">
+                                </div>
+                                <div class="col-lg-6 mb-3">
                                     <label for="user_role" class="form-label">Role</label>
                                     <select id="user_role" name="role" class="form-select">
                                         <option value="" selected disabled>Please select</option>
