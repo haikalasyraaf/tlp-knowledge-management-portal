@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\InternalBulletin;
 use App\Models\InternalBulletinDocument;
 use App\Models\User;
+use App\Notifications\UserAlertNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
@@ -74,6 +76,22 @@ class InternalBulletinController extends Controller
         $data['updated_by'] = $request->user()->id;
 
         $bulletin = InternalBulletin::create($data);
+
+        $users = User::whereNot('id', $bulletin->created_by)->get();
+        $sender = User::find($bulletin->created_by);
+
+        foreach($users as $user) {
+            try {
+                $user->notify(new UserAlertNotification(
+                    'Internal Bulletin',
+                    'New Bulletin Added',
+                    $sender->name . ' has added a new bulletin: "' . $bulletin->title . '".',
+                    $sender->name
+                ));
+            } catch (\Exception $e) {
+                Log::warning("Alert notification failed for ({$user->employee_id}) {$user->name}: {$e->getMessage()}");
+            }
+        }
 
         return response()->json(['message'   => 'Internal Bulletin created successfully.', 'bulletin' => $bulletin]);
     }

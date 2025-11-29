@@ -6,7 +6,9 @@ use App\Models\TrainingRequest;
 use App\Models\TrainingRequestDocument;
 use App\Models\TrainingRequestStatus;
 use App\Models\User;
+use App\Notifications\UserAlertNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
@@ -81,6 +83,22 @@ class TrainingRequestController extends Controller
         $data['updated_by']     = $request->user()->id;
 
         $trainingRequest = TrainingRequest::create($data);
+
+        $users = User::whereNot('id', $trainingRequest->created_by)->where('is_reviewer', 1)->get();
+        $sender = User::find($trainingRequest->created_by);
+
+        foreach($users as $user) {
+            try {
+                $user->notify(new UserAlertNotification(
+                    'Training Request',
+                    'New Training Request Pending Your Review',
+                    "{$sender->name} has submitted a new training request titled \"{$trainingRequest->training_title}\". Seeking your help to review it.",
+                    $sender->name
+                ));
+            } catch (\Exception $e) {
+                Log::warning("Alert notification failed for ({$user->employee_id}) {$user->name}: {$e->getMessage()}");
+            }
+        }
 
         return response()->json(['message'   => 'Training Request created successfully.', 'trainingRequest' => $trainingRequest]);
     }
@@ -176,6 +194,22 @@ class TrainingRequestController extends Controller
             'status' => 2
         ]);
 
+        $users = User::whereNot('id', $trainingRequest->created_by)->where('is_approver', 1)->get();
+        $sender = User::find($trainingStatus->user_id);
+
+        foreach($users as $user) {
+            try {
+                $user->notify(new UserAlertNotification(
+                    'Training Request',
+                    'New Training Request Pending Your Approval',
+                    "{$sender->name} has reviewed training request titled \"{$trainingRequest->training_title}\". Currently seeking your approval.",
+                    $sender->name
+                ));
+            } catch (\Exception $e) {
+                Log::warning("Alert notification failed for ({$user->employee_id}) {$user->name}: {$e->getMessage()}");
+            }
+        }
+
         return response()->json(['message' => 'Training Request Review Added']);
     }
 
@@ -196,6 +230,34 @@ class TrainingRequestController extends Controller
         $trainingRequest->update([
             'status' => $trainingStatus->approval_decision == 1 ? 3 : 4
         ]);
+
+        $user = User::where('id', $trainingRequest->created_by)->first();
+        $sender = User::find($trainingStatus->user_id);
+
+        if ($trainingStatus->approval_decision == 1) {
+            try {
+                $user->notify(new UserAlertNotification(
+                    'Training Request',
+                    'Your Training Request Approved',
+                    "{$sender->name} has reviewed training request titled \"{$trainingRequest->training_title}\". We are happy to inform it has been approved.",
+                    $sender->name
+                ));
+            } catch (\Exception $e) {
+                Log::warning("Alert notification failed for ({$user->employee_id}) {$user->name}: {$e->getMessage()}");
+            }
+        } else {
+            try {
+                $user->notify(new UserAlertNotification(
+                    'Training Request',
+                    'Your Training Request Rejected',
+                    "{$sender->name} has reviewed training request titled \"{$trainingRequest->training_title}\". We are sorry to inform it has been rejected.",
+                    $sender->name
+                ));
+            } catch (\Exception $e) {
+                Log::warning("Alert notification failed for ({$user->employee_id}) {$user->name}: {$e->getMessage()}");
+            }
+        }
+
 
         return response()->json(['message' => 'Training Request Status Added']);
     }

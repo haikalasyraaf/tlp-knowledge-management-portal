@@ -34,7 +34,7 @@ class UserAlertNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -48,5 +48,18 @@ class UserAlertNotification extends Notification
             'message' => $this->message,
             'sender' => $this->sender,
         ];
+    }
+
+    /**
+     * Format for email
+     */
+    public function toMail($notifiable)
+    {
+        return (new MailMessage)
+            ->subject($this->title)
+            ->greeting("Hello {$notifiable->name},")
+            ->line($this->message)
+            ->line("Sent by: " . $this->sender)
+            ->salutation('Regards, ' . \App\Models\Setting::get('app_name', 'Learning Portal'));
     }
 }
