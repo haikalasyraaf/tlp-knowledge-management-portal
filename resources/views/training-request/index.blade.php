@@ -54,7 +54,24 @@
                                         </div>
                                         <div class="col-lg-6 mb-3">
                                             <label for="create_deparment_name" class="form-label">Department<span style="color: red"> *</span></label>
-                                            <input id="create_deparment_name" type="text" name="deparment_name" class="form-control" placeholder="Department">
+                                            <select id="create_deparment_name" name="deparment_name" class="form-select">
+                                                <option value="" selected disabled>Please select</option>
+                                                <option value="Auxiliary Police">Auxiliary Police</option>
+                                                <option value="Breakbulk & Customer Service">Breakbulk & Customer Service</option>
+                                                <option value="Business Development & Commercial">Business Development & Commercial</option>
+                                                <option value="Corporate Planning & Strategic Transformation">Corporate Planning & Strategic Transformation</option>
+                                                <option value="Corporate Strategic Planning">Corporate Strategic Planning</option>
+                                                <option value="Corporate_Services">Corporate_Services</option>
+                                                <option value="Environment, Safety & Health">Environment, Safety & Health</option>
+                                                <option value="Finance">Finance</option>
+                                                <option value="Governance , Risk & Compliance">Governance , Risk & Compliance</option>
+                                                <option value="Human Resource & Administration">Human Resource & Administration</option>
+                                                <option value="IT">IT</option>
+                                                <option value="Marine & Liquid Operations">Marine & Liquid Operations</option>
+                                                <option value="Office of Executive Director & Chief Executive">Office of Executive Director & Chief Executive</option>
+                                                <option value="Technical Engineering & Facility Management">Technical Engineering & Facility Management</option>
+                                                <option value="Terminal & Free Zone Operation">Terminal & Free Zone Operation</option>
+                                            </select>
                                         </div>
                                         <div class="col-lg-6 mb-3">
                                             <label for="create_training_title" class="form-label">Training Title<span style="color: red"> *</span></label>

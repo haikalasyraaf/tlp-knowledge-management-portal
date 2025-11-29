@@ -52,8 +52,25 @@
                                     </div>
                                     <div class="col-lg-6 mb-3">
                                         <label for="create_deparment_name{{$trainingRequest->id}}" class="form-label">Department<span style="color: red"> *</span></label>
-                                        <input id="create_deparment_name{{$trainingRequest->id}}" type="text" name="deparment_name" class="form-control" value="{{$trainingRequest->deparment_name}}" placeholder="Department"
+                                        <select id="create_deparment_name{{$trainingRequest->id}}" name="deparment_name" class="form-select"
                                             {{ (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus ? '' : 'disabled' }}>
+                                            <option value="" selected disabled>Please select</option>
+                                            <option value="Auxiliary Police" {{ $trainingRequest->deparment_name == 'Auxiliary Police' ? 'selected' : '' }}>Auxiliary Police</option>
+                                            <option value="Breakbulk & Customer Service" {{ $trainingRequest->deparment_name == 'Breakbulk & Customer Service' ? 'selected' : '' }}>Breakbulk & Customer Service</option>
+                                            <option value="Business Development & Commercial" {{ $trainingRequest->deparment_name == 'Business Development & Commercial' ? 'selected' : '' }}>Business Development & Commercial</option>
+                                            <option value="Corporate Planning & Strategic Transformation" {{ $trainingRequest->deparment_name == 'Corporate Planning & Strategic Transformation' ? 'selected' : '' }}>Corporate Planning & Strategic Transformation</option>
+                                            <option value="Corporate Strategic Planning" {{ $trainingRequest->deparment_name == 'Corporate Strategic Planning' ? 'selected' : '' }}>Corporate Strategic Planning</option>
+                                            <option value="Corporate_Services" {{ $trainingRequest->deparment_name == 'Corporate_Services' ? 'selected' : '' }}>Corporate_Services</option>
+                                            <option value="Environment, Safety & Health" {{ $trainingRequest->deparment_name == 'Environment, Safety & Health' ? 'selected' : '' }}>Environment, Safety & Health</option>
+                                            <option value="Finance" {{ $trainingRequest->deparment_name == 'Finance' ? 'selected' : '' }}>Finance</option>
+                                            <option value="Governance , Risk & Compliance" {{ $trainingRequest->deparment_name == 'Governance , Risk & Compliance' ? 'selected' : '' }}>Governance , Risk & Compliance</option>
+                                            <option value="Human Resource & Administration" {{ $trainingRequest->deparment_name == 'Human Resource & Administration' ? 'selected' : '' }}>Human Resource & Administration</option>
+                                            <option value="IT" {{ $trainingRequest->deparment_name == 'IT' ? 'selected' : '' }}>IT</option>
+                                            <option value="Marine & Liquid Operations" {{ $trainingRequest->deparment_name == 'Marine & Liquid Operations' ? 'selected' : '' }}>Marine & Liquid Operations</option>
+                                            <option value="Office of Executive Director & Chief Executive" {{ $trainingRequest->deparment_name == 'Office of Executive Director & Chief Executive' ? 'selected' : '' }}>Office of Executive Director & Chief Executive</option>
+                                            <option value="Technical Engineering & Facility Management" {{ $trainingRequest->deparment_name == 'Technical Engineering & Facility Management' ? 'selected' : '' }}>Technical Engineering & Facility Management</option>
+                                            <option value="Terminal & Free Zone Operation" {{ $trainingRequest->deparment_name == 'Terminal & Free Zone Operation' ? 'selected' : '' }}>Terminal & Free Zone Operation</option>
+                                        </select>
                                     </div>
                                     <div class="col-lg-6 mb-3">
                                         <label for="create_training_title{{$trainingRequest->id}}" class="form-label">Training Title<span style="color: red"> *</span></label>
