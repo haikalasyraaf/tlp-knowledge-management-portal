@@ -45,6 +45,12 @@
         </li>
 
         <li class="nav-item">
+            <a class="nav-link w-100 {{ request()->routeIs('training-request.index') ? 'active' : '' }}" href="{{ route('training-request.index') }}">
+                <i class="bi bi-arrow-left-right sidebar-icon-md"></i> Traininig Request
+            </a>
+        </li>
+
+        <li class="nav-item">
             <a class="nav-link w-100 {{ request()->routeIs('training-needs.program.index') || request()->routeIs('training-needs.competency.index') || request()->routeIs('training-needs.course.index') ? 'active' : '' }}" href="{{ route('training-needs.program.index') }}">
                 <i class="bi bi-search sidebar-icon-md"></i> Training Needs Identification
             </a>

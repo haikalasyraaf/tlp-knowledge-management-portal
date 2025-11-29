@@ -18,6 +18,7 @@ use App\Http\Controllers\TrainingNeedsIdentificationController;
 use App\Http\Controllers\TrainingPolicyGuidelineController;
 use App\Http\Controllers\TrainingProgramController;
 use App\Http\Controllers\TrainingProgramFolderController;
+use App\Http\Controllers\TrainingRequestController;
 use App\Http\Controllers\TransferOfKnowledgeController;
 use Illuminate\Support\Facades\Route;
 
@@ -79,8 +80,6 @@ Route::middleware('auth')->group(function () {
     Route::post('transfer-of-knowledge/create', [TransferOfKnowledgeController::class, 'store'])->name('transfer-of-knowledge.store');
     Route::post('transfer-of-knowledge/{id}/edit', [TransferOfKnowledgeController::class, 'update'])->name('transfer-of-knowledge.update');
     Route::delete('transfer-of-knowledge/{id}/delete', [TransferOfKnowledgeController::class, 'delete'])->name('transfer-of-knowledge.delete');
-    Route::post('transfer-of-knowledge/{id}/set-as-top-learner', [TransferOfKnowledgeController::class, 'setAsTopLearner'])->name('transfer-of-knowledge.set-as-top-leaner');
-    Route::post('transfer-of-knowledge/{id}/remove-as-top-learner', [TransferOfKnowledgeController::class, 'removeAsTopLearner'])->name('transfer-of-knowledge.remove-as-top-leaner');
     Route::post('transfer-of-knowledge/{knowledge_id}/document/upload', [TransferOfKnowledgeController::class, 'uploadDocument'])->name('transfer-of-knowledge.upload.document');
     Route::delete('transfer-of-knowledge/{knowledge_id}/document/{id}/delete', [TransferOfKnowledgeController::class, 'deleteDocument'])->name('transfer-of-knowledge.delete.document');
 
@@ -89,6 +88,13 @@ Route::middleware('auth')->group(function () {
     Route::post('training-needs/program/{id}/edit', [TniProgramController::class, 'update'])->name('training-needs.program.update');
     Route::delete('training-needs/program/{id}/delete', [TniProgramController::class, 'delete'])->name('training-needs.program.delete');
     Route::post('training-needs/program/report', [TniProgramController::class, 'report'])->name('training-needs.program.report');
+
+    Route::get('training-request', [TrainingRequestController::class, 'index'])->name('training-request.index');
+    Route::post('training-request/create', [TrainingRequestController::class, 'store'])->name('training-request.store');
+    Route::post('training-request/{id}/edit', [TrainingRequestController::class, 'update'])->name('training-request.update');
+    Route::delete('training-request/{id}/delete', [TrainingRequestController::class, 'destroy'])->name('training-request.delete');
+    Route::post('training-request/{training_request_id}/document/upload', [TrainingRequestController::class, 'uploadDocument'])->name('training-request.upload.document');
+    Route::delete('training-request/{training_request_id}/document/{id}/delete', [TrainingRequestController::class, 'deleteDocument'])->name('training-request.delete.document');
 
     Route::get('training-needs/program/{program_id}/competency', [TniCompetencyController::class, 'index'])->name('training-needs.competency.index');
     Route::post('training-needs/program/{program_id}/competency/create', [TniCompetencyController::class, 'store'])->name('training-needs.competency.store');
