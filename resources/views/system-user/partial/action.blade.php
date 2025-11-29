@@ -121,6 +121,18 @@
                                         <option value="2" {{$user->status == '2' ? 'selected' : ''}}>Inactive</option>
                                     </select>
                                 </div>
+                                <div class="col-lg-6 mb-3">
+                                    <div class="form-check">
+                                        <input type="hidden" name="is_reviewer" class="form-check-input" value="2">
+                                        <input id="reviewerCheckChecked" type="checkbox" name="is_reviewer" class="form-check-input" value="1" {{$user->is_reviewer == "1" ? 'checked' : ''}}>
+                                        <label class="form-check-label" for="reviewerCheckChecked">Reviewer</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="hidden" name="is_approver" class="form-check-input" value="2">
+                                        <input id="approverCheckChecked" type="checkbox" name="is_approver" class="form-check-input" value="1" {{$user->is_approver == "1" ? 'checked' : ''}}>
+                                        <label class="form-check-label" for="approverCheckChecked">Approver</label>
+                                    </div>
+                                </div>
                                 <div class="col-12 text-end">
                                     <button type="button" class="btn btn-primary edit-user-btn" data-id="{{ $user->id }}">Save</button>
                                 </div>

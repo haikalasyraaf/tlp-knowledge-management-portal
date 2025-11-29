@@ -521,13 +521,13 @@
                 }
             });
 
-            $(document).on('click', '.add-guideline-btn', function (e) {
-                let form = $('#guidelineForm')[0];
+            $(document).on('click', '.reviewer-submit-btn', function () {
+                let trainingRequestId = $(this).data('id');
+                let form = $('#reviewerForm' + trainingRequestId)[0];
                 let formData = new FormData(form);
-                $(e.currentTarget).prop('disabled', true);
 
                 $.ajax({
-                    url: "/settings/update/training-request",
+                    url: "/training-request/" + trainingRequestId + "/review",
                     type: "POST",
                     data: formData,
                     processData: false,
@@ -536,12 +536,43 @@
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     },
                     success: function (response) {
-                        location.reload();
+                        $('#statusModal' + trainingRequestId).modal('hide');
+
+                        console.log(response);
+                        toastr.success('Training Request updated successfully!', '', { timeOut: 8000 });
+                        $('#dataTableBuilder').DataTable().ajax.reload();
                     },
                     error: function (xhr) {
                         console.log(xhr.responseText);
                         toastr.error(xhr.responseJSON?.message || 'Something went wrong!');
-                        $(e.currentTarget).prop('disabled', false);
+                    }
+                });
+            });
+
+            $(document).on('click', '.approver-submit-btn', function () {
+                let trainingRequestId = $(this).data('id');
+                let form = $('#approverForm' + trainingRequestId)[0];
+                let formData = new FormData(form);
+
+                $.ajax({
+                    url: "/training-request/" + trainingRequestId + "/approve",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    success: function (response) {
+                        $('#statusModal' + trainingRequestId).modal('hide');
+
+                        console.log(response);
+                        toastr.success('Training Request updated successfully!', '', { timeOut: 8000 });
+                        $('#dataTableBuilder').DataTable().ajax.reload();
+                    },
+                    error: function (xhr) {
+                        console.log(xhr.responseText);
+                        toastr.error(xhr.responseJSON?.message || 'Something went wrong!');
                     }
                 });
             });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TrainingRequest;
 use App\Models\TrainingRequestDocument;
+use App\Models\TrainingRequestStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -15,9 +16,9 @@ class TrainingRequestController extends Controller
     public function index(Request $request, Builder $builder)
     {
         if($request->user()->role == 'Admin') {
-            $query = TrainingRequest::orderBy('id', 'desc');
+            $query = TrainingRequest::with(['reviewStatus', 'approveStatus'])->orderBy('id', 'desc');
         } else if ($request->user()->role == 'Staff') {
-            $query = TrainingRequest::where('created_by', $request->user()->id)->orderBy('id', 'desc');
+            $query = TrainingRequest::with(['reviewStatus', 'approveStatus'])->where('created_by', $request->user()->id)->orderBy('id', 'desc');
         }
 
         if (request()->ajax()) {
@@ -151,5 +152,51 @@ class TrainingRequestController extends Controller
         $document->delete();
 
         return response()->json(['message' => 'Training Request Document deleted successfully']);
+    }
+
+    public function review(Request $request, $id)
+    {
+        $data = $request->validate([
+            'transport_to_venue'        => 'required|string|max:255',
+            'approved_training_cost'    => 'required|numeric',
+            'is_accomodation_required'  => '',
+            'is_hdrc_claimable'         => '',
+            'is_budget_under_atp'       => '',
+            'remarks'                   => 'nullable|string',
+        ]);
+
+        $data['training_request_id']    = $id;
+        $data['user_id']                = $request->user()->id;
+        $data['status_type']            = 1;
+
+        $trainingStatus = TrainingRequestStatus::create($data);
+
+        $trainingRequest = TrainingRequest::findOrFail($id);
+        $trainingRequest->update([
+            'status' => 2
+        ]);
+
+        return response()->json(['message' => 'Training Request Review Added']);
+    }
+
+    public function approve(Request $request, $id)
+    {
+        $data = $request->validate([
+            'approval_decision'         => 'required|string|max:255',
+            'remarks'                   => 'nullable|string',
+        ]);
+
+        $data['training_request_id']    = $id;
+        $data['user_id']                = $request->user()->id;
+        $data['status_type']            = 2;
+
+        $trainingStatus = TrainingRequestStatus::create($data);
+
+        $trainingRequest = TrainingRequest::findOrFail($id);
+        $trainingRequest->update([
+            'status' => $trainingStatus->approval_decision == 1 ? 3 : 4
+        ]);
+
+        return response()->json(['message' => 'Training Request Status Added']);
     }
 }

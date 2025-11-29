@@ -31,9 +31,14 @@ class TrainingRequest extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function statuses()
+    public function reviewStatus()
     {
-        return $this->hasMany(TrainingRequestStatus::class);
+        return $this->hasOne(TrainingRequestStatus::class)->where('status_type', 1);
+    }
+
+    public function approveStatus()
+    {
+        return $this->hasOne(TrainingRequestStatus::class)->where('status_type', 2);
     }
 
     public function documents()

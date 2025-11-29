@@ -26,6 +26,8 @@ class User extends Authenticatable
         'password',
         'profile_photo_path',
         'role',
+        'is_reviewer',
+        'is_approver',
         'department',
         'designation',
         'status'

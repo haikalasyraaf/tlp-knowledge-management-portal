@@ -124,6 +124,18 @@
                                             <option value="Yard/Vessel Planner">Yard/Vessel Planner</option>
                                         </select>
                                     </div>
+                                    <div class="col-lg-6 mb-3">
+                                        <div class="form-check">
+                                            <input type="hidden" name="is_reviewer" class="form-check-input" value="2">
+                                            <input id="checkChecked" type="checkbox" name="is_reviewer" class="form-check-input" value="1">
+                                            <label class="form-check-label" for="checkChecked">Reviewer</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="hidden" name="is_approver" class="form-check-input" value="2">
+                                            <input id="checkChecked" type="checkbox" name="is_approver" class="form-check-input" value="1">
+                                            <label class="form-check-label" for="checkChecked">Approver</label>
+                                        </div>
+                                    </div>
                                     <div class="col-12 text-end">
                                         <button type="button" class="btn btn-primary add-user-btn">Save</button>
                                     </div>

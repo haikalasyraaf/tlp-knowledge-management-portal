@@ -95,6 +95,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('training-request/{id}/delete', [TrainingRequestController::class, 'destroy'])->name('training-request.delete');
     Route::post('training-request/{training_request_id}/document/upload', [TrainingRequestController::class, 'uploadDocument'])->name('training-request.upload.document');
     Route::delete('training-request/{training_request_id}/document/{id}/delete', [TrainingRequestController::class, 'deleteDocument'])->name('training-request.delete.document');
+    Route::post('training-request/{id}/review', [TrainingRequestController::class, 'review'])->name('training-request.review');
+    Route::post('training-request/{id}/approve', [TrainingRequestController::class, 'approve'])->name('training-request.approve');
 
     Route::get('training-needs/program/{program_id}/competency', [TniCompetencyController::class, 'index'])->name('training-needs.competency.index');
     Route::post('training-needs/program/{program_id}/competency/create', [TniCompetencyController::class, 'store'])->name('training-needs.competency.store');
