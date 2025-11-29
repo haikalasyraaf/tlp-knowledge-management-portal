@@ -60,7 +60,7 @@ class SettingController extends Controller
     public function updateTokGuideline(Request $request)
     {
         $request->validate([
-            'tok_guideline' => 'nullable|string|max:255',
+            'tok_guideline' => 'nullable|string',
         ]);
 
         \App\Models\Setting::set('tok_guideline', $request->tok_guideline);
