@@ -238,7 +238,7 @@ class TrainingRequestController extends Controller
             try {
                 $user->notify(new UserAlertNotification(
                     'Training Request',
-                    'Your Training Request Approved',
+                    'Training Request Approved',
                     "{$sender->name} has reviewed training request titled \"{$trainingRequest->training_title}\". We are happy to inform it has been approved.",
                     $sender->name
                 ));
@@ -249,7 +249,34 @@ class TrainingRequestController extends Controller
             try {
                 $user->notify(new UserAlertNotification(
                     'Training Request',
-                    'Your Training Request Rejected',
+                    'Training Request Rejected',
+                    "{$sender->name} has reviewed training request titled \"{$trainingRequest->training_title}\". We are sorry to inform it has been rejected.",
+                    $sender->name
+                ));
+            } catch (\Exception $e) {
+                Log::warning("Alert notification failed for ({$user->employee_id}) {$user->name}: {$e->getMessage()}");
+            }
+        }
+
+        $user = User::where('id', $trainingRequest->reviewStatus->user_id)->first();
+        $sender = User::find($trainingStatus->user_id);
+
+        if ($trainingStatus->approval_decision == 1) {
+            try {
+                $user->notify(new UserAlertNotification(
+                    'Training Request',
+                    'Training Request Approved',
+                    "{$sender->name} has reviewed training request titled \"{$trainingRequest->training_title}\". We are happy to inform it has been approved.",
+                    $sender->name
+                ));
+            } catch (\Exception $e) {
+                Log::warning("Alert notification failed for ({$user->employee_id}) {$user->name}: {$e->getMessage()}");
+            }
+        } else {
+            try {
+                $user->notify(new UserAlertNotification(
+                    'Training Request',
+                    'Training Request Rejected',
                     "{$sender->name} has reviewed training request titled \"{$trainingRequest->training_title}\". We are sorry to inform it has been rejected.",
                     $sender->name
                 ));
