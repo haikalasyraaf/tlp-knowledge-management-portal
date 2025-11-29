@@ -35,12 +35,10 @@ class AuthenticatedSessionController extends Controller
             ])->withInput();
         }
 
-        if (ucfirst($request->role) === 'Admin') {
-            if (!Hash::check($request->password, $user->password)) {
-                return redirect()->back()->withErrors([
-                    'password' => 'Incorrect password.',
-                ])->withInput();
-            }
+        if (!Hash::check($request->password, $user->password)) {
+            return redirect()->back()->withErrors([
+                'password' => 'Incorrect password.',
+            ])->withInput();
         }
 
         Auth::login($user);

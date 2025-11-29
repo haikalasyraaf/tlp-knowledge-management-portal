@@ -33,17 +33,17 @@
                         :placeholder="role == 'Staff' ? 'STAFF ID' : 'ADMIN ID'" required>
                 </div>
 
-                <div class="input-group mt-3" x-show="role == 'Admin'" x-transition>
+                <div class="input-group mt-3">
                     <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
                     <input type="password" id="password" name="password" class="form-control"
-                        placeholder="PASSWORD" :required="role == 'Admin'">
+                        placeholder="PASSWORD">
                 </div>
 
                 <div class="text-danger">
                     <x-input-error :messages="$errors->get('employee_id')" class="mt-2" style="padding: 0 !important; margin: 5px 0 !important; font-size: 12px !important" />
                 </div>
 
-                <div class="text-danger" x-show="role == 'Admin'">
+                <div class="text-danger">
                     <x-input-error :messages="$errors->get('password')" class="mt-2" style="padding: 0 !important; margin: 5px 0 !important; font-size: 12px !important" />
                 </div>
 
