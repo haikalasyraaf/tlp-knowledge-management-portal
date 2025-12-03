@@ -45,4 +45,9 @@ class TrainingRequest extends Model
     {
         return $this->hasMany(TrainingRequestDocument::class);
     }
+
+    public function participants()
+    {
+        return $this->hasMany(TrainingRequestUser::class);
+    }
 }

@@ -98,16 +98,46 @@
                                             <input id="create_title" type="date" name="training_end_date" class="form-control" placeholder="Training End Date">
                                         </div>
                                         <div class="col-lg-6 mb-3">
-                                            <label for="create_employees_recommended" class="form-label">Employee Recommended<span style="color: red"> *</span></label>
-                                            <input id="create_employees_recommended" type="text" name="employees_recommended" class="form-control" placeholder="Employee Recommended">
+                                            <label for="create_training_objective" class="form-label">Training Objective<span style="color: red"> *</span></label>
+                                            <textarea id="create_training_objective" name="training_objective" class="form-control" rows="4" placeholder="Enter training objective..."></textarea>
                                         </div>
                                         <div class="col-lg-6 mb-3">
                                             <label for="create_remarks" class="form-label">Remark</label>
-                                            <input id="create_remarks" type="text" name="remarks" class="form-control" placeholder="Remark">
+                                            <textarea id="create_remarks" name="remarks" class="form-control" rows="4" placeholder="Enter remarks..."></textarea>
                                         </div>
-                                        <div class="col-lg-12 mb-3">
-                                            <label for="create_training_objective" class="form-label">Training Objective<span style="color: red"> *</span></label>
-                                            <textarea id="create_training_objective" name="training_objective" class="form-control" rows="4" placeholder="Enter training objective..."></textarea>
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label">Participants<span style="color: red"> *</span></label>
+                                            <div id="participantsRepeater">
+                                                <div class="row g-3 participant-row mb-2">
+                                                    <div class="col-lg-5">
+                                                        <input type="text" name="participants[0][name]" class="form-control" placeholder="Participant Name">
+                                                    </div>
+                                                    <div class="col-lg-5">
+                                                        <select name="participants[0][department]" class="form-select">
+                                                            <option value="" selected disabled>Please select</option>
+                                                            <option value="Auxiliary Police">Auxiliary Police</option>
+                                                            <option value="Breakbulk & Customer Service">Breakbulk & Customer Service</option>
+                                                            <option value="Business Development & Commercial">Business Development & Commercial</option>
+                                                            <option value="Corporate Planning & Strategic Transformation">Corporate Planning & Strategic Transformation</option>
+                                                            <option value="Corporate Strategic Planning">Corporate Strategic Planning</option>
+                                                            <option value="Corporate_Services">Corporate_Services</option>
+                                                            <option value="Environment, Safety & Health">Environment, Safety & Health</option>
+                                                            <option value="Finance">Finance</option>
+                                                            <option value="Governance , Risk & Compliance">Governance , Risk & Compliance</option>
+                                                            <option value="Human Resource & Administration">Human Resource & Administration</option>
+                                                            <option value="IT">IT</option>
+                                                            <option value="Marine & Liquid Operations">Marine & Liquid Operations</option>
+                                                            <option value="Office of Executive Director & Chief Executive">Office of Executive Director & Chief Executive</option>
+                                                            <option value="Technical Engineering & Facility Management">Technical Engineering & Facility Management</option>
+                                                            <option value="Terminal & Free Zone Operation">Terminal & Free Zone Operation</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <button type="button" class="btn btn-danger remove-participant w-100">Remove</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-secondary add-participant" data-id="">Add Participant</button>
                                         </div>
 
                                         <div class="col-12 text-end">
@@ -593,6 +623,52 @@
                     }
                 });
             });
+
+            $(document).on('click', '.add-participant', function () {
+
+                let id = $(this).data('id') ?? '';  
+                let container = $('#participantsRepeater' + id);
+
+                let index = container.children('.participant-row').length;
+
+                container.append(`
+                    <div class="row g-3 participant-row mb-2">
+                        <div class="col-lg-5">
+                            <input type="text" name="participants[${index}][name]" class="form-control" placeholder="Participant Name">
+                        </div>
+
+                        <div class="col-lg-5">
+                            <select name="participants[${index}][department]" class="form-select">
+                                <option value="" selected disabled>Please select</option>
+                                <option value="Auxiliary Police">Auxiliary Police</option>
+                                <option value="Breakbulk & Customer Service">Breakbulk & Customer Service</option>
+                                <option value="Business Development & Commercial">Business Development & Commercial</option>
+                                <option value="Corporate Planning & Strategic Transformation">Corporate Planning & Strategic Transformation</option>
+                                <option value="Corporate Strategic Planning">Corporate Strategic Planning</option>
+                                <option value="Corporate_Services">Corporate_Services</option>
+                                <option value="Environment, Safety & Health">Environment, Safety & Health</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Governance , Risk & Compliance">Governance , Risk & Compliance</option>
+                                <option value="Human Resource & Administration">Human Resource & Administration</option>
+                                <option value="IT">IT</option>
+                                <option value="Marine & Liquid Operations">Marine & Liquid Operations</option>
+                                <option value="Office of Executive Director & Chief Executive">Office of Executive Director & Chief Executive</option>
+                                <option value="Technical Engineering & Facility Management">Technical Engineering & Facility Management</option>
+                                <option value="Terminal & Free Zone Operation">Terminal & Free Zone Operation</option>
+                            </select>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <button type="button" class="btn btn-danger remove-participant w-100">Remove</button>
+                        </div>
+                    </div>
+                `);
+            });
+
+            $(document).on('click', '.remove-participant', function () {
+                $(this).closest('.participant-row').remove();
+            });
+
         </script>
     @endpush
 </x-app-layout>

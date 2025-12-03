@@ -103,20 +103,90 @@
                                             {{ (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus ? '' : 'disabled' }}>
                                     </div>
                                     <div class="col-lg-6 mb-3">
-                                        <label for="create_employees_recommended{{$trainingRequest->id}}" class="form-label">Employee Recommended<span style="color: red"> *</span></label>
-                                        <input id="create_employees_recommended{{$trainingRequest->id}}" type="text" name="employees_recommended" class="form-control" value="{{$trainingRequest->employees_recommended}}" placeholder="Employee Recommended"
-                                            {{ (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus ? '' : 'disabled' }}>
-                                    </div>
-                                    <div class="col-lg-6 mb-3">
-                                        <label for="create_remarks{{$trainingRequest->id}}" class="form-label">Remark</label>
-                                        <input id="create_remarks{{$trainingRequest->id}}" type="text" name="remarks" class="form-control" value="{{$trainingRequest->remarks}}" placeholder="Remark"
-                                            {{ (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus ? '' : 'disabled' }}>
-                                    </div>
-                                    <div class="col-lg-12 mb-3">
                                         <label for="create_training_objective{{$trainingRequest->id}}" class="form-label">Training Objective<span style="color: red"> *</span></label>
                                         <textarea id="create_training_objective{{$trainingRequest->id}}" name="training_objective" class="form-control" rows="4"
                                             placeholder="Enter training objective..."
                                             {{ (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus ? '' : 'disabled' }}>{!! $trainingRequest->training_objective !!}</textarea>
+                                    </div>
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="create_remarks{{$trainingRequest->id}}" class="form-label">Remark</label>
+                                        <textarea id="create_remarks{{$trainingRequest->id}}" name="remarks" class="form-control" rows="4" placeholder="Enter training remarks..."
+                                            {{ (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus ? '' : 'disabled' }}>{!! $trainingRequest->remarks !!}</textarea>
+                                    </div>
+                                    <div class="col-lg-12 mb-3">
+                                        <label class="form-label">Participants <span style="color: red">*</span></label>
+                                        <div id="participantsRepeater{{$trainingRequest->id}}">
+                                            @forelse ($trainingRequest->participants as $index => $p)
+                                                <div class="row g-3 participant-row mb-2">
+                                                    <div class="col-lg-5">
+                                                        <input type="text" name="participants[{{$index}}][name]" class="form-control" value="{{$p->name}}" placeholder="Participant Name"
+                                                            {{ (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus ? '' : 'disabled' }}>
+                                                    </div>
+                                                    <div class="col-lg-5">
+                                                        <select name="participants[{{$index}}][department]" class="form-select"
+                                                            {{ (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus ? '' : 'disabled' }}>
+                                                            <option value="" selected disabled>Please select</option>
+                                                            <option value="Auxiliary Police" {{ $p->department == 'Auxiliary Police' ? 'selected' : '' }}>Auxiliary Police</option>
+                                                            <option value="Breakbulk & Customer Service" {{ $p->department == 'Breakbulk & Customer Service' ? 'selected' : '' }}>Breakbulk & Customer Service</option>
+                                                            <option value="Business Development & Commercial" {{ $p->department == 'Business Development & Commercial' ? 'selected' : '' }}>Business Development & Commercial</option>
+                                                            <option value="Corporate Planning & Strategic Transformation" {{ $p->department == 'Corporate Planning & Strategic Transformation' ? 'selected' : '' }}>Corporate Planning & Strategic Transformation</option>
+                                                            <option value="Corporate Strategic Planning" {{ $p->department == 'Corporate Strategic Planning' ? 'selected' : '' }}>Corporate Strategic Planning</option>
+                                                            <option value="Corporate_Services" {{ $p->department == 'Corporate_Services' ? 'selected' : '' }}>Corporate_Services</option>
+                                                            <option value="Environment, Safety & Health" {{ $p->department == 'Environment, Safety & Health' ? 'selected' : '' }}>Environment, Safety & Health</option>
+                                                            <option value="Finance" {{ $p->department == 'Finance' ? 'selected' : '' }}>Finance</option>
+                                                            <option value="Governance , Risk & Compliance" {{ $p->department == 'Governance , Risk & Compliance' ? 'selected' : '' }}>Governance , Risk & Compliance</option>
+                                                            <option value="Human Resource & Administration" {{ $p->department == 'Human Resource & Administration' ? 'selected' : '' }}>Human Resource & Administration</option>
+                                                            <option value="IT" {{ $p->department == 'IT' ? 'selected' : '' }}>IT</option>
+                                                            <option value="Marine & Liquid Operations" {{ $p->department == 'Marine & Liquid Operations' ? 'selected' : '' }}>Marine & Liquid Operations</option>
+                                                            <option value="Office of Executive Director & Chief Executive" {{ $p->department == 'Office of Executive Director & Chief Executive' ? 'selected' : '' }}>Office of Executive Director & Chief Executive</option>
+                                                            <option value="Technical Engineering & Facility Management" {{ $p->department == 'Technical Engineering & Facility Management' ? 'selected' : '' }}>Technical Engineering & Facility Management</option>
+                                                            <option value="Terminal & Free Zone Operation" {{ $p->department == 'Terminal & Free Zone Operation' ? 'selected' : '' }}>Terminal & Free Zone Operation</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        @if ((auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus)
+                                                            <button type="button" class="btn btn-danger remove-participant w-100">Remove</button>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            @empty
+                                                <div class="row g-3 participant-row mb-2">
+                                                    <div class="col-lg-5">
+                                                        <input type="text" name="participants[0][name]" class="form-control" placeholder="Participant Name"
+                                                            {{ (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus ? '' : 'disabled' }}>
+                                                    </div>
+                                                    <div class="col-lg-5">
+                                                        <select name="participants[0][department]" class="form-select"
+                                                            {{ (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus ? '' : 'disabled' }}>
+                                                            <option value="" selected disabled>Please select</option>
+                                                            <option value="Auxiliary Police">Auxiliary Police</option>
+                                                            <option value="Breakbulk & Customer Service">Breakbulk & Customer Service</option>
+                                                            <option value="Business Development & Commercial">Business Development & Commercial</option>
+                                                            <option value="Corporate Planning & Strategic Transformation">Corporate Planning & Strategic Transformation</option>
+                                                            <option value="Corporate Strategic Planning">Corporate Strategic Planning</option>
+                                                            <option value="Corporate_Services">Corporate_Services</option>
+                                                            <option value="Environment, Safety & Health">Environment, Safety & Health</option>
+                                                            <option value="Finance">Finance</option>
+                                                            <option value="Governance , Risk & Compliance">Governance , Risk & Compliance</option>
+                                                            <option value="Human Resource & Administration">Human Resource & Administration</option>
+                                                            <option value="IT">IT</option>
+                                                            <option value="Marine & Liquid Operations">Marine & Liquid Operations</option>
+                                                            <option value="Office of Executive Director & Chief Executive">Office of Executive Director & Chief Executive</option>
+                                                            <option value="Technical Engineering & Facility Management">Technical Engineering & Facility Management</option>
+                                                            <option value="Terminal & Free Zone Operation">Terminal & Free Zone Operation</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        @if ((auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus)
+                                                            <button type="button" class="btn btn-danger remove-participant w-100">Remove</button>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            @endforelse
+                                        </div>
+                                        @if ((auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus)
+                                            <button type="button" class="btn btn-secondary add-participant" data-id="{{$trainingRequest->id}}">Add Participant</button>
+                                        @endif
                                     </div>
 
                                     @if ((auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus)

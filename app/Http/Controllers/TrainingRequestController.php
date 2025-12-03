@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TrainingRequest;
 use App\Models\TrainingRequestDocument;
 use App\Models\TrainingRequestStatus;
+use App\Models\TrainingRequestUser;
 use App\Models\User;
 use App\Notifications\UserAlertNotification;
 use Illuminate\Http\Request;
@@ -72,10 +73,13 @@ class TrainingRequestController extends Controller
             'training_venue'            => 'required|string|max:255',
             'training_cost'             => 'required|numeric',
             'training_start_date'       => 'required|date',
-            'training_end_date'         => 'required|date|after:training_start_date',
+            'training_end_date'         => 'required|date|after_or_equal:training_start_date',
             'employees_recommended'     => 'nullable|string',
             'training_objective'        => 'required|string',
             'remarks'                   => 'nullable|string',
+            'participants'                 => 'required|array|min:1',
+            'participants.*.name'          => 'required|string|max:255',
+            'participants.*.department'    => 'required|string|max:255',
         ]);
 
         $data['date_requested'] = now();
@@ -83,6 +87,19 @@ class TrainingRequestController extends Controller
         $data['updated_by']     = $request->user()->id;
 
         $trainingRequest = TrainingRequest::create($data);
+
+        if ($request->has('participants')) {
+            foreach ($request->participants as $participant) {
+                TrainingRequestUser::create([
+                    'training_request_id' => $trainingRequest->id,
+                    'name'                => $participant['name'],
+                    'department'          => $participant['department'],
+                    'status'              => 1,
+                    'created_by'          => $request->user()->id,
+                    'updated_by'          => $request->user()->id,
+                ]);
+            }
+        }
 
         $users = User::whereNot('id', $trainingRequest->created_by)->where('is_reviewer', 1)->get();
         $sender = User::find($trainingRequest->created_by);
@@ -113,10 +130,13 @@ class TrainingRequestController extends Controller
             'training_venue'            => 'required|string|max:255',
             'training_cost'             => 'required|numeric',
             'training_start_date'       => 'required|date',
-            'training_end_date'         => 'required|date|after:training_start_date',
+            'training_end_date'         => 'required|date|after_or_equal:training_start_date',
             'employees_recommended'     => 'nullable|string',
             'training_objective'        => 'required|string',
             'remarks'                   => 'nullable|string',
+            'participants'                 => 'required|array|min:1',
+            'participants.*.name'          => 'required|string|max:255',
+            'participants.*.department'    => 'required|string|max:255',
         ]);
 
         $data['updated_by'] = $request->user()->id;
@@ -124,11 +144,26 @@ class TrainingRequestController extends Controller
         $trainingRequest = TrainingRequest::findOrFail($id);
         $trainingRequest->update($data);
 
+        TrainingRequestUser::where('training_request_id', $trainingRequest->id)->delete();
+
+        if ($request->has('participants')) {
+            foreach ($request->participants as $participant) {
+                TrainingRequestUser::create([
+                    'training_request_id' => $trainingRequest->id,
+                    'name'                => $participant['name'],
+                    'department'          => $participant['department'],
+                    'created_by'          => $request->user()->id,
+                    'updated_by'          => $request->user()->id,
+                ]);
+            }
+        }
+
         return response()->json(['message' => 'Training Request updated successfully']);
     }
 
     public function destroy($id)
     {
+        TrainingRequestUser::where('training_request_id', $id)->delete();
         TrainingRequest::findOrFail($id)->delete();
 
         return response()->json([
