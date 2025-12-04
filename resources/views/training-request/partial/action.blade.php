@@ -302,7 +302,7 @@
                                 <div class="mb-2">
                                     <label class="form-label">Transport To Venue</label>
                                     <select name="transport_to_venue" class="form-select">
-                                        <option hidden>Please select</option>
+                                        <option value="" selected disabled>Please select</option>
                                         <option value="1">Self Drive</option>
                                         <option value="2">Company Car</option>
                                         <option value="3">Flight</option>
@@ -310,25 +310,51 @@
                                     </select>
                                 </div>
                                 <div class="mb-2">
-                                    <label class="form-label">Approved Training Cost</label>
+                                    <label class="form-label">
+                                        Transportation Remark
+                                        <small style="font-size: 10px; font-style:italic; color:gray">(required if 'Others' is selected)</small>
+                                    </label>
+                                    <input name="transportation_remark" class="form-control">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Approved Training Cost (RM)</label>
                                     <input name="approved_training_cost" class="form-control">
                                 </div>
                                 <div class="mb-2">
-                                    <div class="form-check">
-                                        <input type="hidden" name="is_accomodation_required" value="2">
-                                        <input type="checkbox" class="form-check-input" name="is_accomodation_required" value="1">
-                                        <label class="form-check-label">Accommodation Required</label>
-                                    </div>
+                                    <label class="form-label">Training Hour</label>
+                                    <input name="training_duration" class="form-control">
+                                </div>
+                                <div class="mb-2">
                                     <div class="form-check">
                                         <input type="hidden" name="is_hdrc_claimable" value="2">
                                         <input type="checkbox" class="form-check-input" name="is_hdrc_claimable" value="1">
-                                        <label class="form-check-label">HDRC Claimable</label>
+                                        <label class="form-check-label">HRDF Claimable</label>
                                     </div>
                                     <div class="form-check">
                                         <input type="hidden" name="is_budget_under_atp" value="2">
                                         <input type="checkbox" class="form-check-input" name="is_budget_under_atp" value="1">
                                         <label class="form-check-label">Annual Training Plan Budgeted</label>
                                     </div>
+                                    <div class="form-check">
+                                        <input type="hidden" name="is_accomodation_required" value="2">
+                                        <input type="checkbox" class="form-check-input" name="is_accomodation_required" value="1">
+                                        <label class="form-check-label">Accommodation Required</label>
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">
+                                        Accommodation Name
+                                        <small style="font-size: 10px; font-style:italic; color:gray">(required if 'Accommodation Required' is checked)</small>
+                                    </label>
+                                    <input name="accommodation_name" class="form-control">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Internal / External</label>
+                                    <select name="internal_or_external" class="form-select">
+                                        <option value="" selected disabled>Please select</option>
+                                        <option value="1">Internal</option>
+                                        <option value="2">External</option>
+                                    </select>
                                 </div>
                                 <div class="mb-2">
                                     <label class="form-label">Remarks</label>
@@ -346,7 +372,10 @@
                                     <tr>
                                         <th style="width: 25%">Transport To Venue</th>
                                         <td style="border-bottom: none !important; padding: 8px !important; width: 1%;">:</td>
-                                        <td style="border-bottom: none !important; padding: 8px !important;">{{ $reviewStatus->transport_to_venue_text }}</td>
+                                        <td style="border-bottom: none !important; padding: 8px !important;">
+                                            {{ $reviewStatus->transport_to_venue_text }}
+                                            {{ $reviewStatus->transportation_remark != null ? '(' . $reviewStatus->transportation_remark . ')' : '' }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Approved Cost</th>
@@ -356,7 +385,10 @@
                                     <tr>
                                         <th>Accommodation</th>
                                         <td style="border-bottom: none !important; padding: 8px !important;">:</td>
-                                        <td style="border-bottom: none !important; padding: 8px !important;">{{ $reviewStatus->is_accomodation_required == 1 ? 'Yes' : 'No' }}</td>
+                                        <td style="border-bottom: none !important; padding: 8px !important;">
+                                            {{ $reviewStatus->is_accomodation_required == 1 ? 'Yes' : 'No' }}
+                                            {{ $reviewStatus->accommodation_name != null ? '(' . $reviewStatus->accommodation_name . ')' : '' }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>HDRC Claimable</th>
@@ -398,7 +430,7 @@
                                     <div class="mb-2">
                                         <label class="form-label">Decision</label>
                                         <select name="approval_decision" class="form-select">
-                                            <option hidden>Please select</option>
+                                            <option value="" selected disabled>Please select</option>
                                             <option value="1">Approved</option>
                                             <option value="2">Rejected</option>
                                         </select>

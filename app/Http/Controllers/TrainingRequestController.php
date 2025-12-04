@@ -211,10 +211,14 @@ class TrainingRequestController extends Controller
     {
         $data = $request->validate([
             'transport_to_venue'        => 'required|string|max:255',
+            'transportation_remark'     => 'required_if:transport_to_venue,4',
             'approved_training_cost'    => 'required|numeric',
+            'training_duration'         => 'required|numeric',
             'is_accomodation_required'  => '',
             'is_hdrc_claimable'         => '',
             'is_budget_under_atp'       => '',
+            'accommodation_name'        => 'required_if:is_accomodation_required,1',
+            'internal_or_external'      => 'required|string',
             'remarks'                   => 'nullable|string',
         ]);
 
