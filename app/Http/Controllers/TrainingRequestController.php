@@ -35,13 +35,21 @@ class TrainingRequestController extends Controller
                     if($trainingRequest->status == 1) {
                         return '<span class="badge bg-secondary">Under Review</span>';
                     } else if ($trainingRequest->status == 2) {
-                        return '<span class="badge bg-warning">Pending Approval</span>';
+                        return '<span class="badge bg-warning">Pending Recommendation</span>';
                     } else if ($trainingRequest->status == 3) {
-                        return '<span class="badge bg-success">Approved</span>';
+                        return '<span class="badge bg-success">Recommended</span>';
                     } else if ($trainingRequest->status == 4) {
-                        return '<span class="badge bg-danger">Rejected</span>';
+                        return '<span class="badge bg-danger">Not Recommended</span>';
                     } else if ($trainingRequest->status == 5) {
-                        return '<span class="badge bg-primary">Completed</span>';
+                        return '<span class="badge bg-warning">Pending Approval</span>';
+                    } else if ($trainingRequest->status == 6) {
+                        return '<span class="badge bg-success">Approved</span>';
+                    } else if ($trainingRequest->status == 7) {
+                        return '<span class="badge bg-danger">Rejected</span>';
+                    } else if ($trainingRequest->status == 8) {
+                        return '<span class="badge bg-danger">KIV</span>';
+                    } else if ($trainingRequest->status == 9) {
+                        return '<span class="badge bg-primary">Training Completed</span>';
                     }
                 })
                 ->addColumn('action', function ($trainingRequest) {
@@ -211,13 +219,13 @@ class TrainingRequestController extends Controller
     {
         $data = $request->validate([
             'transport_to_venue'        => 'required|string|max:255',
-            'transportation_remark'     => 'required_if:transport_to_venue,4',
+            'transportation_remark'     => 'nullable|required_if:transport_to_venue,4',
             'approved_training_cost'    => 'required|numeric',
             'training_duration'         => 'required|numeric',
             'is_accomodation_required'  => '',
             'is_hdrc_claimable'         => '',
             'is_budget_under_atp'       => '',
-            'accommodation_name'        => 'required_if:is_accomodation_required,1',
+            'accommodation_name'        => 'nullable|required_if:is_accomodation_required,1',
             'internal_or_external'      => 'required|string',
             'remarks'                   => 'nullable|string',
         ]);
@@ -255,8 +263,8 @@ class TrainingRequestController extends Controller
     public function approve(Request $request, $id)
     {
         $data = $request->validate([
-            'approval_decision'         => 'required|string|max:255',
-            'remarks'                   => 'nullable|string',
+            'approval_decision' => 'required|string|max:255',
+            'remarks'           => 'nullable|required_if:approval_decision,2',
         ]);
 
         $data['training_request_id']    = $id;
@@ -265,9 +273,44 @@ class TrainingRequestController extends Controller
 
         $trainingStatus = TrainingRequestStatus::create($data);
 
+        $statusToBeUpdate = 4; // NOT RECOMMENDED
+        if($trainingStatus->approval_decision == 1) {
+            $statusToBeUpdate = 3; // RECOMMENDED
+        } else if($trainingStatus->approval_decision == 3) {
+            $statusToBeUpdate = 8; // KIV
+        }
+
         $trainingRequest = TrainingRequest::findOrFail($id);
         $trainingRequest->update([
-            'status' => $trainingStatus->approval_decision == 1 ? 3 : 4
+            'status' => $statusToBeUpdate
+        ]);
+
+        return response()->json(['message' => 'Training Request Status Added']);
+    }
+
+    public function hocApprove(Request $request, $id)
+    {
+        $data = $request->validate([
+            'approval_decision' => 'required|string|max:255',
+            'remarks'           => 'nullable|required_if:approval_decision,2',
+        ]);
+
+        $data['training_request_id']    = $id;
+        $data['user_id']                = $request->user()->id;
+        $data['status_type']            = 3;
+
+        $trainingStatus = TrainingRequestStatus::create($data);
+
+        $statusToBeUpdate = 7; // REJECTED
+        if($trainingStatus->approval_decision == 1) {
+            $statusToBeUpdate = 6; // APPROVED
+        } else if($trainingStatus->approval_decision == 3) {
+            $statusToBeUpdate = 8; // KIV
+        }
+
+        $trainingRequest = TrainingRequest::findOrFail($id);
+        $trainingRequest->update([
+            'status' => $statusToBeUpdate
         ]);
 
         $user = User::where('id', $trainingRequest->created_by)->first();
@@ -297,34 +340,14 @@ class TrainingRequestController extends Controller
             }
         }
 
-        $user = User::where('id', $trainingRequest->reviewStatus->user_id)->first();
-        $sender = User::find($trainingStatus->user_id);
+        return response()->json(['message' => 'Training Request HOC Status Added']);
+    }
 
-        if ($trainingStatus->approval_decision == 1) {
-            try {
-                $user->notify(new UserAlertNotification(
-                    'Training Request',
-                    'Training Request Approved',
-                    "{$sender->name} has reviewed training request titled \"{$trainingRequest->training_title}\". We are happy to inform it has been approved.",
-                    $sender->name
-                ));
-            } catch (\Exception $e) {
-                Log::warning("Alert notification failed for ({$user->employee_id}) {$user->name}: {$e->getMessage()}");
-            }
-        } else {
-            try {
-                $user->notify(new UserAlertNotification(
-                    'Training Request',
-                    'Training Request Rejected',
-                    "{$sender->name} has reviewed training request titled \"{$trainingRequest->training_title}\". We are sorry to inform it has been rejected.",
-                    $sender->name
-                ));
-            } catch (\Exception $e) {
-                Log::warning("Alert notification failed for ({$user->employee_id}) {$user->name}: {$e->getMessage()}");
-            }
-        }
+    public function markAsCompleted(Request $request, $id)
+    {
+        $trainingRequest = TrainingRequest::findOrFail($id);
+        $trainingRequest->update(['status' => 9]);
 
-
-        return response()->json(['message' => 'Training Request Status Added']);
+        return response()->json(['message' => 'Training Request Mark As Completed']);
     }
 }

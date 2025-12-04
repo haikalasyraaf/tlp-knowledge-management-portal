@@ -1,6 +1,7 @@
 @php
     $reviewStatus = $trainingRequest->reviewStatus;
     $approveStatus = $trainingRequest->approveStatus;
+    $hocApproveStatus = $trainingRequest->hocApproveStatus;
 
     $isReviewer = auth()->user()->is_reviewer == 1;
     $isApprover = auth()->user()->is_approver == 1;
@@ -403,7 +404,7 @@
                                     <tr>
                                         <th>Remarks</th>
                                         <td style="border-bottom: none !important; padding: 8px !important;">:</td>
-                                        <td style="border-bottom: none !important; padding: 8px !important;">{!! nl2br($reviewStatus->remarks) !!}</td>
+                                        <td style="border-bottom: none !important; padding: 8px !important;">{!! nl2br($reviewStatus->remarks ?? 'No remarks') !!}</td>
                                     </tr>
                                 </table>
                             </div>
@@ -423,7 +424,7 @@
                 ======================================================= --}}
                 @if($reviewStatus)
                     <div class="card" style="box-shadow: none !important">
-                        <div class="card-body">
+                        <div class="card-body pt-0">
                             <h5 class="mb-2">Second Review</h5>
                             @if(!$approveStatus && $isApprover)
                                 <form id="approverForm{{ $trainingRequest->id }}">
@@ -431,8 +432,9 @@
                                         <label class="form-label">Decision</label>
                                         <select name="approval_decision" class="form-select">
                                             <option value="" selected disabled>Please select</option>
-                                            <option value="1">Approved</option>
-                                            <option value="2">Rejected</option>
+                                            <option value="1">Recommended</option>
+                                            <option value="2">Not Recommended</option>
+                                            <option value="3">KIV</option>
                                         </select>
                                     </div>
                                     <div class="mb-2">
@@ -456,7 +458,7 @@
                                         <tr>
                                             <th>Remarks</th>
                                             <td style="border-bottom: none !important; padding: 8px !important;">:</td>
-                                            <td style="border-bottom: none !important; padding: 8px !important;">{!! nl2br($approveStatus->remarks) !!}</td>
+                                            <td style="border-bottom: none !important; padding: 8px !important;">{!! nl2br($approveStatus->remarks ?? 'No remarks') !!}</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -466,6 +468,78 @@
                             @else
                                 <div class="p-2 border rounded bg-light">
                                     Pending Review
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+
+                {{-- ======================================================
+                     HOC APPROVER SECTION (only show if reviewer exists)
+                ======================================================= --}}
+                @if($approveStatus)
+                    <div class="card" style="box-shadow: none !important">
+                        <div class="card-body pt-0">
+                            <h5 class="mb-2">Third Review</h5>
+                            @if(!$hocApproveStatus && ($isReviewer || $isApprover))
+                                <form id="hocApproverForm{{ $trainingRequest->id }}">
+                                    <div class="mb-2">
+                                        <label class="form-label">Decision</label>
+                                        <select name="approval_decision" class="form-select">
+                                            <option value="" selected disabled>Please select</option>
+                                            <option value="1">Approved</option>
+                                            <option value="2">Rejected</option>
+                                            <option value="2">KIV</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">Remarks</label>
+                                        <textarea name="remarks" class="form-control" rows="3"></textarea>
+                                    </div>
+                                    <div class="text-end">
+                                        <button type="button" class="btn btn-primary btn-sm hoc-approver-submit-btn" data-id="{{ $trainingRequest->id }}">
+                                            Save
+                                        </button>
+                                    </div>
+                                </form>
+                            @elseif($hocApproveStatus)
+                                <div class="p-2 border rounded bg-light">
+                                    <table class="table table-borderless mb-0">
+                                        <tr>
+                                            <th style="width: 25%">Decision</th>
+                                            <td style="border-bottom: none !important; padding: 8px !important; width: 1%;">:</td>
+                                            <td style="border-bottom: none !important; padding: 8px !important;">{{ $hocApproveStatus->approval_decision == 1 ? 'Approved' : 'Rejected' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Remarks</th>
+                                            <td style="border-bottom: none !important; padding: 8px !important;">:</td>
+                                            <td style="border-bottom: none !important; padding: 8px !important;">{!! nl2br($hocApproveStatus->remarks ?? 'No remarks') !!}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="text-end">
+                                    <small style="font-style: italic">Reviewed by {{ $approveStatus->reviewBy->name }} (Representative) on {{$approveStatus->created_at->format('d/m/Y H:i:s')}}</small>
+                                </div>
+                            @else
+                                <div class="p-2 border rounded bg-light">
+                                    Pending Review
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+
+                {{-- ======================================================
+                     TRAINING REQUEST COMPLETE SECTION (only show if reviewer exists)
+                ======================================================= --}}
+                @if($hocApproveStatus && $trainingRequest->status != 9)
+                    <div class="card" style="box-shadow: none !important">
+                        <div class="card-body pt-0">
+                            @if($isReviewer || $isApprover)
+                                <div class="text-end">
+                                    <button type="button" class="btn btn-success btn-sm w-100 mark-as-completed-btn" data-id="{{ $trainingRequest->id }}">
+                                        Mark As Completed
+                                    </button>
                                 </div>
                             @endif
                         </div>

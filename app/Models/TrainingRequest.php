@@ -41,6 +41,11 @@ class TrainingRequest extends Model
         return $this->hasOne(TrainingRequestStatus::class)->where('status_type', 2);
     }
 
+    public function hocApproveStatus()
+    {
+        return $this->hasOne(TrainingRequestStatus::class)->where('status_type', 3);
+    }
+
     public function documents()
     {
         return $this->hasMany(TrainingRequestDocument::class);

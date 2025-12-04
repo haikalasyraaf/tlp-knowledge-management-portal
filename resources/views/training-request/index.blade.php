@@ -624,6 +624,58 @@
                 });
             });
 
+            $(document).on('click', '.hoc-approver-submit-btn', function () {
+                let trainingRequestId = $(this).data('id');
+                let form = $('#hocApproverForm' + trainingRequestId)[0];
+                let formData = new FormData(form);
+
+                $.ajax({
+                    url: "/training-request/" + trainingRequestId + "/hoc-approve",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    success: function (response) {
+                        $('#statusModal' + trainingRequestId).modal('hide');
+
+                        console.log(response);
+                        toastr.success('Training Request updated successfully!', '', { timeOut: 8000 });
+                        $('#dataTableBuilder').DataTable().ajax.reload();
+                    },
+                    error: function (xhr) {
+                        console.log(xhr.responseText);
+                        toastr.error(xhr.responseJSON?.message || 'Something went wrong!');
+                    }
+                });
+            });
+
+            $(document).on('click', '.mark-as-completed-btn', function () {
+                let trainingRequestId = $(this).data('id');
+
+                $.ajax({
+                    url: "/training-request/" + trainingRequestId + "/mark-as-completed",
+                    type: "POST",
+                    data: {},
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    success: function (response) {
+                        $('#statusModal' + trainingRequestId).modal('hide');
+
+                        console.log(response);
+                        toastr.success('Training Request updated successfully!', '', { timeOut: 8000 });
+                        $('#dataTableBuilder').DataTable().ajax.reload();
+                    },
+                    error: function (xhr) {
+                        console.log(xhr.responseText);
+                        toastr.error(xhr.responseJSON?.message || 'Something went wrong!');
+                    }
+                });
+            });
+
             $(document).on('click', '.add-participant', function () {
 
                 let id = $(this).data('id') ?? '';  
