@@ -392,7 +392,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>HDRC Claimable</th>
+                                        <th>HRDF Claimable</th>
                                         <td style="border-bottom: none !important; padding: 8px !important;">:</td>
                                         <td style="border-bottom: none !important; padding: 8px !important;">{{ $reviewStatus->is_hdrc_claimable == 1 ? 'Yes' : 'No' }}</td>
                                     </tr>
@@ -461,6 +461,13 @@
                                             <td style="border-bottom: none !important; padding: 8px !important;">{!! nl2br($approveStatus->remarks ?? 'No remarks') !!}</td>
                                         </tr>
                                     </table>
+                                    @if ($isReviewer || $isApprover)
+                                        <div class="text-end">
+                                            <a href="/training-request/{{ $trainingRequest->id }}/generate-form-pdf" style="text-decoration: underline">
+                                                Generate Form
+                                            </a>
+                                        </div>                                        
+                                    @endif
                                 </div>
                                 <div class="text-end">
                                     <small style="font-style: italic">Reviewed by {{ $approveStatus->reviewBy->name }} on {{$approveStatus->created_at->format('d/m/Y H:i:s')}}</small>

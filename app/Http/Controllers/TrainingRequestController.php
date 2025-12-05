@@ -8,6 +8,7 @@ use App\Models\TrainingRequestStatus;
 use App\Models\TrainingRequestUser;
 use App\Models\User;
 use App\Notifications\UserAlertNotification;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -213,6 +214,15 @@ class TrainingRequestController extends Controller
         $document->delete();
 
         return response()->json(['message' => 'Training Request Document deleted successfully']);
+    }
+
+    public function generateFormPDF($id)
+    {
+        $trainingRequest = TrainingRequest::findOrFail($id);
+
+        $pdf = Pdf::loadView('pdf.training-request-form', ['training' => $trainingRequest]);
+
+        return $pdf->download($trainingRequest->training_title . '_training_form.pdf');
     }
 
     public function review(Request $request, $id)
