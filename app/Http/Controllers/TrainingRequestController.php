@@ -12,6 +12,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Rap2hpoutre\FastExcel\FastExcel;
 use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
 
@@ -359,5 +360,53 @@ class TrainingRequestController extends Controller
         $trainingRequest->update(['status' => 9]);
 
         return response()->json(['message' => 'Training Request Mark As Completed']);
+    }
+
+    public function report(Request $request)
+    {
+        $reportType = $request->input('report_type');
+        $year = $request->input('year');   // Example: 2025
+        $month = $request->input('month'); // Example: 2025-10
+
+        if ($reportType == 2 && $year) {
+            // Yearly report
+            $query = TrainingRequest::whereYear('created_at', $year);
+        } elseif ($reportType == 3 && $month) {
+            // Monthly report — extract year & month properly
+            $parsedMonth = \Carbon\Carbon::parse($month);
+            $query = TrainingRequest::whereYear('created_at', $parsedMonth->year)
+                ->whereMonth('created_at', $parsedMonth->month);
+        } else {
+            $query = TrainingRequest::query();
+        }
+
+        $trainingRequests = $query->get();
+
+        $data = $trainingRequests->flatMap(function ($training) {
+            $participants = $training->participants;
+            return $participants->map(function ($participant, $index) use ($training, $participants) {
+                return [
+                    'No'                  => $index === 0 ? ($index + 1) : '',
+                    'Date'                => $index === 0 ? ($training->training_start_date . '-' . $training->training_end_date) : '',
+                    'Course'              => $index === 0 ? $training->training_title : '',
+                    'Name of Participant' => $participant->name,
+                    'Department'          => $participant->department ?? '-',
+                    'No of Pax'           => $index === 0 ? $participants->count() : '',
+                    'Internal'            => $index === 0 ? ($training->reviewStatus->internal_or_external == 1 ? '/' : '') : '',
+                    'External'            => $index === 0 ? ($training->reviewStatus->internal_or_external != 1 ? '/' : '') : '',
+                    'Total Cost (RM)'     => $index === 0 ? $training->reviewStatus->approved_training_cost : '',
+                    'Training Hour'       => $index === 0 ? $training->reviewStatus->training_duration : '',
+                    'Training Manhours'   => '',
+                    'Training Provider'   => $index === 0 ? $training->training_organiser : '',
+                    'HRDF Claim'          => $index === 0 ? ($training->reviewStatus->is_hdrc_claimable == 1 ? 'YES' : 'NO') : '',
+                ];
+            });
+        });
+
+        if ($data->isEmpty()) {
+            throw new \Exception('No data available to export.');
+        }
+
+        return (new FastExcel($data))->download('training_request.xlsx');
     }
 }

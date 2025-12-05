@@ -9,6 +9,9 @@
                         </h5>
                     </div>
                     <div class="col-6 text-end">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#reportFormModal" class="btn btn-sm btn-success ms-2">
+                            <i class="bi bi-file-earmark-arrow-down-fill icon-13 me-1"></i> Export
+                        </a>
                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
                             <i class="bi bi-plus-lg icon-13 me-1"></i> New Record
                         </button>                    
@@ -191,27 +194,38 @@
         </div>
     </div>
 
-    <!-- ToK Guideline Modal -->
-    <div class="modal fade" id="guidelineModal" tabindex="-1" aria-labelledby="guidelineModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal fade" id="reportFormModal" tabindex="-1" aria-labelledby="reportFormModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-lg">
             <div class="modal-content text-start">
                 <div class="modal-header pb-0">
-                    <h1 class="modal-title fs-5" id="guidelineModalLabel">Training Request Guideline</h1>
-                    <button type="button" class="btn-close close-create-modal-btn" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h1 class="modal-title fs-5" id="reportFormModalLabel">Export Data</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body py-0">
-                    <form id="guidelineForm">
-                        <div class="card card-detail" style="box-shadow: none !important">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-lg-12 mb-2 px-0">
-                                        <textarea id="tok_guideline" name="tok_guideline" class="form-control" rows="10" placeholder="Enter guideline..."
-                                            >{{ \App\Models\Setting::get('tok_guideline', '') }}</textarea>
-                                    </div>
+                <div class="modal-body">
+                    <form id="reportForm" enctype="multipart/form-data">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-6 mb-3">
+                                    <label for="report_type" class="form-label">Report Type</label>
+                                    <select name="report_type" id="report_type" class="form-select">
+                                        <option value="" hidden selected>Please select</option>
+                                        <option value="1">All</option>
+                                        <option value="2">Yearly</option>
+                                        <option value="3">Monthly</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 mb-3 year-group d-none">
+                                    <label for="year" class="form-label">Year</label>
+                                    <input type="number" class="form-control" id="year" name="year" min="2000" max="2100" value="{{ date('Y') }}"
+                                        oninput="if (this.value.length > 4) this.value = this.value.slice(0,4);">
+                                </div>
 
-                                    <div class="col-12 text-end px-0">
-                                        <button type="button" class="btn btn-primary add-guideline-btn">Save</button>
-                                    </div>
+                                <div class="col-lg-6 mb-3 month-group d-none">
+                                    <label for="month" class="form-label">Month</label>
+                                    <input type="month" class="form-control" id="month" name="month">
+                                </div>
+                                <div class="col-12 text-end">
+                                    <button type="button" class="btn btn-primary report-btn">Export</button>
                                 </div>
                             </div>
                         </div>
@@ -741,6 +755,87 @@
                     error: function (xhr) {
                         console.log(xhr.responseText);
                         toastr.error(xhr.responseJSON?.message || 'Something went wrong!');
+                    }
+                });
+            });
+
+            $(document).on('change', '#report_type', function () {
+                const selected = $(this).val();
+                const currentYear = new Date().getFullYear();
+
+                // Hide both first
+                $('.year-group, .month-group').addClass('d-none');
+
+                if (selected === '2') {
+                    // Yearly → show year input and set to current year
+                    $('.year-group').removeClass('d-none');
+                    $('#year').val(currentYear);
+                    $('#month').val('');
+                } 
+                else if (selected === '3') {
+                    // Monthly → show month input only
+                    $('.month-group').removeClass('d-none');
+                    $('#year').val('');
+                } 
+                else {
+                    // All → clear both
+                    $('#year, #month').val('');
+                }
+            });
+
+            $(document).on('click', '.report-btn', function () {
+                let form = $('#reportForm')[0];
+                let formData = new FormData(form);
+
+                // Disable button while generating
+                let btn = $(this);
+                btn.prop('disabled', true).text('Generating...');
+
+                $.ajax({
+                    url: "/training-request/report",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    xhrFields: {
+                        responseType: 'blob' // 👈 important for file download
+                    },
+                    success: function (blob, status, xhr) {
+                        // ✅ Get filename from header if available
+                        let filename = "";
+                        const disposition = xhr.getResponseHeader('Content-Disposition');
+                        if (disposition && disposition.indexOf('attachment') !== -1) {
+                            const matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(disposition);
+                            if (matches && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                        }
+                        if (!filename) filename = "program_report.xlsx";
+
+                        // ✅ Create a link and trigger download
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                        window.URL.revokeObjectURL(url);
+
+                        toastr.success('Report exported successfully!');
+                        
+                        // Close modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('reportFormModal'));
+                        modal.hide();
+                    },
+                    error: function (xhr) {
+                        console.log(xhr.responseText);
+                        toastr.error(xhr.responseJSON?.message || 'Failed to export report!');
+                    },
+                    complete: function () {
+                        // Always reset button state
+                        btn.prop('disabled', false).text('Export');
                     }
                 });
             });
