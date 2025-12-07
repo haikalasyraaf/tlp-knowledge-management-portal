@@ -392,13 +392,13 @@ class TrainingRequestController extends Controller
                     'Name of Participant' => $participant->name,
                     'Department'          => $participant->department ?? '-',
                     'No of Pax'           => $index === 0 ? $participants->count() : '',
-                    'Internal'            => $index === 0 ? ($training->reviewStatus->internal_or_external == 1 ? '/' : '') : '',
-                    'External'            => $index === 0 ? ($training->reviewStatus->internal_or_external != 1 ? '/' : '') : '',
-                    'Total Cost (RM)'     => $index === 0 ? $training->reviewStatus->approved_training_cost : '',
-                    'Training Hour'       => $index === 0 ? $training->reviewStatus->training_duration : '',
+                    'Internal'            => ($index === 0 && $training->reviewStatus) ? ($training->reviewStatus->internal_or_external == 1 ? '/' : '') : '',
+                    'External'            => ($index === 0 && $training->reviewStatus) ? ($training->reviewStatus->internal_or_external != 1 ? '/' : '') : '',
+                    'Total Cost (RM)'     => ($index === 0 && $training->reviewStatus) ? $training->reviewStatus->approved_training_cost : '',
+                    'Training Hour'       => ($index === 0 && $training->reviewStatus) ? $training->reviewStatus->training_duration : '',
                     'Training Manhours'   => '',
                     'Training Provider'   => $index === 0 ? $training->training_organiser : '',
-                    'HRDF Claim'          => $index === 0 ? ($training->reviewStatus->is_hdrc_claimable == 1 ? 'YES' : 'NO') : '',
+                    'HRDF Claim'          => ($index === 0 && $training->reviewStatus) ? ($training->reviewStatus->is_hdrc_claimable == 1 ? 'YES' : 'NO') : '',
                 ];
             });
         });
