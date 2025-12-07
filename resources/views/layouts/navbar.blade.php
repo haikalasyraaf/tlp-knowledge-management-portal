@@ -81,16 +81,14 @@
                         <span class="me-2">{{ Auth::user()->name }}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        @if (auth()->user()->role == 'Admin')
-                            <li>
-                                <a class="dropdown-item" href="{{ route('settings.profile.edit') }}">
-                                    <i class="bi bi-key-fill me-2"></i> {{ __('Change Password') }}
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>                            
-                        @endif
+                        <li>
+                            <a class="dropdown-item" href="{{ route('settings.profile.edit') }}">
+                                <i class="bi bi-key-fill me-2"></i> {{ __('Change Password') }}
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
                         <li>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
