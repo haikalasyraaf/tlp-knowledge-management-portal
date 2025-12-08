@@ -5,12 +5,12 @@
     <title>Training Request Form</title>
 
     <style>
-        body { font-family: DejaVu Sans, sans-serif; font-size: 9px; line-height: 1.4; }
+        body { font-family: Arial, sans-serif; font-size: 12px; line-height: 1.4; }
         h1 { text-align: center; font-size: 18px; margin-bottom: 20px; }
 
         table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
         th, td { border: 1px solid #000; }
-        th, td { padding: 1px 6px; text-align: left; vertical-align: top; } /* top-aligned */
+        th, td { padding: 6px 6px; text-align: left; vertical-align: top; } /* top-aligned */
 
         /* Custom class for borderless tables */
         table.no-border, 
@@ -27,13 +27,13 @@
 <body>
     <table>
         <tr>
-            <td colspan="2" rowspan="4" style="vertical-align: middle !important;">
-                <table style="border:0; margin: 0 !important">
+            <td colspan="2" rowspan="4" style="vertical-align: middle !important; margin: 0 !important; padding: 0 0 0 24px !important">
+                <table style="border:0; margin: 0 !important;">
                     <tr>
-                        <td width="20%" style="border:0;">
-                            <img src="{{ public_path(\App\Models\Setting::get('app_logo', 'images/default-logo.png')) }}" style="height: 80px; width: 80px;">
+                        <td width="20%" style="border: 0; vertical-align: middle !important; padding: 0 !important;">
+                            <img src="{{ public_path('images/tlp-logo-document.png') }}" style="height: 75px; padding: 0 !important;">
                         </td>
-                        <td width="80%" style="border:0; font-size: 8px !important;">
+                        <td width="80%" style="border:0; font-size: 9px !important; vertical-align: middle !important">
                             <span style="font-weight: bolder">TLP TERMINAL SDN BHD</span> <br>
                             Bangunan Pentadbiran,Langsat Marine Terminal, <br>
                             Lot 1, PTD 4845, Jalan Persiaran Tanjung Langsat, <br>
@@ -43,24 +43,24 @@
                     </tr>
                 </table>
             </td>
-            <td width="13%">DOC. NO</td>
-            <td width="14%">TLPT-HCA-FR-001</td>
+            <td width="12%" style="padding: 0 0 0 6px !important; vertical-align: middle; font-size: 10px !important;">DOC. NO</td>
+            <td width="14%" style="padding: 0 0 0 6px !important; vertical-align: middle; font-size: 10px !important;">TLPT-HCA-FR-001</td>
         </tr>
         <tr>
-            <td>REV. NO</td>
-            <td>3</td>
+            <td style="padding: 0 0 0 6px !important; vertical-align: middle; font-size: 10px !important;">REV. NO</td>
+            <td style="padding: 0 0 0 6px !important; vertical-align: middle; font-size: 10px !important;">3</td>
         </tr>
         <tr>
-            <td>REV. DATE</td>
-            <td>01 JAN 2026</td>
+            <td style="padding: 0 0 0 6px !important; vertical-align: middle; font-size: 10px !important;">REV. DATE</td>
+            <td style="padding: 0 0 0 6px !important; vertical-align: middle; font-size: 10px !important;">01 JAN 2026</td>
         </tr>
         <tr>
-            <td>PAGE NO</td>
-            <td>1 OF 1 PAGES</td>
+            <td style="padding: 0 0 0 6px !important; vertical-align: middle; font-size: 10px !important;">PAGE NO</td>
+            <td style="padding: 0 0 0 6px !important; vertical-align: middle; font-size: 10px !important;">1 OF 1 PAGES</td>
         </tr>
         <tr>
-            <td colspan="2" style="vertical-align: middle !important; font-weight:bolder;">
-                TITLE: TRAINING REQUEST
+            <td colspan="2" style="vertical-align: middle !important; font-weight:bolder; font-size: 16px !important;">
+                TITLE : TRAINING REQUEST
             </td>
             <td colspan="2" class="text-center" style="background-color: black; color: white; font-weight:bolder">
                 THIS RECORD SHOULD BE <br> KEPT FOR A MIN. 3 YEARS
@@ -120,13 +120,17 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($training->participants as $index => $p)
-            <tr>
-                <td class="text-center">{{ $index + 1 }}</td>
-                <td>{{ $p->name }}</td>
-                <td>{{ $p->department }}</td>
-            </tr>
-            @endforeach
+            @for($i = 0; $i < 5; $i++)
+                @php
+                    $participant = $training->participants[$i] ?? null;
+                @endphp
+
+                <tr>
+                    <td class="text-center">{{ $i + 1 }}</td>
+                    <td>{{ $participant->name ?? '' }}</td>
+                    <td>{{ $participant->department ?? '' }}</td>
+                </tr>
+            @endfor
         </tbody>
     </table>
 
@@ -170,16 +174,16 @@
         </tr>
     </table>
 
-    <table>
+    <table style="font-size: 10px !important;">
         <tr>
-            <td width="58%" rowspan="2">REMARKS:</td>
-            <td width="14%" class="text-center" style="background-color: rgb(196, 196, 196)">
+            <td width="52%" rowspan="2">REMARKS:</td>
+            <td width="16%" class="text-center" style="background-color: rgb(196, 196, 196)">
                 VERIFIED BY
             </td>
-            <td width="14%" class="text-center" style="background-color: rgb(196, 196, 196)">
+            <td width="16%" class="text-center" style="background-color: rgb(196, 196, 196)">
                 CONFIRMED BY
             </td>
-            <td width="14%" class="text-center" style="background-color: rgb(196, 196, 196)">
+            <td width="16%" class="text-center" style="background-color: rgb(196, 196, 196)">
                 APPROVED BY
             </td>
         </tr>
@@ -199,7 +203,7 @@
         </tr>
         <tr>
             <td colspan="4" style="border: none !important; padding: 0 !important">
-                <span style="font-weight: bolder; color:rgb(27, 27, 82)">This document is deemed CONTROLLED only when viewed electronically from the shared folder.</span>
+                <span style="font-weight: bolder; color:rgb(27, 27, 82); font-size: 12px !important;">This document is deemed CONTROLLED only when viewed electronically from the shared folder.</span>
             </td>
         </tr>
     </table>
