@@ -8,7 +8,9 @@
 @endphp
 
 <div class="d-flex justify-content-center gap-1">
-    <a href="#" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#statusModal{{$trainingRequest->id}}">Status Overview</a>
+    @if (auth()->user()->role == 'Admin')
+        <a href="#" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#statusModal{{$trainingRequest->id}}">Status Overview</a>
+    @endif
     @if (((auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus) && !$reviewStatus)
         <a href="#" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#editModal{{$trainingRequest->id}}">Edit</a>
         <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{$trainingRequest->id}}">Delete</a>
@@ -384,6 +386,11 @@
                                         <td style="border-bottom: none !important; padding: 8px !important;">RM {{ number_format($reviewStatus->approved_training_cost, 2) }}</td>
                                     </tr>
                                     <tr>
+                                        <th>Training Hours</th>
+                                        <td style="border-bottom: none !important; padding: 8px !important;">:</td>
+                                        <td style="border-bottom: none !important; padding: 8px !important;">{{ $reviewStatus->training_duration }} Hour(s)</td>
+                                    </tr>
+                                    <tr>
                                         <th>Accommodation</th>
                                         <td style="border-bottom: none !important; padding: 8px !important;">:</td>
                                         <td style="border-bottom: none !important; padding: 8px !important;">
@@ -409,7 +416,7 @@
                                 </table>
                             </div>
                             <div class="text-end">
-                                <small style="font-style: italic">Reviewed by {{ $reviewStatus->reviewBy->name }} on {{$reviewStatus->created_at->format('d/m/Y H:i:s')}}</small>
+                                <small style="font-style: italic">Verified by {{ $reviewStatus->reviewBy->name }} on {{$reviewStatus->created_at->format('d/m/Y H:i:s')}}</small>
                             </div>
                         @else
                             <div class="p-2 border rounded bg-light">
@@ -470,7 +477,7 @@
                                     @endif
                                 </div>
                                 <div class="text-end">
-                                    <small style="font-style: italic">Reviewed by {{ $approveStatus->reviewBy->name }} on {{$approveStatus->created_at->format('d/m/Y H:i:s')}}</small>
+                                    <small style="font-style: italic">Confirmed by {{ $approveStatus->reviewBy->name }} on {{$approveStatus->created_at->format('d/m/Y H:i:s')}}</small>
                                 </div>
                             @else
                                 <div class="p-2 border rounded bg-light">
@@ -525,7 +532,7 @@
                                     </table>
                                 </div>
                                 <div class="text-end">
-                                    <small style="font-style: italic">Reviewed by {{ $approveStatus->reviewBy->name }} (Representative) on {{$approveStatus->created_at->format('d/m/Y H:i:s')}}</small>
+                                    <small style="font-style: italic">Approved by {{ $approveStatus->reviewBy->name }} (Representative) on {{$approveStatus->created_at->format('d/m/Y H:i:s')}}</small>
                                 </div>
                             @else
                                 <div class="p-2 border rounded bg-light">

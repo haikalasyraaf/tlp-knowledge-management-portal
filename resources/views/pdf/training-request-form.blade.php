@@ -5,11 +5,11 @@
     <title>Training Request Form</title>
 
     <style>
-        body { font-family: DejaVu Sans, sans-serif; font-size: 11px; line-height: 1.4; }
+        body { font-family: DejaVu Sans, sans-serif; font-size: 10px; line-height: 1.4; }
         h1 { text-align: center; font-size: 18px; margin-bottom: 20px; }
 
         table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-        table, th, td { border: 1px solid #000; }
+        th, td { border: 1px solid #000; }
         th, td { padding: 3px 6px; text-align: left; vertical-align: top; } /* top-aligned */
 
         /* Custom class for borderless tables */
@@ -27,7 +27,7 @@
 <body>
     <table class="no-border">
         <tr>
-            <td class="text-center">
+            <td>
                 <img src="{{ public_path(\App\Models\Setting::get('app_logo', 'images/default-logo.png')) }}" style="height: 80px; width: 80px;">
             </td>
         </tr>
@@ -43,6 +43,12 @@
             </td>
         </tr>
         <tr>
+            <td width="30%">Requested By</td>
+            <td>
+                {{ $training->requestor_name }} ({{ $training->deparment_name }})
+            </td>
+        </tr>
+        <tr>
             <td>Conducted / Organized By</td>
             <td>
                 {{ $training->training_organiser }}
@@ -53,6 +59,10 @@
             <td>
                 {{ $training->training_venue }}
             </td>
+        </tr>
+        <tr>
+            <td>Training Cost</td>
+            <td>RM {{ number_format($training->training_cost, 2, '.', ',')  }}</td>
         </tr>
         <tr>
             <td>Dates of Training</td>
@@ -106,6 +116,10 @@
             <td>RM {{ number_format($training->reviewStatus->approved_training_cost, 2, '.', ',')  }}</td>
         </tr>
         <tr>
+            <td>Training Hours</td>
+            <td>{{ $training->reviewStatus->training_duration }} Hour(s)</td>
+        </tr>
+        <tr>
             <td>Accommodation</td>
             <td>
                 {{ $training->reviewStatus->is_accomodation_required == 1 ? 'Yes' : 'No' }}
@@ -128,13 +142,14 @@
 
     <table>
         <tr>
-            <td width="33%" class="text-center" style="background-color: rgb(196, 196, 196)">
+            <td width="58%" rowspan="2">REMARKS:</td>
+            <td width="14%" class="text-center" style="background-color: rgb(196, 196, 196)">
                 VERIFIED BY
             </td>
-            <td width="33%" class="text-center" style="background-color: rgb(196, 196, 196)">
+            <td width="14%" class="text-center" style="background-color: rgb(196, 196, 196)">
                 CONFIRMED BY
             </td>
-            <td width="34%" class="text-center" style="background-color: rgb(196, 196, 196)">
+            <td width="14%" class="text-center" style="background-color: rgb(196, 196, 196)">
                 APPROVED BY
             </td>
         </tr>
@@ -152,10 +167,11 @@
                 {{ 'HOC' }}
             </td>
         </tr>
+        <tr>
+            <td colspan="4" style="border: none !important; padding: 0 !important">
+                <span style="font-weight: bolder; color:rgb(27, 27, 82)">This document is deemed CONTROLLED only when viewed electronically from the shared folder.</span>
+            </td>
+        </tr>
     </table>
-
-    <div class="text-center">
-        <p>This is a system-generated training request form.</p>
-    </div>
 </body>
 </html>

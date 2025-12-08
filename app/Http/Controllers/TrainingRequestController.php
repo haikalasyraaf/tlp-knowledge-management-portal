@@ -9,6 +9,7 @@ use App\Models\TrainingRequestUser;
 use App\Models\User;
 use App\Notifications\UserAlertNotification;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -382,12 +383,14 @@ class TrainingRequestController extends Controller
 
         $trainingRequests = $query->get();
 
-        $data = $trainingRequests->flatMap(function ($training) {
+        $counter = 0;
+        $data = $trainingRequests->flatMap(function ($training) use (&$counter) {
+            $counter++;
             $participants = $training->participants;
-            return $participants->map(function ($participant, $index) use ($training, $participants) {
+            return $participants->map(function ($participant, $index) use ($training, $participants, $counter) {
                 return [
-                    'No'                  => $index === 0 ? ($index + 1) : '',
-                    'Date'                => $index === 0 ? ($training->training_start_date . '-' . $training->training_end_date) : '',
+                    'No'                  => $index === 0 ? $counter : '',
+                    'Date'                => $index === 0 ? (($s = Carbon::parse($training->training_start_date)) && ($e = Carbon::parse($training->training_end_date)) && $s->isSameDay($e) ? $s->format('d/m/Y') : $s->format('d/m/Y') . ' - ' . $e->format('d/m/Y')) : '',
                     'Course'              => $index === 0 ? $training->training_title : '',
                     'Name of Participant' => $participant->name,
                     'Department'          => $participant->department ?? '-',
@@ -395,10 +398,12 @@ class TrainingRequestController extends Controller
                     'Internal'            => ($index === 0 && $training->reviewStatus) ? ($training->reviewStatus->internal_or_external == 1 ? '/' : '') : '',
                     'External'            => ($index === 0 && $training->reviewStatus) ? ($training->reviewStatus->internal_or_external != 1 ? '/' : '') : '',
                     'Total Cost (RM)'     => ($index === 0 && $training->reviewStatus) ? $training->reviewStatus->approved_training_cost : '',
+                    'Total Mandays'       => '',
                     'Training Hour'       => ($index === 0 && $training->reviewStatus) ? $training->reviewStatus->training_duration : '',
                     'Training Manhours'   => '',
                     'Training Provider'   => $index === 0 ? $training->training_organiser : '',
                     'HRDF Claim'          => ($index === 0 && $training->reviewStatus) ? ($training->reviewStatus->is_hdrc_claimable == 1 ? 'YES' : 'NO') : '',
+                    'Effectiveness Date'  => '',
                 ];
             });
         });
