@@ -5,12 +5,12 @@
     <title>Training Request Form</title>
 
     <style>
-        body { font-family: DejaVu Sans, sans-serif; font-size: 10px; line-height: 1.4; }
+        body { font-family: DejaVu Sans, sans-serif; font-size: 9px; line-height: 1.4; }
         h1 { text-align: center; font-size: 18px; margin-bottom: 20px; }
 
         table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
         th, td { border: 1px solid #000; }
-        th, td { padding: 3px 6px; text-align: left; vertical-align: top; } /* top-aligned */
+        th, td { padding: 1px 6px; text-align: left; vertical-align: top; } /* top-aligned */
 
         /* Custom class for borderless tables */
         table.no-border, 
@@ -25,54 +25,84 @@
     </style>
 </head>
 <body>
-    <table class="no-border">
-        <tr>
-            <td>
-                <img src="{{ public_path(\App\Models\Setting::get('app_logo', 'images/default-logo.png')) }}" style="height: 80px; width: 80px;">
-            </td>
-        </tr>
-    </table>
     <table>
-        <tr style="background-color: rgb(196, 196, 196)">
-            <td colspan="2">TITLE: TRAINING REQUEST</td>
+        <tr>
+            <td colspan="2" rowspan="4" style="vertical-align: middle !important;">
+                <table style="border:0; margin: 0 !important">
+                    <tr>
+                        <td width="20%" style="border:0;">
+                            <img src="{{ public_path(\App\Models\Setting::get('app_logo', 'images/default-logo.png')) }}" style="height: 80px; width: 80px;">
+                        </td>
+                        <td width="80%" style="border:0; font-size: 8px !important;">
+                            <span style="font-weight: bolder">TLP TERMINAL SDN BHD</span> <br>
+                            Bangunan Pentadbiran,Langsat Marine Terminal, <br>
+                            Lot 1, PTD 4845, Jalan Persiaran Tanjung Langsat, <br>
+                            Pelabuhan Tanjung Langsat, <br>
+                            81700 Pasir Gudang, Johor
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td width="13%">DOC. NO</td>
+            <td width="14%">TLPT-HCA-FR-001</td>
+        </tr>
+        <tr>
+            <td>REV. NO</td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td>REV. DATE</td>
+            <td>01 JAN 2026</td>
+        </tr>
+        <tr>
+            <td>PAGE NO</td>
+            <td>1 OF 1 PAGES</td>
+        </tr>
+        <tr>
+            <td colspan="2" style="vertical-align: middle !important; font-weight:bolder;">
+                TITLE: TRAINING REQUEST
+            </td>
+            <td colspan="2" class="text-center" style="background-color: black; color: white; font-weight:bolder">
+                THIS RECORD SHOULD BE <br> KEPT FOR A MIN. 3 YEARS
+            </td>
         </tr>
         <tr>
             <td width="30%">Training / Course / Programme</td>
-            <td>
+            <td colspan="3">
                 {{ $training->training_title }}
             </td>
         </tr>
         <tr>
             <td width="30%">Requested By</td>
-            <td>
+            <td colspan="3">
                 {{ $training->requestor_name }} ({{ $training->deparment_name }})
             </td>
         </tr>
         <tr>
             <td>Conducted / Organized By</td>
-            <td>
+            <td colspan="3">
                 {{ $training->training_organiser }}
             </td>
         </tr>
         <tr>
             <td>Training Venue</td>
-            <td>
+            <td colspan="3">
                 {{ $training->training_venue }}
             </td>
         </tr>
         <tr>
             <td>Training Cost</td>
-            <td>RM {{ number_format($training->training_cost, 2, '.', ',')  }}</td>
+            <td colspan="3">RM {{ number_format($training->training_cost, 2, '.', ',')  }}</td>
         </tr>
         <tr>
             <td>Dates of Training</td>
-            <td>
+            <td colspan="3">
                 From {{ $training->training_start_date }} To {{ $training->training_end_date }}
             </td>
         </tr>
         <tr>
             <td>Training Objective</td>
-            <td>
+            <td colspan="3">
                 {!! nl2br($training->training_objective) !!}
             </td>
         </tr>
@@ -81,7 +111,7 @@
     <table>
         <thead>
             <tr style="background-color: rgb(196, 196, 196)">
-                <td colspan="3">LIST OF PARTICIPANTS</td>
+                <td colspan="3" style="font-weight:bolder;">LIST OF PARTICIPANTS</td>
             </tr>
             <tr>
                 <th width="1%" class="text-center">NO</th>
@@ -102,7 +132,7 @@
 
     <table>
         <tr style="background-color: rgb(196, 196, 196)">
-            <td colspan="2">FOR HUMAN RESOURCE DEVELOPMENT DEPARTMENT USE</td>
+            <td colspan="2" style="font-weight:bolder;">FOR HUMAN RESOURCE DEVELOPMENT DEPARTMENT USE</td>
         </tr>
         <tr>
             <td width="30%">Transport To Venue</td>
