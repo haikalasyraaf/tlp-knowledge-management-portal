@@ -117,7 +117,7 @@
                                                     </div>
                                                     <div class="col-lg-5">
                                                         <select name="participants[0][department]" class="form-select">
-                                                            <option value="" selected disabled>Please select</option>
+                                                            <option value="">-</option>
                                                             <option value="Auxiliary Police">Auxiliary Police</option>
                                                             <option value="Breakbulk & Customer Service">Breakbulk & Customer Service</option>
                                                             <option value="Business Development & Commercial">Business Development & Commercial</option>
@@ -705,7 +705,7 @@
 
                         <div class="col-lg-5">
                             <select name="participants[${index}][department]" class="form-select">
-                                <option value="" selected disabled>Please select</option>
+                                <option value="">-</option>
                                 <option value="Auxiliary Police">Auxiliary Police</option>
                                 <option value="Breakbulk & Customer Service">Breakbulk & Customer Service</option>
                                 <option value="Business Development & Commercial">Business Development & Commercial</option>

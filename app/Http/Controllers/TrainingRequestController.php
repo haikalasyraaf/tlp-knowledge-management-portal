@@ -90,7 +90,7 @@ class TrainingRequestController extends Controller
             'remarks'                   => 'nullable|string',
             'participants'                 => 'required|array|min:1',
             'participants.*.name'          => 'required|string|max:255',
-            'participants.*.department'    => 'required|string|max:255',
+            'participants.*.department'    => 'nullable|string|max:255',
         ]);
 
         $data['date_requested'] = now();
@@ -104,7 +104,7 @@ class TrainingRequestController extends Controller
                 TrainingRequestUser::create([
                     'training_request_id' => $trainingRequest->id,
                     'name'                => $participant['name'],
-                    'department'          => $participant['department'],
+                    'department'          => $participant['department'] ?? null,
                     'status'              => 1,
                     'created_by'          => $request->user()->id,
                     'updated_by'          => $request->user()->id,
@@ -147,7 +147,7 @@ class TrainingRequestController extends Controller
             'remarks'                   => 'nullable|string',
             'participants'                 => 'required|array|min:1',
             'participants.*.name'          => 'required|string|max:255',
-            'participants.*.department'    => 'required|string|max:255',
+            'participants.*.department'    => 'nullable|string|max:255',
         ]);
 
         $data['updated_by'] = $request->user()->id;
@@ -162,7 +162,7 @@ class TrainingRequestController extends Controller
                 TrainingRequestUser::create([
                     'training_request_id' => $trainingRequest->id,
                     'name'                => $participant['name'],
-                    'department'          => $participant['department'],
+                    'department'          => $participant['department'] ?? null,
                     'created_by'          => $request->user()->id,
                     'updated_by'          => $request->user()->id,
                 ]);
@@ -393,7 +393,7 @@ class TrainingRequestController extends Controller
                     'Date'                => $index === 0 ? (($s = Carbon::parse($training->training_start_date)) && ($e = Carbon::parse($training->training_end_date)) && $s->isSameDay($e) ? $s->format('d/m/Y') : $s->format('d/m/Y') . ' - ' . $e->format('d/m/Y')) : '',
                     'Course'              => $index === 0 ? $training->training_title : '',
                     'Name of Participant' => $participant->name,
-                    'Department'          => $participant->department ?? '-',
+                    'Department'          => $participant->department ?? '',
                     'No of Pax'           => $index === 0 ? $participants->count() : '',
                     'Internal'            => ($index === 0 && $training->reviewStatus) ? ($training->reviewStatus->internal_or_external == 1 ? '/' : '') : '',
                     'External'            => ($index === 0 && $training->reviewStatus) ? ($training->reviewStatus->internal_or_external != 1 ? '/' : '') : '',

@@ -128,7 +128,7 @@
                                                     <div class="col-lg-5">
                                                         <select name="participants[{{$index}}][department]" class="form-select"
                                                             {{ (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus ? '' : 'disabled' }}>
-                                                            <option value="" selected disabled>Please select</option>
+                                                            <option value="" {{ $trainingRequest->deparment_name == null ? 'selected' : '' }}>-</option>
                                                             <option value="Auxiliary Police" {{ $p->department == 'Auxiliary Police' ? 'selected' : '' }}>Auxiliary Police</option>
                                                             <option value="Breakbulk & Customer Service" {{ $p->department == 'Breakbulk & Customer Service' ? 'selected' : '' }}>Breakbulk & Customer Service</option>
                                                             <option value="Business Development & Commercial" {{ $p->department == 'Business Development & Commercial' ? 'selected' : '' }}>Business Development & Commercial</option>
@@ -161,7 +161,7 @@
                                                     <div class="col-lg-5">
                                                         <select name="participants[0][department]" class="form-select"
                                                             {{ (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus ? '' : 'disabled' }}>
-                                                            <option value="" selected disabled>Please select</option>
+                                                            <option value="">-</option>
                                                             <option value="Auxiliary Police">Auxiliary Police</option>
                                                             <option value="Breakbulk & Customer Service">Breakbulk & Customer Service</option>
                                                             <option value="Business Development & Commercial">Business Development & Commercial</option>
