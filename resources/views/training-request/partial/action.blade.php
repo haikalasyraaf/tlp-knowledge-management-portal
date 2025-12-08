@@ -117,7 +117,7 @@
                                             {{ (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus ? '' : 'disabled' }}>{!! $trainingRequest->remarks !!}</textarea>
                                     </div>
                                     <div class="col-lg-12 mb-3">
-                                        <label class="form-label">Participants <span style="color: red">*</span></label>
+                                        <label class="form-label">Participants <span style="color: red">*</span> <span style="color: gray; font-size: 10px; font-style:italic;">(For more than 5 participants, please upload the list in the attachment section.)</span></label>
                                         <div id="participantsRepeater{{$trainingRequest->id}}">
                                             @forelse ($trainingRequest->participants as $index => $p)
                                                 <div class="row g-3 participant-row mb-2">

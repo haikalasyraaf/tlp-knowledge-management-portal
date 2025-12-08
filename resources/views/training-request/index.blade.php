@@ -109,7 +109,7 @@
                                             <textarea id="create_remarks" name="remarks" class="form-control" rows="4" placeholder="Enter remarks..."></textarea>
                                         </div>
                                         <div class="col-12 mb-3">
-                                            <label class="form-label">Participants<span style="color: red"> *</span></label>
+                                            <label class="form-label">Participants<span style="color: red"> *</span> <span style="color: gray; font-size: 10px; font-style:italic;">(For more than 5 participants, please upload the list in the attachment section.)</span></label>
                                             <div id="participantsRepeater">
                                                 <div class="row g-3 participant-row mb-2">
                                                     <div class="col-lg-5">
@@ -563,6 +563,48 @@
                     </div>
                 `);
 
+                // Reset participant repeater
+                let repeaterContainers = $('#participantsRepeater, [id^="participantsRepeater-"]');
+
+                repeaterContainers.each(function() {
+                    // Clear all participant rows
+                    $(this).empty();
+
+                    // Optionally, add 1 empty row as initial
+                    $(this).append(`
+                        <div class="row g-3 participant-row mb-2">
+                            <div class="col-lg-5">
+                                <input type="text" name="participants[0][name]" class="form-control" placeholder="Participant Name">
+                            </div>
+
+                            <div class="col-lg-5">
+                                <select name="participants[0][department]" class="form-select">
+                                    <option value="">-</option>
+                                    <option value="Auxiliary Police">Auxiliary Police</option>
+                                    <option value="Breakbulk & Customer Service">Breakbulk & Customer Service</option>
+                                    <option value="Business Development & Commercial">Business Development & Commercial</option>
+                                    <option value="Corporate Planning & Strategic Transformation">Corporate Planning & Strategic Transformation</option>
+                                    <option value="Corporate Strategic Planning">Corporate Strategic Planning</option>
+                                    <option value="Corporate_Services">Corporate_Services</option>
+                                    <option value="Environment, Safety & Health">Environment, Safety & Health</option>
+                                    <option value="Finance">Finance</option>
+                                    <option value="Governance , Risk & Compliance">Governance , Risk & Compliance</option>
+                                    <option value="Human Resource & Administration">Human Resource & Administration</option>
+                                    <option value="IT">IT</option>
+                                    <option value="Marine & Liquid Operations">Marine & Liquid Operations</option>
+                                    <option value="Office of Executive Director & Chief Executive">Office of Executive Director & Chief Executive</option>
+                                    <option value="Technical Engineering & Facility Management">Technical Engineering & Facility Management</option>
+                                    <option value="Terminal & Free Zone Operation">Terminal & Free Zone Operation</option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-2">
+                                <button type="button" class="btn btn-danger remove-participant w-100">Remove</button>
+                            </div>
+                        </div>
+                    `);
+                });
+
                 // Reset ID back to generic
                 container.attr('id', 'create-document-container');
 
@@ -695,7 +737,16 @@
                 let id = $(this).data('id') ?? '';  
                 let container = $('#participantsRepeater' + id);
 
-                let index = container.children('.participant-row').length;
+                let count = container.children('.participant-row').length;
+
+                // Prevent adding more than 5
+                if (count >= 5) {
+                    toastr.error('Limit reached: Please upload participant list in the attachment section.');
+                    return;
+                }
+
+                // Use count as index
+                let index = count;
 
                 container.append(`
                     <div class="row g-3 participant-row mb-2">
