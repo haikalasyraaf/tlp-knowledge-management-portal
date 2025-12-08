@@ -1,10 +1,17 @@
 <section>
     <div class="mb-4">
-        <h2 class="h5">{{ __('Update Password') }}</h2>
+        <h2 class="h5">{{ __('Update Email & Password') }}</h2>
         <p class="text-muted">{{ __('Use a strong password that includes a combination of alphabets (including capital letters) and numbers.') }}</p>
     </div>
 
     <form id="updatePasswordForm">
+        {{-- Current Email --}}
+        <div class="mb-3">
+            <label for="email" class="form-label">{{ __('Email') }}</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ auth()->user()->email }}">
+            <div class="invalid-feedback" id="email_error"></div>
+        </div>
+
         {{-- Current Password --}}
         <div class="mb-3">
             <label for="current_password" class="form-label">{{ __('Current Password') }}</label>
@@ -54,14 +61,20 @@
             },
             success: function(response) {
                 // Show success message
-                toastr.success('Password updated successfully', '', { timeOut: 8000 });
+                toastr.success('Password updated successfully', '', { timeOut: 2000 });
 
-                // Clear form fields
-                form[0].reset();
+                // Redirect to dashboard
+                setTimeout(() => {
+                    window.location.href = "/dashboard";
+                }, 2000);
             },
             error: function(xhr) {
                 if (xhr.status === 422) {
                     const errors = xhr.responseJSON.errors;
+                    if (errors.email) {
+                        $('#email').addClass('is-invalid');
+                        $('#email_error').text(errors.email[0]);
+                    }
                     if (errors.current_password) {
                         $('#current_password').addClass('is-invalid');
                         $('#current_password_error').text(errors.current_password[0]);

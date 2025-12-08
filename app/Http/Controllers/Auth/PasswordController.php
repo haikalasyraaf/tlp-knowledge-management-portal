@@ -16,6 +16,7 @@ class PasswordController extends Controller
     public function update(Request $request): RedirectResponse
     {
         $validated = $request->validateWithBag('updatePassword', [
+            'email' => ['required'],
             'current_password' => ['required', 'current_password'],
             'password' => ['required', 'confirmed',
                 Password::min(6) // Minimum 6 characters
@@ -26,6 +27,7 @@ class PasswordController extends Controller
         ]);
 
         $request->user()->update([
+            'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);
 
