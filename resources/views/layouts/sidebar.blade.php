@@ -46,7 +46,7 @@
 
         <li class="nav-item">
             <a class="nav-link w-100 {{ request()->routeIs('training-request.index') ? 'active' : '' }}" href="{{ route('training-request.index') }}">
-                <i class="bi bi-arrow-left-right sidebar-icon-md"></i> Traininig Request
+                <i class="bi bi-arrow-left-right sidebar-icon-md"></i> Training Request
             </a>
         </li>
 
