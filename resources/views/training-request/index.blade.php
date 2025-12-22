@@ -9,9 +9,11 @@
                         </h5>
                     </div>
                     <div class="col-6 text-end">
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#reportFormModal" class="btn btn-sm btn-success ms-2">
-                            <i class="bi bi-file-earmark-arrow-down-fill icon-13 me-1"></i> Export
-                        </a>
+                        @if (auth()->user()->role == 'Admin')
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#reportFormModal" class="btn btn-sm btn-success ms-2">
+                                <i class="bi bi-file-earmark-arrow-down-fill icon-13 me-1"></i> Export
+                            </a>
+                        @endif
                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
                             <i class="bi bi-plus-lg icon-13 me-1"></i> New Record
                         </button>                    
