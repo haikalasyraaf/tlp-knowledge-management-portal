@@ -21,10 +21,10 @@ class TrainingRequestController extends Controller
 {
     public function index(Request $request, Builder $builder)
     {
-        if($request->user()->role == 'Admin') {
-            $query = TrainingRequest::with(['reviewStatus', 'approveStatus'])->orderBy('id', 'desc');
-        } else if ($request->user()->role == 'Staff') {
-            $query = TrainingRequest::with(['reviewStatus', 'approveStatus'])->where('created_by', $request->user()->id)->orderBy('id', 'desc');
+        $user = $request->user();
+        $query = TrainingRequest::with(['reviewStatus', 'approveStatus']);
+        if ($user->role == 'Staff') {
+            $query->where('created_by', $user->id);
         }
 
         if (request()->ajax()) {
@@ -34,26 +34,26 @@ class TrainingRequestController extends Controller
                     $user = User::where('id', $trainingRequest->created_by)->first();
                     return $user->name;
                 })
-                ->editColumn('status', function ($trainingRequest) {
-                    if($trainingRequest->status == 1) {
-                        return '<span class="badge bg-secondary">Under Review</span>';
-                    } else if ($trainingRequest->status == 2) {
-                        return '<span class="badge bg-warning">Pending Recommendation</span>';
-                    } else if ($trainingRequest->status == 3) {
-                        return '<span class="badge bg-success">Recommended</span>';
-                    } else if ($trainingRequest->status == 4) {
-                        return '<span class="badge bg-danger">Not Recommended</span>';
-                    } else if ($trainingRequest->status == 5) {
-                        return '<span class="badge bg-warning">Pending Approval</span>';
-                    } else if ($trainingRequest->status == 6) {
-                        return '<span class="badge bg-success">Approved</span>';
-                    } else if ($trainingRequest->status == 7) {
-                        return '<span class="badge bg-danger">Rejected</span>';
-                    } else if ($trainingRequest->status == 8) {
-                        return '<span class="badge bg-danger">KIV</span>';
-                    } else if ($trainingRequest->status == 9) {
-                        return '<span class="badge bg-primary">Training Completed</span>';
+                ->editColumn('status', function ($trainingRequest) use ($user) {
+                    $status = $trainingRequest->status;
+
+                    $trainingStatuses = [
+                        1 => ['label' => 'Under Review', 'class' => 'bg-secondary'],
+                        2 => ['label' => 'Pending Recommendation', 'class' => 'bg-warning'],
+                        3 => ['label' => 'Recommended', 'class' => 'bg-success'],
+                        4 => ['label' => 'Not Recommended', 'class' => 'bg-danger'],
+                        5 => ['label' => 'Pending Approval', 'class' => 'bg-warning'],
+                        6 => ['label' => 'Approved', 'class' => 'bg-success'],
+                        7 => ['label' => 'Rejected', 'class' => 'bg-danger'],
+                        8 => ['label' => 'KIV', 'class' => 'bg-danger'],
+                        9 => ['label' => 'Training Completed', 'class' => 'bg-primary'],
+                    ];
+
+                    if ($user->role != 'Admin' && in_array($status, [2,3,4,5])) {
+                        $status = 1;
                     }
+
+                    return '<span class="badge '.$trainingStatuses[$status]['class'].'">'.$trainingStatuses[$status]['label'].'</span>';
                 })
                 ->addColumn('action', function ($trainingRequest) {
                     return view('training-request.partial.action', compact('trainingRequest'))->render();

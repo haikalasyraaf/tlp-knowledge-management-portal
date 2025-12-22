@@ -460,7 +460,7 @@
                                         <tr>
                                             <th style="width: 25%">Decision</th>
                                             <td style="border-bottom: none !important; padding: 8px !important; width: 1%;">:</td>
-                                            <td style="border-bottom: none !important; padding: 8px !important;">{{ $approveStatus->approval_decision == 1 ? 'Approved' : 'Rejected' }}</td>
+                                            <td style="border-bottom: none !important; padding: 8px !important;">{{ $approveStatus->approval_decision == 1 ? 'Recommended' : ($approveStatus->approval_decision == 2 ? 'Not Recommended' : ($approveStatus->approval_decision == 3 ? 'KIV' : 'N/A')) }}</td>
                                         </tr>
                                         <tr>
                                             <th>Remarks</th>
@@ -503,7 +503,7 @@
                                             <option value="" selected disabled>Please select</option>
                                             <option value="1">Approved</option>
                                             <option value="2">Rejected</option>
-                                            <option value="2">KIV</option>
+                                            <option value="3">KIV</option>
                                         </select>
                                     </div>
                                     <div class="mb-2">
@@ -522,7 +522,7 @@
                                         <tr>
                                             <th style="width: 25%">Decision</th>
                                             <td style="border-bottom: none !important; padding: 8px !important; width: 1%;">:</td>
-                                            <td style="border-bottom: none !important; padding: 8px !important;">{{ $hocApproveStatus->approval_decision == 1 ? 'Approved' : 'Rejected' }}</td>
+                                            <td style="border-bottom: none !important; padding: 8px !important;">{{ $hocApproveStatus->approval_decision == 1 ? 'Approved' : ($hocApproveStatus->approval_decision == 2 ? 'Rejected' : ($hocApproveStatus->approval_decision == 3 ? 'KIV' : 'N/A')) }}</td>
                                         </tr>
                                         <tr>
                                             <th>Remarks</th>
@@ -546,7 +546,7 @@
                 {{-- ======================================================
                      TRAINING REQUEST COMPLETE SECTION (only show if reviewer exists)
                 ======================================================= --}}
-                @if($hocApproveStatus && $trainingRequest->status != 9)
+                @if ($hocApproveStatus?->approval_decision == 1 && $trainingRequest->status != 9)
                     <div class="card" style="box-shadow: none !important">
                         <div class="card-body pt-0">
                             @if($isReviewer || $isApprover)
