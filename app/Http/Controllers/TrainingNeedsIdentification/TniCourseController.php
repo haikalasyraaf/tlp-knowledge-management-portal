@@ -95,6 +95,12 @@ class TniCourseController extends Controller
             ->where('id', $id)
             ->firstOrFail();
 
+        $userEnrollmentCount = $user->tniCourses()->wherePivot('status', 'enrolled')->count();
+
+        if ($userEnrollmentCount >= 5) {
+            return response()->json(['message' => 'Enrollment limit reached. Maximum only 5 is allowed per staff.'], 400);
+        }
+
         $existing = $course->users()->where('user_id', $user->id)->first();
 
         if ($existing) {
