@@ -77,20 +77,23 @@ class TrainingRequestController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'requestor_name'            => 'required|string|max:255',
-            'deparment_name'            => 'required|string|max:255',
-            'training_title'            => 'required|string|max:255',
-            'training_organiser'        => 'required|string|max:255',
-            'training_venue'            => 'required|string|max:255',
-            'training_cost'             => 'required|numeric',
-            'training_start_date'       => 'required|date',
-            'training_end_date'         => 'required|date|after_or_equal:training_start_date',
-            'employees_recommended'     => 'nullable|string',
-            'training_objective'        => 'required|string',
-            'remarks'                   => 'nullable|string',
-            'participants'                 => 'required|array|min:1',
-            'participants.*.name'          => 'required|string|max:255',
-            'participants.*.department'    => 'nullable|string|max:255',
+            'requestor_name'                => 'required|string|max:255',
+            'deparment_name'                => 'required|string|max:255',
+            'training_title'                => 'required|string|max:255',
+            'training_organiser'            => 'required|string|max:255',
+            'training_venue'                => 'required|string|max:255',
+            'training_cost'                 => 'required|numeric',
+            'training_start_date'           => 'required|date',
+            'training_end_date'             => 'required|date|after_or_equal:training_start_date',
+            'employees_recommended'         => 'nullable|string',
+            'training_objective'            => 'required|string',
+            'remarks'                       => 'nullable|string',
+            'participants'                  => 'required|array|min:1',
+            'participants.*.name'           => 'required|string|max:255',
+            'participants.*.department'     => 'nullable|string|max:255',
+        ], [
+            'participants.required'         => 'At least one participant is required to proceed.',
+            'participants.*.name.required'  => 'Ensure each participant name is filled. Remove any empty rows to proceed.',
         ]);
 
         $data['date_requested'] = now();
@@ -134,20 +137,23 @@ class TrainingRequestController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->validate([
-            'requestor_name'            => 'required|string|max:255',
-            'deparment_name'            => 'required|string|max:255',
-            'training_title'            => 'required|string|max:255',
-            'training_organiser'        => 'required|string|max:255',
-            'training_venue'            => 'required|string|max:255',
-            'training_cost'             => 'required|numeric',
-            'training_start_date'       => 'required|date',
-            'training_end_date'         => 'required|date|after_or_equal:training_start_date',
-            'employees_recommended'     => 'nullable|string',
-            'training_objective'        => 'required|string',
-            'remarks'                   => 'nullable|string',
-            'participants'                 => 'required|array|min:1',
-            'participants.*.name'          => 'required|string|max:255',
-            'participants.*.department'    => 'nullable|string|max:255',
+            'requestor_name'                => 'required|string|max:255',
+            'deparment_name'                => 'required|string|max:255',
+            'training_title'                => 'required|string|max:255',
+            'training_organiser'            => 'required|string|max:255',
+            'training_venue'                => 'required|string|max:255',
+            'training_cost'                 => 'required|numeric',
+            'training_start_date'           => 'required|date',
+            'training_end_date'             => 'required|date|after_or_equal:training_start_date',
+            'employees_recommended'         => 'nullable|string',
+            'training_objective'            => 'required|string',
+            'remarks'                       => 'nullable|string',
+            'participants'                  => 'required|array|min:1',
+            'participants.*.name'           => 'required|string|max:255',
+            'participants.*.department'     => 'nullable|string|max:255',
+        ], [
+            'participants.required'         => 'At least one participant is required to proceed.',
+            'participants.*.name.required'  => 'Ensure each participant name is filled. Remove any empty rows to proceed.',
         ]);
 
         $data['updated_by'] = $request->user()->id;

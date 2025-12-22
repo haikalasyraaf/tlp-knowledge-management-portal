@@ -8,9 +8,9 @@
         body { font-family: Arial, sans-serif; font-size: 12px; line-height: 1.4; }
         h1 { text-align: center; font-size: 18px; margin-bottom: 20px; }
 
-        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
         th, td { border: 1px solid #000; }
-        th, td { padding: 6px 6px; text-align: left; vertical-align: top; } /* top-aligned */
+        th, td { padding: 5px; text-align: left; vertical-align: top; } /* top-aligned */
 
         /* Custom class for borderless tables */
         table.no-border, 
@@ -95,9 +95,16 @@
             <td colspan="3">RM {{ number_format($training->training_cost, 2, '.', ',')  }}</td>
         </tr>
         <tr>
-            <td>Dates of Training</td>
-            <td colspan="3">
-                From {{ $training->training_start_date }} To {{ $training->training_end_date }}
+            <td>Date(s) of Training</td>
+            <td colspan="3" style="padding: 0">
+                <table width="100%" style="margin: 0">
+                    <tr>
+                        <td width="15%" style="border: 0 !important; border-right: 1px solid black !important;">From</td>
+                        <td width="35%" style="border: 0 !important; border-right: 1px solid black !important;">{{ $training->training_start_date->format('d/m/Y') }}</td>
+                        <td width="15%" style="border: 0 !important; border-right: 1px solid black !important;">To</td>
+                        <td width="35%" style="border: 0 !important;">{{ $training->training_end_date->format('d/m/Y') }}</td>
+                    </tr>
+                </table>
             </td>
         </tr>
         <tr>
@@ -120,7 +127,7 @@
             </tr>
         </thead>
         <tbody>
-            @for($i = 0; $i < 5; $i++)
+            @for($i = 0; $i < 10; $i++)
                 @php
                     $participant = $training->participants[$i] ?? null;
                 @endphp

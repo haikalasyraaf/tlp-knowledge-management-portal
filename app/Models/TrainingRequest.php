@@ -26,6 +26,11 @@ class TrainingRequest extends Model
         'updated_by',
     ];
 
+    protected $casts = [
+        'training_start_date' => 'datetime',
+        'training_end_date' => 'datetime',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

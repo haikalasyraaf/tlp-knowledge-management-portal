@@ -97,12 +97,12 @@
                                     </div>
                                     <div class="col-lg-6 mb-3">
                                         <label for="create_training_start_date{{$trainingRequest->id}}" class="form-label">Training Start Date<span style="color: red"> *</span></label>
-                                        <input id="create_training_start_date{{$trainingRequest->id}}" type="date" name="training_start_date" class="form-control" value="{{$trainingRequest->training_start_date}}" placeholder="Training Start Date"
+                                        <input id="create_training_start_date{{$trainingRequest->id}}" type="date" name="training_start_date" class="form-control" value="{{$trainingRequest->training_start_date->format('Y-m-d')}}" placeholder="Training Start Date"
                                             {{ (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus ? '' : 'disabled' }}>
                                     </div>
                                     <div class="col-lg-6 mb-3">
                                         <label for="create_title{{$trainingRequest->id}}" class="form-label">Training End Date<span style="color: red"> *</span></label>
-                                        <input id="create_title{{$trainingRequest->id}}" type="date" name="training_end_date" class="form-control" value="{{$trainingRequest->training_end_date}}" placeholder="Training End Date"
+                                        <input id="create_title{{$trainingRequest->id}}" type="date" name="training_end_date" class="form-control" value="{{$trainingRequest->training_end_date->format('Y-m-d')}}" placeholder="Training End Date"
                                             {{ (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus ? '' : 'disabled' }}>
                                     </div>
                                     <div class="col-lg-6 mb-3">
@@ -117,7 +117,7 @@
                                             {{ (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus ? '' : 'disabled' }}>{!! $trainingRequest->remarks !!}</textarea>
                                     </div>
                                     <div class="col-lg-12 mb-3">
-                                        <label class="form-label">Participants <span style="color: red">*</span> <span style="color: gray; font-size: 10px; font-style:italic;">(For more than 5 participants, please upload the list in the attachment section.)</span></label>
+                                        <label class="form-label">Participants <span style="color: red">*</span> <span style="color: gray; font-size: 10px; font-style:italic;">(For more than 10 participants, please upload the list in the attachment section.)</span></label>
                                         <div id="participantsRepeater{{$trainingRequest->id}}">
                                             @forelse ($trainingRequest->participants as $index => $p)
                                                 <div class="row g-3 participant-row mb-2">

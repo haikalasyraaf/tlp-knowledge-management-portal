@@ -109,7 +109,7 @@
                                             <textarea id="create_remarks" name="remarks" class="form-control" rows="4" placeholder="Enter remarks..."></textarea>
                                         </div>
                                         <div class="col-12 mb-3">
-                                            <label class="form-label">Participants<span style="color: red"> *</span> <span style="color: gray; font-size: 10px; font-style:italic;">(For more than 5 participants, please upload the list in the attachment section.)</span></label>
+                                            <label class="form-label">Participants<span style="color: red"> *</span> <span style="color: gray; font-size: 10px; font-style:italic;">(For more than 10 participants, please upload the list in the attachment section.)</span></label>
                                             <div id="participantsRepeater">
                                                 <div class="row g-3 participant-row mb-2">
                                                     <div class="col-lg-5">
@@ -740,7 +740,7 @@
                 let count = container.children('.participant-row').length;
 
                 // Prevent adding more than 5
-                if (count >= 5) {
+                if (count >= 10) {
                     toastr.error('Limit reached: Please upload participant list in the attachment section.');
                     return;
                 }
