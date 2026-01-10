@@ -14,6 +14,14 @@ class NotificationController extends Controller
             $notification->markAsRead();
         }
 
-        return redirect()->route('transfer-of-knowledge.index'); // redirect to its target link
+        $type = $notification->data['type'] ?? null;
+
+        $routes = [
+            'Training Request' => 'training-request.index',
+            'Transfer of Knowledge' => 'transfer-of-knowledge.index',
+            'Internal Bulletin' => 'internal-bulletin.index',
+        ];
+
+        return redirect()->route($routes[$type] ?? 'dashboard');
     }
 }
