@@ -95,6 +95,11 @@
                                             <input id="create_training_cost" type="text" name="training_cost" class="form-control" placeholder="Training Cost">
                                         </div>
                                         <div class="col-lg-6 mb-3">
+                                            <label for="create_training_duration" class="form-label">Training Hour<span style="color: red"> *</span></label>
+                                            <input id="create_training_duration" type="text" name="training_duration" class="form-control" placeholder="Training Hour">
+                                        </div>
+                                        <div class="col-lg-6"></div>
+                                        <div class="col-lg-6 mb-3">
                                             <label for="create_training_start_date" class="form-label">Training Start Date<span style="color: red"> *</span></label>
                                             <input id="create_training_start_date" type="date" name="training_start_date" class="form-control" placeholder="Training Start Date">
                                         </div>
@@ -252,7 +257,7 @@
                     processData: false,
                     contentType: false,
                     headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (response) {
                         toastr.success('Training Request created successfully! You can now upload documents.', '', { timeOut: 8000 });
@@ -283,7 +288,7 @@
                     processData: false,
                     contentType: false,
                     headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (response) {
                         $('#editModal' + trainingRequestId).modal('hide');
@@ -306,7 +311,7 @@
                     url: "/training-request/" + trainingRequestId + "/delete",
                     type: "DELETE",
                     headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (response) {
                         $('#deleteModal' + trainingRequestId).modal('hide');
@@ -341,7 +346,7 @@
                     data: formData,
                     processData: false,
                     contentType: false,
-                    headers: { 'X-CSRF-TOKEN': "{{ csrf_token() }}" },
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                     success: function (response) {
                         toastr.success('Document uploaded successfully!', '', { timeOut: 8000 });
 
@@ -408,7 +413,7 @@
                     processData: false,
                     contentType: false,
                     headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (response) {
 
@@ -479,7 +484,7 @@
                     url: "/training-request/" + trainingRequestId + "/document/" + documentId + "/delete",
                     method: "DELETE",
                     headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (response) {
                         toastr.success(response.message, '', { timeOut: 8000 });
@@ -638,7 +643,7 @@
                     processData: false,
                     contentType: false,
                     headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (response) {
                         $('#statusModal' + trainingRequestId).modal('hide');
@@ -666,7 +671,7 @@
                     processData: false,
                     contentType: false,
                     headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (response) {
                         $('#statusModal' + trainingRequestId).modal('hide');
@@ -694,7 +699,7 @@
                     processData: false,
                     contentType: false,
                     headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (response) {
                         $('#statusModal' + trainingRequestId).modal('hide');
@@ -718,7 +723,7 @@
                     type: "POST",
                     data: {},
                     headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (response) {
                         $('#statusModal' + trainingRequestId).modal('hide');
@@ -796,7 +801,7 @@
                     type: "POST",
                     data: {},
                     headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (response) {
                         $('#statusModal' + trainingRequestId).modal('hide');
@@ -851,7 +856,7 @@
                     processData: false,
                     contentType: false,
                     headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     xhrFields: {
                         responseType: 'blob' // 👈 important for file download

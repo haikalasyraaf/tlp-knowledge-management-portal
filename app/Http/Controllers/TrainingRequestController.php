@@ -83,6 +83,7 @@ class TrainingRequestController extends Controller
             'training_organiser'            => 'required|string|max:255',
             'training_venue'                => 'required|string|max:255',
             'training_cost'                 => 'required|numeric',
+            'training_duration'             => 'required|numeric',
             'training_start_date'           => 'required|date',
             'training_end_date'             => 'required|date|after_or_equal:training_start_date',
             'employees_recommended'         => 'nullable|string',
@@ -143,6 +144,7 @@ class TrainingRequestController extends Controller
             'training_organiser'            => 'required|string|max:255',
             'training_venue'                => 'required|string|max:255',
             'training_cost'                 => 'required|numeric',
+            'training_duration'             => 'required|numeric',
             'training_start_date'           => 'required|date',
             'training_end_date'             => 'required|date|after_or_equal:training_start_date',
             'employees_recommended'         => 'nullable|string',
@@ -180,6 +182,8 @@ class TrainingRequestController extends Controller
 
     public function destroy($id)
     {
+        TrainingRequestDocument::where('training_request_id', $id)->delete();
+        TrainingRequestStatus::where('training_request_id', $id)->delete();
         TrainingRequestUser::where('training_request_id', $id)->delete();
         TrainingRequest::findOrFail($id)->delete();
 

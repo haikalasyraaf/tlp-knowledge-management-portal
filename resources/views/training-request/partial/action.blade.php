@@ -16,6 +16,9 @@
         <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{$trainingRequest->id}}">Delete</a>
     @else
         <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal{{$trainingRequest->id}}">View</a>
+        @if (auth()->user()->role == 'Admin')
+            <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{$trainingRequest->id}}">Delete</a>
+        @endif
     @endif
 </div>
 
@@ -95,6 +98,12 @@
                                         <input id="create_training_cost{{$trainingRequest->id}}" type="text" name="training_cost" class="form-control" value="{{$trainingRequest->training_cost}}" placeholder="Training Cost"
                                             {{ (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus ? '' : 'disabled' }}>
                                     </div>
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="create_training_duration{{$trainingRequest->id}}" class="form-label">Training Hour<span style="color: red"> *</span></label>
+                                        <input id="create_training_duration{{$trainingRequest->id}}" type="text" name="training_duration" class="form-control" value="{{$trainingRequest->training_duration}}" placeholder="Training Hour"
+                                            {{ (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus ? '' : 'disabled' }}>
+                                    </div>
+                                    <div class="col-lg-6"></div>
                                     <div class="col-lg-6 mb-3">
                                         <label for="create_training_start_date{{$trainingRequest->id}}" class="form-label">Training Start Date<span style="color: red"> *</span></label>
                                         <input id="create_training_start_date{{$trainingRequest->id}}" type="date" name="training_start_date" class="form-control" value="{{$trainingRequest->training_start_date->format('Y-m-d')}}" placeholder="Training Start Date"

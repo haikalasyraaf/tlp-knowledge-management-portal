@@ -16,6 +16,7 @@ class TrainingRequest extends Model
         'training_venue',
         'training_start_date',
         'training_end_date',
+        'training_duration',
         'training_cost',
         'approved_training_cost',
         'employees_recommended',
