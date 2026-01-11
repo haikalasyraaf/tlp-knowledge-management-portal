@@ -120,8 +120,11 @@
                                     <div class="col-lg-6 mb-3">
                                         <label for="create_training_objective{{$trainingRequest->id}}" class="form-label">Training Objective<span style="color: red"> *</span></label>
                                         <textarea id="create_training_objective{{$trainingRequest->id}}" name="training_objective" class="form-control" rows="4"
-                                            placeholder="Enter training objective..."
+                                            placeholder="Enter training objective..." maxlength="170"
                                             {{ (auth()->user()->role == 'Admin' || (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by)) && !$reviewStatus ? '' : 'disabled' }}>{!! $trainingRequest->training_objective !!}</textarea>
+                                        <div class="text-end">
+                                            <small class="text-muted objective-counter">0 / 170 characters</small>
+                                        </div>
                                     </div>
                                     <div class="col-lg-6 mb-3">
                                         <label for="create_remarks{{$trainingRequest->id}}" class="form-label">Remark</label>

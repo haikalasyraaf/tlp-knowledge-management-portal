@@ -109,7 +109,10 @@
                                         </div>
                                         <div class="col-lg-6 mb-3">
                                             <label for="create_training_objective" class="form-label">Training Objective<span style="color: red"> *</span></label>
-                                            <textarea id="create_training_objective" name="training_objective" class="form-control" rows="4" placeholder="Enter training objective..."></textarea>
+                                            <textarea id="create_training_objective" name="training_objective" class="form-control" rows="4" placeholder="Enter training objective..." maxlength="170"></textarea>
+                                            <div class="text-end">
+                                                <small class="text-muted objective-counter">0 / 170 characters</small>
+                                            </div>
                                         </div>
                                         <div class="col-lg-6 mb-3">
                                             <label for="create_remarks" class="form-label">Remark</label>
@@ -896,6 +899,13 @@
                         btn.prop('disabled', false).text('Export');
                     }
                 });
+            });
+
+            $(document).on('input', 'textarea[id^="create_training_objective"]', function () {
+                let max = 170;
+                let length = $(this).val().length;
+
+                $(this).next('.text-end').find('.objective-counter').text(length + ' / ' + max + ' characters');
             });
 
         </script>
