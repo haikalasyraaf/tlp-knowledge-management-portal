@@ -19,6 +19,9 @@
         @if (auth()->user()->role == 'Admin')
             <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{$trainingRequest->id}}">Delete</a>
         @endif
+        @if (auth()->user()->role == 'Staff' && auth()->user()->id == $trainingRequest->created_by && $trainingRequest->status == 9)
+            <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{$trainingRequest->id}}">Delete</a>
+        @endif
     @endif
 </div>
 
