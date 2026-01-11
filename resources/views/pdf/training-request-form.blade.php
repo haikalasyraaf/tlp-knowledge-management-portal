@@ -8,7 +8,7 @@
         body { font-family: Arial, sans-serif; font-size: 12px; line-height: 1.4; }
         h1 { text-align: center; font-size: 18px; margin-bottom: 20px; }
 
-        table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
         th, td { border: 1px solid #000; }
         th, td { padding: 5px; text-align: left; vertical-align: top; } /* top-aligned */
 
@@ -52,7 +52,7 @@
         </tr>
         <tr>
             <td style="padding: 0 0 0 6px !important; vertical-align: middle; font-size: 10px !important;">REV. DATE</td>
-            <td style="padding: 0 0 0 6px !important; vertical-align: middle; font-size: 10px !important;">01 JAN 2026</td>
+            <td style="padding: 0 0 0 6px !important; vertical-align: middle; font-size: 10px !important;">13 JAN 2026</td>
         </tr>
         <tr>
             <td style="padding: 0 0 0 6px !important; vertical-align: middle; font-size: 10px !important;">PAGE NO</td>
@@ -110,7 +110,9 @@
         <tr>
             <td>Training Objective</td>
             <td colspan="3">
-                {!! nl2br($training->training_objective) !!}
+                <div style="height: 34px !important; vertical-align: top !important;">
+                    {!! nl2br(Str::limit($training->training_objective, 175)) !!}
+                </div>
             </td>
         </tr>
     </table>
@@ -134,8 +136,8 @@
 
                 <tr>
                     <td class="text-center">{{ $i + 1 }}</td>
-                    <td>{{ $participant->name ?? '' }}</td>
-                    <td>{{ $participant->department ?? '' }}</td>
+                    <td>{{ Str::limit($participant->name ?? '', 52) }}</td>
+                    <td>{{ Str::limit($participant->department ?? '', 52) }}</td>
                 </tr>
             @endfor
         </tbody>
