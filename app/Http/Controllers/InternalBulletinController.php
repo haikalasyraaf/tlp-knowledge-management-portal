@@ -86,7 +86,8 @@ class InternalBulletinController extends Controller
                     'Internal Bulletin',
                     'New Bulletin Added',
                     $sender->name . ' has added a new bulletin: "' . $bulletin->title . '".',
-                    $sender->name
+                    $sender->name,
+                    route('internal-bulletin.index')
                 ));
             } catch (\Exception $e) {
                 Log::warning("Alert notification failed for ({$user->employee_id}) {$user->name}: {$e->getMessage()}");

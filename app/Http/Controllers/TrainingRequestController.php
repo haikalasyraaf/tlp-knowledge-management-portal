@@ -125,7 +125,8 @@ class TrainingRequestController extends Controller
                     'Training Request',
                     'New Training Request Pending Your Review',
                     "{$sender->name} has submitted a new training request titled \"{$trainingRequest->training_title}\". Seeking your help to review it.",
-                    $sender->name
+                    $sender->name,
+                    route('training-request.index')
                 ));
             } catch (\Exception $e) {
                 Log::warning("Alert notification failed for ({$user->employee_id}) {$user->name}: {$e->getMessage()}");
@@ -272,7 +273,8 @@ class TrainingRequestController extends Controller
                     'Training Request',
                     'New Training Request Pending Your Approval',
                     "{$sender->name} has reviewed training request titled \"{$trainingRequest->training_title}\". Currently seeking your approval.",
-                    $sender->name
+                    $sender->name,
+                    route('training-request.index')
                 ));
             } catch (\Exception $e) {
                 Log::warning("Alert notification failed for ({$user->employee_id}) {$user->name}: {$e->getMessage()}");
@@ -344,7 +346,8 @@ class TrainingRequestController extends Controller
                     'Training Request',
                     'Training Request Approved',
                     "{$sender->name} has reviewed training request titled \"{$trainingRequest->training_title}\". We are happy to inform it has been approved.",
-                    $sender->name
+                    $sender->name,
+                    route('training-request.index')
                 ));
             } catch (\Exception $e) {
                 Log::warning("Alert notification failed for ({$user->employee_id}) {$user->name}: {$e->getMessage()}");
@@ -355,7 +358,8 @@ class TrainingRequestController extends Controller
                     'Training Request',
                     'Training Request Rejected',
                     "{$sender->name} has reviewed training request titled \"{$trainingRequest->training_title}\". We are sorry to inform it has been rejected.",
-                    $sender->name
+                    $sender->name,
+                    route('training-request.index')
                 ));
             } catch (\Exception $e) {
                 Log::warning("Alert notification failed for ({$user->employee_id}) {$user->name}: {$e->getMessage()}");

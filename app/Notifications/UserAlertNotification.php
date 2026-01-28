@@ -15,6 +15,7 @@ class UserAlertNotification extends Notification
     public $title;
     public $message;
     public $sender;
+    public $url;
 
     /**
      * Create a new notification instance.
@@ -25,6 +26,7 @@ class UserAlertNotification extends Notification
         $this->title = $title;
         $this->message = $message;
         $this->sender = $sender;
+        $this->url = $url ?? config('app.url');
     }
 
     /**
@@ -59,6 +61,7 @@ class UserAlertNotification extends Notification
             ->subject($this->title)
             ->greeting("Hello {$notifiable->name},")
             ->line($this->message)
+            ->action('Open Application', $this->url)
             ->line("Sent by: " . $this->sender)
             ->salutation('Regards, ' . \App\Models\Setting::get('app_name', 'Learning Portal'));
     }

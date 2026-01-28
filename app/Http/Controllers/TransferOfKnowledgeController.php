@@ -97,7 +97,8 @@ class TransferOfKnowledgeController extends Controller
                     'Transfer of Knowledge',
                     'New Knowledge Shared',
                     $sender->name . ' has shared a new topic: "' . $knowledge->title . '".',
-                    $sender->name
+                    $sender->name,
+                    route('transfer-of-knowledge.index')
                 ));
             } catch (\Exception $e) {
                 Log::warning("Alert notification failed for ({$user->employee_id}) {$user->name}: {$e->getMessage()}");
