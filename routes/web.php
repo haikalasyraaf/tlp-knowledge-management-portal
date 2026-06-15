@@ -10,6 +10,8 @@ use App\Http\Controllers\SubTrainingProgramController;
 use App\Http\Controllers\SystemUserController;
 use App\Http\Controllers\TrainingCalendarMonthlyController;
 use App\Http\Controllers\TrainingCalendarYearlyController;
+use App\Http\Controllers\TrainingEvaluation\TrainingEvaluationController;
+use App\Http\Controllers\TrainingEvaluation\TrainingEvaluationGroupController;
 use App\Http\Controllers\TrainingFormController;
 use App\Http\Controllers\TrainingNeedsIdentification\TniCompetencyController;
 use App\Http\Controllers\TrainingNeedsIdentification\TniCourseController;
@@ -133,6 +135,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/settings/update/transfer-of-knowledge', [SettingController::class, 'updateTokGuideline'])->name('settings.update.tok.guideline');
 
     Route::get('/notifications/read/{id}', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.read');
+
+    Route::get('/training-evaluation', [TrainingEvaluationGroupController::class, 'index'])->name('training-evaluation.index');
+    Route::post('/training-evaluation/create', [TrainingEvaluationGroupController::class, 'create'])->name('training-evaluation.create');
+    Route::delete('/training-evaluation/{trainingEvaluationGroup}/delete', [TrainingEvaluationController::class, 'delete'])->name('training-evaluation.delete');
+
+    Route::get('/training-evaluation/{trainingEvaluationGroup}/list', [TrainingEvaluationController::class, 'index'])->name('training-evaluation.list');
+    Route::get('/training-evaluation/{trainingEvaluationGroup}/show/{user}/user', [TrainingEvaluationController::class, 'show'])->name('training-evaluation.show');
+    Route::post('/training-evaluation/{trainingEvaluation}/submit', [TrainingEvaluationController::class, 'submit'])->name('training-evaluation.submit');
+    Route::get('/training-evaluation/{trainingEvaluation}/export', [TrainingEvaluationController::class, 'export'])->name('training-evaluation.export');
+    
 });
 
 require __DIR__.'/auth.php';
