@@ -20,7 +20,7 @@ class UserAlertNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct($type, $title, $message, $sender)
+    public function __construct($type, $title, $message, $sender, $url)
     {
         $this->type = $type;
         $this->title = $title;
