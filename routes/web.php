@@ -22,6 +22,7 @@ use App\Http\Controllers\TrainingNeedsIdentificationController;
 use App\Http\Controllers\TrainingPolicyGuidelineController;
 use App\Http\Controllers\TrainingProgramController;
 use App\Http\Controllers\TrainingProgramFolderController;
+use App\Http\Controllers\TrainingRecordController;
 use App\Http\Controllers\TrainingRequestController;
 use App\Http\Controllers\TransferOfKnowledgeController;
 use Illuminate\Support\Facades\Route;
@@ -157,6 +158,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/training-assessment/{trainingAssessment}/pre/submit', [TrainingAssessmentController::class, 'submitPreQuestion'])->name('training-assessment.pre.submit');
     Route::post('/training-assessment/{trainingAssessment}/post/submit', [TrainingAssessmentController::class, 'submitPostQuestion'])->name('training-assessment.post.submit');
     Route::get('/training-assessment/{trainingAssessment}/export', [TrainingAssessmentController::class, 'export'])->name('training-assessment.export');
+
+    Route::get('/training-record', [TrainingRecordController::class, 'index'])->name('training-record.index');
+    Route::post('/training-record/create', [TrainingRecordController::class, 'create'])->name('training-record.create');
+    Route::delete('/training-record/{trainingRecord}/delete', [TrainingRecordController::class, 'delete'])->name('training-record.delete');
     
 });
 
