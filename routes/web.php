@@ -8,6 +8,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SubTrainingProgramController;
 use App\Http\Controllers\SystemUserController;
+use App\Http\Controllers\TrainingAssessment\TrainingAssessmentController;
+use App\Http\Controllers\TrainingAssessment\TrainingAssessmentGroupController;
 use App\Http\Controllers\TrainingCalendarMonthlyController;
 use App\Http\Controllers\TrainingCalendarYearlyController;
 use App\Http\Controllers\TrainingEvaluation\TrainingEvaluationController;
@@ -144,6 +146,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/training-evaluation/{trainingEvaluationGroup}/show/{user}/user', [TrainingEvaluationController::class, 'show'])->name('training-evaluation.show');
     Route::post('/training-evaluation/{trainingEvaluation}/submit', [TrainingEvaluationController::class, 'submit'])->name('training-evaluation.submit');
     Route::get('/training-evaluation/{trainingEvaluation}/export', [TrainingEvaluationController::class, 'export'])->name('training-evaluation.export');
+
+    Route::get('/training-assessment', [TrainingAssessmentGroupController::class, 'index'])->name('training-assessment.index');
+    Route::post('/training-assessment/create', [TrainingAssessmentGroupController::class, 'create'])->name('training-assessment.create');
+    Route::delete('/training-assessment/{trainingAssessmentGroup}/delete', [TrainingAssessmentController::class, 'delete'])->name('training-assessment.delete');
+
+    Route::get('/training-assessment/{trainingAssessmentGroup}/list', [TrainingAssessmentController::class, 'index'])->name('training-assessment.list');
+    Route::get('/training-assessment/{trainingAssessmentGroup}/pre/show/{user}/user', [TrainingAssessmentController::class, 'showPreQuestion'])->name('training-assessment.pre.show');
+    Route::get('/training-assessment/{trainingAssessmentGroup}/post/show/{user}/user', [TrainingAssessmentController::class, 'showPostQuestion'])->name('training-assessment.post.show');
+    Route::post('/training-assessment/{trainingAssessment}/pre/submit', [TrainingAssessmentController::class, 'submitPreQuestion'])->name('training-assessment.pre.submit');
+    Route::post('/training-assessment/{trainingAssessment}/post/submit', [TrainingAssessmentController::class, 'submitPostQuestion'])->name('training-assessment.post.submit');
+    Route::get('/training-assessment/{trainingAssessment}/export', [TrainingAssessmentController::class, 'export'])->name('training-assessment.export');
     
 });
 

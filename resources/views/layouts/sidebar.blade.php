@@ -34,13 +34,13 @@
 
         <li class="nav-item">
             <a class="nav-link w-100 {{ request()->routeIs('training-form.index') ? 'active' : '' }}" href="{{ route('training-form.index') }}">
-                <i class="bi bi-ui-checks sidebar-icon-md"></i> Training Form
+                <i class="bi bi-file-earmark-ruled sidebar-icon-md"></i> Training Form
             </a>
         </li>
 
         <li class="nav-item">
             <a class="nav-link w-100 {{ request()->routeIs('transfer-of-knowledge.index') ? 'active' : '' }}" href="{{ route('transfer-of-knowledge.index') }}">
-                <i class="bi bi-arrow-left-right sidebar-icon-md"></i> Transfer of Knowledge
+                <i class="bi bi-lightbulb sidebar-icon-md"></i> Transfer of Knowledge
             </a>
         </li>
 
@@ -53,6 +53,12 @@
         <li class="nav-item">
             <a class="nav-link w-100 {{ request()->routeIs('training-evaluation.index') || request()->routeIs('training-evaluation.show') || request()->routeIs('training-evaluation.list') ? 'active' : '' }}" href="{{ route('training-evaluation.index') }}">
                 <i class="bi bi-ui-checks sidebar-icon-md"></i> Training Evaluation
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link w-100 {{ request()->routeIs('training-assessment.index') || request()->routeIs('training-assessment.pre.show') || request()->routeIs('training-assessment.post.show') || request()->routeIs('training-assessment.list') ? 'active' : '' }}" href="{{ route('training-assessment.index') }}">
+                <i class="bi bi-ui-checks-grid sidebar-icon-md"></i> Training Assessment
             </a>
         </li>
 
